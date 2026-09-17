@@ -1,0 +1,45 @@
+<h2 mat-dialog-title>Nueva transferencia</h2>
+
+<form [formGroup]="form" (ngSubmit)="submit()">
+  <mat-dialog-content>
+    <mat-form-field appearance="outline">
+      <mat-label>Cliente</mat-label>
+      <input matInput formControlName="nameClient" />
+      <mat-error *ngIf="form.get('nameClient')?.invalid">{{ errorFor('nameClient', 'El cliente') }}</mat-error>
+    </mat-form-field>
+
+    <div class="form-row">
+      <mat-form-field appearance="outline">
+        <mat-label>Monto</mat-label>
+        <span matTextPrefix>$&nbsp;</span>
+        <input matInput type="number" min="0" step="0.01" formControlName="amount" />
+        <mat-error *ngIf="form.get('amount')?.invalid">{{ errorFor('amount', 'El monto') }}</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Banco</mat-label>
+        <input matInput formControlName="bank" />
+        <mat-error *ngIf="form.get('bank')?.invalid">{{ errorFor('bank', 'El banco') }}</mat-error>
+      </mat-form-field>
+    </div>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Destino</mat-label>
+      <input matInput formControlName="destination" placeholder="Cuenta o entidad destino" />
+      <mat-error *ngIf="form.get('destination')?.invalid">{{ errorFor('destination', 'El destino') }}</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Fecha de la transferencia</mat-label>
+      <input matInput type="datetime-local" formControlName="dateTransfer" />
+      <mat-error *ngIf="form.get('dateTransfer')?.invalid">
+        {{ errorFor('dateTransfer', 'La fecha') }}
+      </mat-error>
+    </mat-form-field>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-button type="button" (click)="cancel()">Cancelar</button>
+    <app-submit-button label="Registrar" [loading]="loading" [disabled]="form.invalid"></app-submit-button>
+  </mat-dialog-actions>
+</form>

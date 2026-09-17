@@ -1,0 +1,30 @@
+.product-cell {
+  display: flex;
+  flex-direction: column;
+
+  &__name {
+    font-weight: 500;
+  }
+
+  &__ref {
+    font-size: 0.75rem;
+    color: var(--vria-text-secondary);
+  }
+}
+
+.stock-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.2rem;
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  font-weight: 600;
+  background: rgba(37, 99, 235, 0.1);
+  color: var(--vria-blue-dark);
+
+  &--low {
+    background: rgba(220, 38, 38, 0.12);
+    color: #b91c1c;
+  }
+}

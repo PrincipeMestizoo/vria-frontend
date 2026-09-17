@@ -1,0 +1,56 @@
+<h2 mat-dialog-title>Nueva entrega</h2>
+
+<form [formGroup]="form" (ngSubmit)="submit()">
+  <mat-dialog-content>
+    <div class="form-row">
+      <mat-form-field appearance="outline">
+        <mat-label>Cliente</mat-label>
+        <input matInput formControlName="nameClient" />
+        <mat-error *ngIf="form.get('nameClient')?.invalid">{{ errorFor('nameClient', 'El cliente') }}</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Repartidor</mat-label>
+        <input matInput formControlName="nameDelivery" />
+        <mat-error *ngIf="form.get('nameDelivery')?.invalid">
+          {{ errorFor('nameDelivery', 'El repartidor') }}
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Dirección</mat-label>
+      <input matInput formControlName="address" />
+      <mat-error *ngIf="form.get('address')?.invalid">{{ errorFor('address', 'La dirección') }}</mat-error>
+    </mat-form-field>
+
+    <div class="form-row">
+      <mat-form-field appearance="outline">
+        <mat-label>Modo de pago</mat-label>
+        <mat-select formControlName="payMode">
+          <mat-option *ngFor="let mode of payModes" [value]="mode">{{ mode | payModeLabel }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Fecha y hora de entrega</mat-label>
+        <input matInput type="datetime-local" formControlName="dateDelivery" />
+        <mat-error *ngIf="form.get('dateDelivery')?.invalid">
+          {{ errorFor('dateDelivery', 'La fecha de entrega') }}
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Estado inicial</mat-label>
+      <mat-select formControlName="state">
+        <mat-option *ngFor="let state of states" [value]="state">{{ state | deliveryStateLabel }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-button type="button" (click)="cancel()">Cancelar</button>
+    <app-submit-button label="Registrar entrega" [loading]="loading" [disabled]="form.invalid"></app-submit-button>
+  </mat-dialog-actions>
+</form>

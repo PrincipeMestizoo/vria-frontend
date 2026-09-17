@@ -1,0 +1,39 @@
+.page-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+
+  &__title {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+
+    mat-icon {
+      color: var(--vria-purple);
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 1.5rem;
+      font-weight: 600;
+      background: linear-gradient(90deg, var(--vria-blue), var(--vria-purple));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+  }
+
+  p {
+    margin: 0.25rem 0 0;
+    color: var(--vria-text-secondary);
+  }
+
+  &__actions {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+  }
+}

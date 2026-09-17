@@ -1,0 +1,138 @@
+.shell {
+  height: 100vh;
+
+  &__sidenav {
+    width: 264px;
+    border-right: none !important;
+    background: linear-gradient(180deg, #1c1450 0%, #2c1a68 45%, #351f78 100%);
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    padding: 0.5rem 0.75rem 1.5rem;
+  }
+
+  &__toolbar {
+    background: var(--vria-surface);
+    border-bottom: 1px solid var(--vria-border);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+
+  &__spacer {
+    flex: 1 1 auto;
+  }
+
+  &__content {
+    min-height: calc(100vh - 64px);
+    background: var(--vria-background);
+    padding: clamp(1rem, 2vw, 2rem);
+  }
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 1.25rem 0.75rem 1.5rem;
+
+  &__logo {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    object-fit: contain;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 3px;
+  }
+
+  &__name {
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    font-size: 1.1rem;
+  }
+}
+
+.theme-toggle {
+  color: var(--vria-text-secondary);
+  transition: color 160ms ease, transform 200ms ease;
+
+  &:hover {
+    color: var(--vria-purple);
+    transform: rotate(14deg);
+  }
+}
+
+.nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.nav-item {
+  border-radius: 10px;
+  color: rgba(255, 255, 255, 0.78);
+  transition: background-color 160ms ease, color 160ms ease, transform 160ms ease;
+
+  ::ng-deep .mdc-list-item__start {
+    color: inherit;
+  }
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.08);
+    color: #fff;
+    transform: translateX(2px);
+  }
+
+  &--active {
+    background: linear-gradient(90deg, rgba(96, 165, 250, 0.35), rgba(167, 139, 250, 0.35));
+    color: #fff;
+
+    ::ng-deep .mdc-list-item__start {
+      color: #fff;
+    }
+  }
+}
+
+.user-chip {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  height: 48px;
+  border-radius: 999px;
+  padding: 0 0.5rem 0 0.35rem;
+
+  &__avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #fff;
+    background: var(--vria-gradient);
+  }
+
+  &__info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    line-height: 1.1;
+    text-transform: none;
+
+    strong {
+      font-size: 0.85rem;
+      color: var(--vria-text-primary);
+    }
+
+    small {
+      font-size: 0.72rem;
+      color: var(--vria-text-secondary);
+    }
+
+    @media (max-width: 480px) {
+      display: none;
+    }
+  }
+}

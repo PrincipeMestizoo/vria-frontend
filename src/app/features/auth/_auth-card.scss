@@ -1,0 +1,72 @@
+.auth-card {
+  width: 100%;
+  max-width: 26rem;
+  padding: 2.25rem;
+  animation: rise 320ms ease-out;
+
+  h2 {
+    margin: 0 0 0.25rem;
+    font-size: 1.6rem;
+    font-weight: 700;
+    background: linear-gradient(90deg, var(--vria-blue), var(--vria-purple));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  &__subtitle {
+    margin: 0 0 1.5rem;
+    color: var(--vria-text-secondary);
+  }
+
+  &__footer {
+    margin: 1.5rem 0 0;
+    text-align: center;
+    color: var(--vria-text-secondary);
+
+    a {
+      color: var(--vria-purple);
+      font-weight: 600;
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+
+  app-submit-button {
+    margin-top: 0.5rem;
+
+    ::ng-deep .vria-btn {
+      width: 100%;
+    }
+  }
+}
+
+.auth-form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 1rem;
+
+  @media (max-width: 480px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

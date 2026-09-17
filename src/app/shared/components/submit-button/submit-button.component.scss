@@ -1,0 +1,35 @@
+.vria-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 9rem;
+  justify-content: center;
+  transition: transform 160ms ease, box-shadow 160ms ease;
+  box-shadow: 0 4px 14px rgba(94, 53, 177, 0.25);
+
+  &:not([disabled]):hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 20px rgba(94, 53, 177, 0.32);
+  }
+
+  &:not([disabled]):active {
+    transform: translateY(0) scale(0.97);
+    box-shadow: 0 2px 8px rgba(94, 53, 177, 0.28);
+  }
+
+  &[disabled] {
+    box-shadow: none;
+  }
+
+  &--stroked {
+    box-shadow: none;
+  }
+
+  &__spinner {
+    display: inline-flex;
+
+    ::ng-deep circle {
+      stroke: currentColor;
+    }
+  }
+}

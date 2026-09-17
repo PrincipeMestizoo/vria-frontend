@@ -1,0 +1,26 @@
+<app-loading-overlay></app-loading-overlay>
+
+<div class="auth-shell">
+  <div class="auth-shell__aside">
+    <img class="brand-logo" src="assets/images/logo1.png" alt="VRIA" />
+    <h1>VRIA</h1>
+    <p>Plataforma de gestión de inventario, entregas y pagos.</p>
+    <ul>
+      <li><mat-icon>inventory_2</mat-icon> Control de productos y categorías</li>
+      <li><mat-icon>local_shipping</mat-icon> Trazabilidad de entregas</li>
+      <li><mat-icon>receipt_long</mat-icon> Comprobantes de transferencia</li>
+    </ul>
+  </div>
+
+  <div class="auth-shell__panel">
+    <button
+      mat-icon-button
+      class="theme-toggle"
+      (click)="toggleTheme()"
+      [matTooltip]="theme === 'dark' ? 'Cambiar a tema claro' : 'Cambiar a tema oscuro'"
+    >
+      <mat-icon>{{ theme === 'dark' ? 'light_mode' : 'dark_mode' }}</mat-icon>
+    </button>
+    <router-outlet></router-outlet>
+  </div>
+</div>

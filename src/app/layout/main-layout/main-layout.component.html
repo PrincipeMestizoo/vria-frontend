@@ -1,0 +1,72 @@
+<app-loading-overlay></app-loading-overlay>
+
+<mat-sidenav-container class="shell">
+  <mat-sidenav
+    #sidenav
+    class="shell__sidenav"
+    [mode]="(isHandset$ | async) ? 'over' : 'side'"
+    [opened]="(isHandset$ | async) === false"
+  >
+    <div class="brand">
+      <img class="brand__logo" src="assets/images/logo1.png" alt="VRIA" />
+      <span class="brand__name">VRIA</span>
+    </div>
+
+    <mat-nav-list class="nav">
+      <a
+        mat-list-item
+        *ngFor="let item of navItems"
+        [routerLink]="item.path"
+        routerLinkActive="nav-item--active"
+        (click)="isHandset && sidenav.close()"
+        class="nav-item"
+      >
+        <mat-icon matListItemIcon>{{ item.icon }}</mat-icon>
+        <span matListItemTitle>{{ item.label }}</span>
+      </a>
+    </mat-nav-list>
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    <mat-toolbar class="shell__toolbar">
+      <button mat-icon-button *ngIf="isHandset$ | async" (click)="sidenav.toggle()" aria-label="Abrir menú">
+        <mat-icon>menu</mat-icon>
+      </button>
+
+      <span class="shell__spacer"></span>
+
+      <button
+        mat-icon-button
+        class="theme-toggle"
+        (click)="toggleTheme()"
+        [matTooltip]="theme === 'dark' ? 'Cambiar a tema claro' : 'Cambiar a tema oscuro'"
+      >
+        <mat-icon>{{ theme === 'dark' ? 'light_mode' : 'dark_mode' }}</mat-icon>
+      </button>
+
+      <button mat-button [matMenuTriggerFor]="userMenu" class="user-chip" *ngIf="currentUser">
+        <span class="user-chip__avatar">{{ currentUser.name | initials }}</span>
+        <span class="user-chip__info">
+          <strong>{{ currentUser.name }}</strong>
+          <small>{{ currentUser.role | roleLabel }}</small>
+        </span>
+        <mat-icon>expand_more</mat-icon>
+      </button>
+      <mat-menu #userMenu="matMenu">
+        <button mat-menu-item disabled>
+          <mat-icon>mail</mat-icon>
+          <span>{{ currentUser?.email }}</span>
+        </button>
+        <mat-divider></mat-divider>
+        <button mat-menu-item (click)="logout()">
+          <mat-icon>logout</mat-icon>
+          <span>Cerrar sesión</span>
+        </button>
+      </mat-menu>
+    </mat-toolbar>
+
+    <main class="shell__content" [@routeFade]="router.url">
+      <router-outlet></router-outlet>
+    </main>
+  </mat-sidenav-content>
+</mat-sidenav-container>

@@ -1,0 +1,32 @@
+.user-cell {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+
+  &__avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #fff;
+    background: var(--vria-gradient);
+    flex-shrink: 0;
+  }
+}
+
+.status-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #16a34a;
+  margin-right: 0.4rem;
+
+  &--off {
+    background: #9ca3af;
+  }
+}

@@ -1,0 +1,85 @@
+<div class="vria-page">
+  <app-page-header
+    [title]="'Hola, ' + (currentUser?.name || '')"
+    subtitle="Este es el resumen general de la operación VRIA."
+    icon="space_dashboard"
+  ></app-page-header>
+
+  <div class="stats-grid" *ngIf="!loadingStats; else statsSkeleton" [@listStagger]="stats.length">
+    <a
+      class="stat-card vria-card"
+      [class.stat-card--purple]="stat.accent === 'purple'"
+      [class.stat-card--green]="stat.accent === 'green'"
+      [class.stat-card--amber]="stat.accent === 'amber'"
+      *ngFor="let stat of stats"
+      [routerLink]="stat.path"
+    >
+      <div class="stat-card__icon">
+        <mat-icon>{{ stat.icon }}</mat-icon>
+      </div>
+      <div class="stat-card__body">
+        <span class="stat-card__value">{{ stat.value }}</span>
+        <span class="stat-card__label">{{ stat.label }}</span>
+      </div>
+    </a>
+  </div>
+
+  <ng-template #statsSkeleton>
+    <div class="stats-grid">
+      <div class="stat-card stat-card--skeleton vria-card" *ngFor="let i of [1, 2, 3, 4]"></div>
+    </div>
+  </ng-template>
+
+  <div class="vria-card panel quick-actions" *ngIf="quickActions.length">
+    <div class="panel__header">
+      <h2>Accesos rápidos</h2>
+    </div>
+    <div class="quick-actions__list">
+      <a
+        mat-flat-button
+        class="vria-btn"
+        [class]="action.colorClass"
+        *ngFor="let action of quickActions"
+        [routerLink]="action.path"
+      >
+        <mat-icon>{{ action.icon }}</mat-icon>
+        {{ action.label }}
+      </a>
+    </div>
+  </div>
+
+  <div class="vria-card panel">
+    <div class="panel__header">
+      <h2>Entregas pendientes</h2>
+      <a mat-button color="primary" routerLink="/deliveries">Ver todas</a>
+    </div>
+
+    <app-empty-state
+      *ngIf="!loadingStats && pendingDeliveries.length === 0"
+      icon="task_alt"
+      title="Todo al día"
+      message="No hay entregas pendientes en este momento."
+    ></app-empty-state>
+
+    <table *ngIf="pendingDeliveries.length" class="mini-table">
+      <thead>
+        <tr>
+          <th>Cliente</th>
+          <th>Repartidor</th>
+          <th>Estado</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let delivery of pendingDeliveries">
+          <td>{{ delivery.nameClient }}</td>
+          <td>{{ delivery.nameDelivery }}</td>
+          <td>
+            <mat-chip class="chip" [class.chip--ready]="delivery.state === 'READY'">
+              {{ delivery.state | deliveryStateLabel }}
+            </mat-chip>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

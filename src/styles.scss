@@ -1,1 +1,288 @@
-/* You can add global styles to this file, and also import other style files */
+@use '@angular/material' as mat;
+@use 'styles/theme' as vria;
+
+@include mat.core();
+@include mat.all-component-themes(vria.$vria-theme);
+
+:root {
+  --vria-blue: #3b82f6;
+  --vria-blue-dark: #1d4ed8;
+  --vria-blue-light: #93c5fd;
+  --vria-purple: #8b5cf6;
+  --vria-purple-dark: #6d28d9;
+  --vria-purple-light: #c4b5fd;
+  --vria-success: #16a34a;
+  --vria-success-dark: #15803d;
+  --vria-success-light: #4ade80;
+  --vria-warning: #d97706;
+  --vria-warning-dark: #b45309;
+  --vria-warning-light: #fbbf24;
+  --vria-danger: #dc2626;
+  --vria-danger-dark: #b91c1c;
+  --vria-danger-light: #f87171;
+  --vria-info: #0891b2;
+  --vria-info-dark: #0e7490;
+  --vria-info-light: #22d3ee;
+  --vria-white: #ffffff;
+  --vria-surface: #ffffff;
+  --vria-surface-alt: #f8faff;
+  --vria-background: #f4f6fd;
+  --vria-border: #e3e7f5;
+  --vria-text-primary: #1c1b2e;
+  --vria-text-secondary: #6b7185;
+  --vria-gradient: linear-gradient(135deg, var(--vria-blue) 0%, var(--vria-purple) 100%);
+  --vria-shadow: 0 10px 30px rgba(76, 42, 166, 0.12);
+  color-scheme: light;
+}
+
+:root[data-theme='dark'] {
+  --vria-blue: #60a5fa;
+  --vria-blue-dark: #3b82f6;
+  --vria-blue-light: #bfdbfe;
+  --vria-purple: #a78bfa;
+  --vria-purple-dark: #8b5cf6;
+  --vria-purple-light: #ddd6fe;
+  --vria-success: #4ade80;
+  --vria-success-dark: #22c55e;
+  --vria-success-light: #86efac;
+  --vria-warning: #fbbf24;
+  --vria-warning-dark: #f59e0b;
+  --vria-warning-light: #fcd34d;
+  --vria-danger: #f87171;
+  --vria-danger-dark: #ef4444;
+  --vria-danger-light: #fca5a5;
+  --vria-info: #22d3ee;
+  --vria-info-dark: #06b6d4;
+  --vria-info-light: #67e8f9;
+  --vria-white: #ffffff;
+  --vria-surface: #1a1830;
+  --vria-surface-alt: #221f3d;
+  --vria-background: #100e21;
+  --vria-border: #322d54;
+  --vria-text-primary: #f4f3fc;
+  --vria-text-secondary: #a6a3c4;
+  --vria-gradient: linear-gradient(135deg, var(--vria-blue) 0%, var(--vria-purple) 100%);
+  --vria-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  color-scheme: dark;
+
+  @include mat.all-component-colors(vria.$vria-dark-theme);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+html {
+  transition: background-color 200ms ease;
+}
+
+body {
+  margin: 0;
+  font-family: 'Plus Jakarta Sans', 'Roboto', 'Helvetica Neue', sans-serif;
+  background: var(--vria-background);
+  color: var(--vria-text-primary);
+  -webkit-font-smoothing: antialiased;
+  transition: background-color 200ms ease, color 200ms ease;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: 'Plus Jakarta Sans', 'Roboto', 'Helvetica Neue', sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--vria-purple-light);
+  border-radius: 999px;
+}
+
+.vria-snack {
+  &.mat-mdc-snack-bar-container {
+    --mdc-snackbar-container-color: #1c1b2e;
+    --mdc-snackbar-supporting-text-color: #ffffff;
+  }
+
+  &--success .mdc-snackbar__surface {
+    background: var(--vria-success-dark) !important;
+  }
+
+  &--error .mdc-snackbar__surface {
+    background: var(--vria-danger-dark) !important;
+  }
+
+  &--info .mdc-snackbar__surface {
+    background: var(--vria-purple-dark) !important;
+  }
+}
+
+.vria-card {
+  background: var(--vria-surface);
+  border-radius: 16px;
+  box-shadow: var(--vria-shadow);
+  border: 1px solid var(--vria-border);
+  transition: transform 180ms ease, box-shadow 180ms ease, background-color 200ms ease, border-color 200ms ease;
+}
+
+.vria-page {
+  padding: clamp(1rem, 2vw, 2rem);
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.mat-mdc-form-field {
+  width: 100%;
+}
+
+// ---- Botones con color propio por tipo de acción ----
+
+.vria-btn {
+  border-radius: 10px !important;
+  transition: transform 150ms ease, box-shadow 150ms ease, filter 150ms ease;
+
+  &:hover:not(:disabled) {
+    transform: translateY(-1px);
+    filter: brightness(1.05);
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(0);
+  }
+}
+
+@mixin vria-btn-color($color, $color-dark, $foreground: #fff) {
+  &.mat-mdc-icon-button {
+    color: $color !important;
+  }
+
+  &.mat-mdc-unelevated-button,
+  &.mat-mdc-raised-button {
+    --mdc-filled-button-container-color: #{$color};
+    --mdc-filled-button-label-text-color: #{$foreground};
+    --mdc-protected-button-container-color: #{$color};
+    --mdc-protected-button-label-text-color: #{$foreground};
+    --mat-mdc-button-persistent-ripple-color: #{$foreground};
+  }
+
+  &.mat-mdc-outlined-button {
+    --mdc-outlined-button-label-text-color: #{$color};
+    --mdc-outlined-button-outline-color: #{$color};
+    color: $color !important;
+  }
+
+  &.mat-mdc-icon-button:hover:not(:disabled) {
+    background-color: rgba(0, 0, 0, 0.04);
+  }
+}
+
+.vria-btn-success {
+  @include vria-btn-color(var(--vria-success), var(--vria-success-dark));
+}
+
+.vria-btn-warning {
+  @include vria-btn-color(var(--vria-warning), var(--vria-warning-dark));
+}
+
+.vria-btn-info {
+  @include vria-btn-color(var(--vria-info), var(--vria-info-dark));
+}
+
+.vria-btn-danger {
+  @include vria-btn-color(var(--vria-danger), var(--vria-danger-dark));
+}
+
+// ---- Utilidades compartidas para páginas de listado (tablas CRUD) ----
+
+.list-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+
+  .list-toolbar__search {
+    flex: 1 1 18rem;
+    max-width: 22rem;
+    margin-bottom: -1.25em;
+  }
+
+  @media (max-width: 600px) {
+    .list-toolbar__search {
+      flex: 1 1 100%;
+      max-width: none;
+    }
+  }
+}
+
+.data-table-card {
+  padding: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+
+.data-table {
+  width: 100%;
+
+  .mat-mdc-header-cell {
+    color: var(--vria-text-secondary);
+    font-weight: 600;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .mat-mdc-row {
+    transition: background-color 140ms ease, transform 140ms ease;
+
+    &:hover {
+      background-color: rgba(59, 130, 246, 0.07);
+    }
+  }
+
+  .cell-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.15rem;
+  }
+}
+
+.state-chip {
+  font-size: 0.75rem !important;
+  min-height: 24px !important;
+  font-weight: 600 !important;
+}
+
+.fade-row {
+  animation: fadeRow 220ms ease-out;
+}
+
+@keyframes fadeRow {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

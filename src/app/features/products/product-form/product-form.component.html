@@ -1,0 +1,63 @@
+<h2 mat-dialog-title>{{ isEdit ? 'Editar producto' : 'Nuevo producto' }}</h2>
+
+<form [formGroup]="form" (ngSubmit)="submit()">
+  <mat-dialog-content>
+    <mat-form-field appearance="outline">
+      <mat-label>Nombre del producto</mat-label>
+      <input matInput formControlName="nameProduct" />
+      <mat-error *ngIf="form.get('nameProduct')?.invalid">{{ errorFor('nameProduct', 'El nombre') }}</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Categoría</mat-label>
+      <mat-select formControlName="idCategory">
+        <mat-option *ngFor="let category of categories" [value]="category.idCategory">
+          {{ category.nameCategory }}
+        </mat-option>
+      </mat-select>
+      <mat-hint *ngIf="!loadingCategories && categories.length === 0">
+        No hay categorías. Crea una primero.
+      </mat-hint>
+      <mat-error *ngIf="form.get('idCategory')?.invalid">{{ errorFor('idCategory', 'La categoría') }}</mat-error>
+    </mat-form-field>
+
+    <div class="form-row">
+      <mat-form-field appearance="outline">
+        <mat-label>Stock</mat-label>
+        <input matInput type="number" min="0" formControlName="stock" />
+        <mat-error *ngIf="form.get('stock')?.invalid">{{ errorFor('stock', 'El stock') }}</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Precio</mat-label>
+        <span matTextPrefix>$&nbsp;</span>
+        <input matInput type="number" min="0" step="0.01" formControlName="price" />
+        <mat-error *ngIf="form.get('price')?.invalid">{{ errorFor('price', 'El precio') }}</mat-error>
+      </mat-form-field>
+    </div>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Referencia</mat-label>
+      <input matInput formControlName="reference" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>URL de foto</mat-label>
+      <input matInput formControlName="photo" placeholder="https://…" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Descripción</mat-label>
+      <textarea matInput rows="3" formControlName="description"></textarea>
+    </mat-form-field>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-button type="button" (click)="cancel()">Cancelar</button>
+    <app-submit-button
+      [label]="isEdit ? 'Guardar cambios' : 'Crear'"
+      [loading]="loading"
+      [disabled]="form.invalid"
+    ></app-submit-button>
+  </mat-dialog-actions>
+</form>

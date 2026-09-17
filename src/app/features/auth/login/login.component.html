@@ -1,0 +1,45 @@
+<div class="auth-card vria-card">
+  <h2>Inicia sesión</h2>
+  <p class="auth-card__subtitle">Accede con tu correo corporativo VRIA.</p>
+
+  <form [formGroup]="form" (ngSubmit)="submit()" class="auth-form">
+    <mat-form-field appearance="outline">
+      <mat-label>Correo electrónico</mat-label>
+      <input matInput type="email" formControlName="email" autocomplete="email" placeholder="nombre@vria.com" />
+      <mat-icon matSuffix>mail_outline</mat-icon>
+      <mat-error *ngIf="form.get('email')?.invalid">{{ errorFor('email', 'El correo') }}</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Contraseña</mat-label>
+      <input
+        matInput
+        [type]="hidePassword ? 'password' : 'text'"
+        formControlName="password"
+        autocomplete="current-password"
+      />
+      <button
+        mat-icon-button
+        matSuffix
+        type="button"
+        (click)="hidePassword = !hidePassword"
+        [attr.aria-label]="'Mostrar contraseña'"
+      >
+        <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+      </button>
+      <mat-error *ngIf="form.get('password')?.invalid">{{ errorFor('password', 'La contraseña') }}</mat-error>
+    </mat-form-field>
+
+    <app-submit-button
+      label="Ingresar"
+      loadingLabel="Ingresando…"
+      icon="login"
+      [loading]="loading"
+      [disabled]="form.invalid"
+    ></app-submit-button>
+  </form>
+
+  <p class="auth-card__footer">
+    ¿No tienes acceso? Solicítalo a tu administrador de VRIA.
+  </p>
+</div>

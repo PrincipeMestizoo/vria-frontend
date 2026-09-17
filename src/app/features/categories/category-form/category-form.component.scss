@@ -1,0 +1,10 @@
+mat-dialog-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  min-width: 22rem;
+
+  @media (max-width: 480px) {
+    min-width: 0;
+  }
+}

@@ -1,0 +1,22 @@
+.state-filter {
+  width: 12rem;
+  margin-bottom: -1.25em;
+
+  @media (max-width: 600px) {
+    width: 100%;
+  }
+}
+
+.delivery-cell {
+  display: flex;
+  flex-direction: column;
+
+  small {
+    color: var(--vria-text-secondary);
+  }
+}
+
+.state-select {
+  width: 11rem;
+  font-size: 0.85rem;
+}

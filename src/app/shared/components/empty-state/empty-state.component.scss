@@ -1,0 +1,27 @@
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 1rem;
+  text-align: center;
+  color: var(--vria-text-secondary);
+
+  mat-icon {
+    font-size: 3rem;
+    width: 3rem;
+    height: 3rem;
+    margin-bottom: 0.75rem;
+    color: var(--vria-purple-light);
+  }
+
+  h3 {
+    margin: 0 0 0.25rem;
+    color: var(--vria-text-primary);
+  }
+
+  p {
+    margin: 0;
+    max-width: 24rem;
+  }
+}
