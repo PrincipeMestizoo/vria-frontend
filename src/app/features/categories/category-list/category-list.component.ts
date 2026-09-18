@@ -33,7 +33,7 @@ export class CategoryListComponent implements OnInit {
   }
 
   get canDelete(): boolean {
-    return this.authService.hasAnyRole(['ADMIN']);
+    return this.authService.hasAnyRole(['ADMIN', 'WAREHOUSE_KEEPER']);
   }
 
   ngOnInit(): void {

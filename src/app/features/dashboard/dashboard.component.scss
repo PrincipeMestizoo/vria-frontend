@@ -12,23 +12,29 @@
   padding: 1.4rem;
   text-decoration: none;
   color: inherit;
-  transition: transform 180ms ease, box-shadow 180ms ease;
+  transition: transform 220ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 220ms ease;
 
   &:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 16px 34px rgba(37, 99, 235, 0.18);
+    transform: translateY(-4px);
+    box-shadow: var(--vria-shadow-hover);
+
+    .stat-card__icon {
+      transform: scale(1.08) rotate(-4deg);
+    }
   }
 
   &__icon {
     width: 52px;
     height: 52px;
-    border-radius: 14px;
+    border-radius: 16px;
     display: flex;
     align-items: center;
     justify-content: center;
     background: linear-gradient(135deg, var(--vria-blue), var(--vria-blue-light));
     color: #fff;
     flex-shrink: 0;
+    box-shadow: 4px 4px 10px rgba(0, 163, 224, 0.35), -3px -3px 8px rgba(255, 255, 255, 0.5);
+    transition: transform 220ms cubic-bezier(0.34, 1.56, 0.64, 1);
   }
 
   &--purple &__icon {
@@ -60,9 +66,10 @@
 
   &--skeleton {
     height: 84px;
-    background: linear-gradient(90deg, #eef1fb 25%, #f7f8fd 37%, #eef1fb 63%);
+    background: linear-gradient(90deg, var(--vria-surface-alt) 25%, var(--vria-surface) 37%, var(--vria-surface-alt) 63%);
     background-size: 400% 100%;
     animation: shimmer 1.4s ease infinite;
+    box-shadow: var(--vria-shadow-sm);
   }
 }
 
@@ -112,13 +119,13 @@
 }
 
 .chip {
-  background: rgba(124, 58, 237, 0.12) !important;
+  background: rgba(139, 47, 201, 0.12) !important;
   color: var(--vria-purple-dark) !important;
   font-size: 0.75rem !important;
   min-height: 24px !important;
 
   &--ready {
-    background: rgba(37, 99, 235, 0.12) !important;
+    background: rgba(0, 163, 224, 0.12) !important;
     color: var(--vria-blue-dark) !important;
   }
 }

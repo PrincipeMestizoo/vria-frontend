@@ -17,14 +17,15 @@
   align-items: center;
   justify-content: center;
   min-width: 2.2rem;
-  padding: 0.15rem 0.5rem;
+  padding: 0.2rem 0.6rem;
   border-radius: 999px;
-  font-weight: 600;
-  background: rgba(37, 99, 235, 0.1);
+  font-weight: 700;
+  background: rgba(0, 163, 224, 0.1);
   color: var(--vria-blue-dark);
+  box-shadow: var(--vria-shadow-sm);
 
   &--low {
     background: rgba(220, 38, 38, 0.12);
-    color: #b91c1c;
+    color: var(--vria-danger-dark);
   }
 }

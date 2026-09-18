@@ -1,21 +1,21 @@
 @use '@angular/material' as mat;
 
-// Paleta azul VRIA (base Tailwind blue, aclarada para un look más vívido)
+// Paleta azul VRIA — construida a partir del azul de marca #00A3E0.
 $vria-blue-palette: (
-  50: #eff6ff,
-  100: #dbeafe,
-  200: #bfdbfe,
-  300: #93c5fd,
-  400: #60a5fa,
-  500: #3b82f6,
-  600: #2563eb,
-  700: #1d4ed8,
-  800: #1e40af,
-  900: #1e3a8a,
-  A100: #bfe0ff,
-  A200: #60a5fa,
-  A400: #3b82f6,
-  A700: #1d4ed8,
+  50: #e6f7fd,
+  100: #c1ecf9,
+  200: #97e0f5,
+  300: #69d3f0,
+  400: #46c8ec,
+  500: #00a3e0,
+  600: #0095d3,
+  700: #0a7da8,
+  800: #0a678a,
+  900: #0a465c,
+  A100: #c1ecf9,
+  A200: #69d3f0,
+  A400: #00a3e0,
+  A700: #0a7da8,
   contrast: (
     50: rgba(black, 0.87),
     100: rgba(black, 0.87),
@@ -34,28 +34,30 @@ $vria-blue-palette: (
   ),
 );
 
-// Paleta morada VRIA (base Tailwind violet, aclarada)
+// Paleta violeta VRIA — construida a partir del morado de marca #8B2FC9.
+// Se usa como color secundario (degradados, navegación) fuera del slot
+// "accent" de Material, que ahora lleva el magenta de marca.
 $vria-purple-palette: (
-  50: #f5f3ff,
-  100: #ede9fe,
-  200: #ddd6fe,
-  300: #c4b5fd,
-  400: #a78bfa,
-  500: #8b5cf6,
-  600: #7c3aed,
-  700: #6d28d9,
-  800: #5b21b6,
-  900: #4c1d95,
-  A100: #ddcbff,
-  A200: #a78bfa,
-  A400: #8b5cf6,
-  A700: #6d28d9,
+  50: #f4e9fb,
+  100: #e2c5f4,
+  200: #cf9aef,
+  300: #b978e3,
+  400: #a151d6,
+  500: #8b2fc9,
+  600: #7a29b0,
+  700: #6b1f9e,
+  800: #571a80,
+  900: #3c1259,
+  A100: #e2c5f4,
+  A200: #b978e3,
+  A400: #8b2fc9,
+  A700: #6b1f9e,
   contrast: (
     50: rgba(black, 0.87),
     100: rgba(black, 0.87),
     200: rgba(black, 0.87),
     300: rgba(black, 0.87),
-    400: rgba(black, 0.87),
+    400: white,
     500: white,
     600: white,
     700: white,
@@ -68,9 +70,45 @@ $vria-purple-palette: (
   ),
 );
 
-// Primario/acento en el tono 500 (más brillante) en vez del 600 original.
+// Paleta magenta VRIA — acento de marca #E02495, usado para el slot "accent"
+// de Material (CTAs, focus, badges de énfasis) siguiendo la regla 60/30/10.
+$vria-pink-palette: (
+  50: #fce6f1,
+  100: #f7c1dd,
+  200: #f18fc0,
+  300: #ea5fa5,
+  400: #e53e9e,
+  500: #e02495,
+  600: #cc1f89,
+  700: #b01674,
+  800: #8f1260,
+  900: #650d44,
+  A100: #f7c1dd,
+  A200: #ea5fa5,
+  A400: #e02495,
+  A700: #b01674,
+  contrast: (
+    50: rgba(black, 0.87),
+    100: rgba(black, 0.87),
+    200: rgba(black, 0.87),
+    300: white,
+    400: white,
+    500: white,
+    600: white,
+    700: white,
+    800: white,
+    900: white,
+    A100: rgba(black, 0.87),
+    A200: white,
+    A400: white,
+    A700: white,
+  ),
+);
+
+// Primario = azul de marca. Acento = magenta de marca (el violeta queda
+// como color secundario decorativo vía variables CSS, no como slot Material).
 $vria-primary: mat.define-palette($vria-blue-palette, 500, 300, 700);
-$vria-accent: mat.define-palette($vria-purple-palette, 500, 300, 700);
+$vria-accent: mat.define-palette($vria-pink-palette, 500, 300, 700);
 $vria-warn: mat.define-palette(mat.$red-palette, 500);
 
 $vria-typography: mat.define-typography-config(

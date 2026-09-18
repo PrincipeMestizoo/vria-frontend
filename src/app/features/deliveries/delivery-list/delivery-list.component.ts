@@ -31,11 +31,11 @@ export class DeliveryListComponent implements OnInit {
   ) {}
 
   get canManage(): boolean {
-    return this.authService.hasAnyRole(['ADMIN', 'WAREHOUSE_KEEPER']);
+    return this.authService.hasAnyRole(['ADMIN', 'COMMERCIAL_ADVISOR']);
   }
 
   get canDelete(): boolean {
-    return this.authService.hasAnyRole(['ADMIN']);
+    return this.authService.hasAnyRole(['ADMIN', 'COMMERCIAL_ADVISOR']);
   }
 
   ngOnInit(): void {

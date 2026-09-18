@@ -53,9 +53,12 @@
         <mat-icon>expand_more</mat-icon>
       </button>
       <mat-menu #userMenu="matMenu">
-        <button mat-menu-item disabled>
-          <mat-icon>mail</mat-icon>
-          <span>{{ currentUser?.email }}</span>
+        <button mat-menu-item disabled class="user-menu__identity">
+          <mat-icon>person</mat-icon>
+          <span>
+            <strong>{{ currentUser?.name }}</strong>
+            <small>{{ currentUser?.role | roleLabel }}</small>
+          </span>
         </button>
         <mat-divider></mat-divider>
         <button mat-menu-item (click)="logout()">

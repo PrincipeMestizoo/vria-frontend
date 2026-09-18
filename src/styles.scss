@@ -5,12 +5,16 @@
 @include mat.all-component-themes(vria.$vria-theme);
 
 :root {
-  --vria-blue: #3b82f6;
-  --vria-blue-dark: #1d4ed8;
-  --vria-blue-light: #93c5fd;
-  --vria-purple: #8b5cf6;
-  --vria-purple-dark: #6d28d9;
-  --vria-purple-light: #c4b5fd;
+  // ---- Marca VRIA: azul + violeta (60/30) y magenta como acento (10) ----
+  --vria-blue: #00a3e0;
+  --vria-blue-dark: #0a7da8;
+  --vria-blue-light: #5dcbef;
+  --vria-purple: #8b2fc9;
+  --vria-purple-dark: #6b1f9e;
+  --vria-purple-light: #b978e3;
+  --vria-accent: #e02495;
+  --vria-accent-dark: #b01674;
+  --vria-accent-light: #f074b8;
   --vria-success: #16a34a;
   --vria-success-dark: #15803d;
   --vria-success-light: #4ade80;
@@ -24,24 +28,47 @@
   --vria-info-dark: #0e7490;
   --vria-info-light: #22d3ee;
   --vria-white: #ffffff;
-  --vria-surface: #ffffff;
-  --vria-surface-alt: #f8faff;
-  --vria-background: #f4f6fd;
-  --vria-border: #e3e7f5;
-  --vria-text-primary: #1c1b2e;
-  --vria-text-secondary: #6b7185;
+  --vria-surface: #fbfbfc;
+  --vria-surface-alt: #ececf1;
+  --vria-background: #f0f0f3;
+  --vria-border: #dedfe6;
+  --vria-text-primary: #1a1821;
+  --vria-text-secondary: #66616f;
   --vria-gradient: linear-gradient(135deg, var(--vria-blue) 0%, var(--vria-purple) 100%);
-  --vria-shadow: 0 10px 30px rgba(76, 42, 166, 0.12);
+  --vria-gradient-accent: linear-gradient(135deg, var(--vria-purple) 0%, var(--vria-accent) 100%);
+
+  // ---- Fichas claymórficas: sombra dual (luz arriba-izq. / sombra abajo-der.) ----
+  --clay-light: rgba(255, 255, 255, 0.9);
+  --clay-dark: rgba(31, 41, 72, 0.14);
+  --clay-dark-strong: rgba(31, 41, 72, 0.2);
+
+  --vria-shadow: 9px 9px 20px var(--clay-dark), -9px -9px 18px var(--clay-light);
+  --vria-shadow-sm: 5px 5px 12px var(--clay-dark), -5px -5px 10px var(--clay-light);
+  --vria-shadow-lg: 14px 14px 32px var(--clay-dark-strong), -12px -12px 26px var(--clay-light);
+  --vria-shadow-hover: 16px 16px 34px var(--clay-dark-strong), -12px -12px 28px var(--clay-light);
+  --vria-shadow-inset: inset 4px 4px 9px var(--clay-dark), inset -4px -4px 8px var(--clay-light);
+  --vria-shadow-inset-deep: inset 6px 6px 12px var(--clay-dark-strong), inset -5px -5px 10px var(--clay-light);
+  --vria-shadow-pressed: inset 3px 3px 7px var(--clay-dark), inset -3px -3px 6px var(--clay-light);
+  --vria-focus-ring: 0 0 0 3px rgba(224, 36, 149, 0.32);
+
+  --vria-radius-lg: 28px;
+  --vria-radius-md: 18px;
+  --vria-radius-sm: 14px;
+
   color-scheme: light;
 }
 
 :root[data-theme='dark'] {
-  --vria-blue: #60a5fa;
-  --vria-blue-dark: #3b82f6;
-  --vria-blue-light: #bfdbfe;
-  --vria-purple: #a78bfa;
-  --vria-purple-dark: #8b5cf6;
-  --vria-purple-light: #ddd6fe;
+  // Tonos aclarados para mantener contraste AA sobre el fondo oscuro de marca.
+  --vria-blue: #33b8e8;
+  --vria-blue-dark: #00a3e0;
+  --vria-blue-light: #8ddcf5;
+  --vria-purple: #ab5ad9;
+  --vria-purple-dark: #8b2fc9;
+  --vria-purple-light: #cf9aef;
+  --vria-accent: #eb59ae;
+  --vria-accent-dark: #e02495;
+  --vria-accent-light: #f58fc8;
   --vria-success: #4ade80;
   --vria-success-dark: #22c55e;
   --vria-success-light: #86efac;
@@ -55,14 +82,27 @@
   --vria-info-dark: #06b6d4;
   --vria-info-light: #67e8f9;
   --vria-white: #ffffff;
-  --vria-surface: #1a1830;
-  --vria-surface-alt: #221f3d;
-  --vria-background: #100e21;
-  --vria-border: #322d54;
-  --vria-text-primary: #f4f3fc;
-  --vria-text-secondary: #a6a3c4;
+  --vria-surface: #221f2c;
+  --vria-surface-alt: #2b2738;
+  --vria-background: #1a1821;
+  --vria-border: #3a3448;
+  --vria-text-primary: #f4f4f6;
+  --vria-text-secondary: #aca7b8;
   --vria-gradient: linear-gradient(135deg, var(--vria-blue) 0%, var(--vria-purple) 100%);
-  --vria-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  --vria-gradient-accent: linear-gradient(135deg, var(--vria-purple) 0%, var(--vria-accent) 100%);
+
+  --clay-light: rgba(255, 255, 255, 0.055);
+  --clay-dark: rgba(0, 0, 0, 0.55);
+  --clay-dark-strong: rgba(0, 0, 0, 0.7);
+
+  --vria-shadow: 9px 9px 20px var(--clay-dark), -9px -9px 18px var(--clay-light);
+  --vria-shadow-sm: 5px 5px 12px var(--clay-dark), -5px -5px 10px var(--clay-light);
+  --vria-shadow-lg: 14px 14px 32px var(--clay-dark-strong), -12px -12px 26px var(--clay-light);
+  --vria-shadow-hover: 16px 16px 34px var(--clay-dark-strong), -12px -12px 28px var(--clay-light);
+  --vria-shadow-inset: inset 4px 4px 9px var(--clay-dark), inset -4px -4px 8px var(--clay-light);
+  --vria-shadow-inset-deep: inset 6px 6px 12px var(--clay-dark-strong), inset -5px -5px 10px var(--clay-light);
+  --vria-shadow-pressed: inset 3px 3px 7px var(--clay-dark), inset -3px -3px 6px var(--clay-light);
+  --vria-focus-ring: 0 0 0 3px rgba(235, 89, 174, 0.4);
   color-scheme: dark;
 
   @include mat.all-component-colors(vria.$vria-dark-theme);
@@ -115,10 +155,23 @@ h6 {
   border-radius: 999px;
 }
 
+// ---------------------------------------------------------------------------
+// Claymorfismo — utilidades base
+// ---------------------------------------------------------------------------
+
 .vria-snack {
+  // Deja libre la zona del toolbar (avatar/menú de usuario) para que el
+  // aviso nunca quede encima del botón de usuario.
+  margin-top: 4.5rem !important;
+
   &.mat-mdc-snack-bar-container {
-    --mdc-snackbar-container-color: #1c1b2e;
-    --mdc-snackbar-supporting-text-color: #ffffff;
+    --mdc-snackbar-container-color: #1a1821;
+    --mdc-snackbar-supporting-text-color: #f4f4f6;
+  }
+
+  .mdc-snackbar__surface {
+    border-radius: var(--vria-radius-md) !important;
+    box-shadow: var(--vria-shadow-lg) !important;
   }
 
   &--success .mdc-snackbar__surface {
@@ -136,10 +189,12 @@ h6 {
 
 .vria-card {
   background: var(--vria-surface);
-  border-radius: 16px;
+  border-radius: var(--vria-radius-lg);
   box-shadow: var(--vria-shadow);
-  border: 1px solid var(--vria-border);
-  transition: transform 180ms ease, box-shadow 180ms ease, background-color 200ms ease, border-color 200ms ease;
+  border: none;
+  transition: transform 260ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 260ms cubic-bezier(0.22, 1, 0.36, 1),
+    background-color 200ms ease;
+  animation: clayPop 360ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 .vria-page {
@@ -152,19 +207,133 @@ h6 {
   width: 100%;
 }
 
+// ---- Campos de formulario: efecto "hundido" en la masa de arcilla ----
+
+.mat-mdc-form-field {
+  .mdc-notched-outline__leading,
+  .mdc-notched-outline__notch,
+  .mdc-notched-outline__trailing {
+    border-color: transparent !important;
+  }
+
+  .mat-mdc-text-field-wrapper {
+    background: var(--vria-surface-alt);
+    border-radius: var(--vria-radius-md) !important;
+    box-shadow: var(--vria-shadow-inset);
+    transition: box-shadow 220ms ease;
+  }
+
+  &.mat-focused .mat-mdc-text-field-wrapper {
+    box-shadow: var(--vria-shadow-inset-deep), var(--vria-focus-ring);
+  }
+
+  &.mat-form-field-invalid .mat-mdc-text-field-wrapper {
+    box-shadow: var(--vria-shadow-inset), 0 0 0 3px rgba(220, 38, 38, 0.22);
+  }
+
+  .mat-mdc-form-field-icon-suffix,
+  .mat-mdc-form-field-icon-prefix {
+    color: var(--vria-text-secondary);
+  }
+
+  // Evita que un label largo se corte o se monte sobre el ícono/notch cuando
+  // el campo se estrecha (columnas de formulario en pantallas medianas).
+  .mdc-floating-label {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+// Los formularios en dos columnas (`.form-row`) deben poder encogerse por
+// debajo del ancho intrínseco de su contenido: sin este mínimo en 0, un
+// input/label largo empuja la columna y la desborda en vez de truncarse.
+.form-row {
+  min-width: 0;
+
+  > * {
+    min-width: 0;
+  }
+}
+
+.mat-mdc-select-panel,
+.mat-mdc-autocomplete-panel {
+  border-radius: var(--vria-radius-md) !important;
+  box-shadow: var(--vria-shadow-lg) !important;
+  background: var(--vria-surface) !important;
+  padding: 0.35rem !important;
+  animation: clayPop 200ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.mat-mdc-option {
+  border-radius: 12px !important;
+  margin: 0.1rem 0.15rem;
+  transition: background-color 140ms ease, transform 140ms ease;
+
+  &:hover:not(.mdc-list-item--disabled) {
+    transform: translateX(2px);
+  }
+}
+
+// ---- Menús contextuales ----
+
+.mat-mdc-menu-panel {
+  border-radius: var(--vria-radius-md) !important;
+  box-shadow: var(--vria-shadow-lg) !important;
+  background: var(--vria-surface) !important;
+  padding: 0.3rem !important;
+  animation: clayPop 200ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.mat-mdc-menu-item {
+  border-radius: 12px !important;
+  transition: background-color 140ms ease, transform 140ms ease;
+
+  &:hover {
+    transform: translateX(2px);
+  }
+}
+
+// ---- Diálogos ----
+
+.mdc-dialog__surface {
+  border-radius: var(--vria-radius-lg) !important;
+  box-shadow: var(--vria-shadow-lg) !important;
+  background: var(--vria-surface) !important;
+}
+
+.mat-mdc-dialog-container {
+  --mdc-dialog-container-color: var(--vria-surface);
+}
+
+// ---- Chips ----
+
+.mat-mdc-chip,
+.mat-mdc-standard-chip {
+  border-radius: 999px !important;
+  box-shadow: var(--vria-shadow-sm);
+}
+
 // ---- Botones con color propio por tipo de acción ----
 
 .vria-btn {
-  border-radius: 10px !important;
-  transition: transform 150ms ease, box-shadow 150ms ease, filter 150ms ease;
+  border-radius: var(--vria-radius-md) !important;
+  box-shadow: var(--vria-shadow-sm);
+  transition: transform 180ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 180ms ease, filter 180ms ease;
 
   &:hover:not(:disabled) {
-    transform: translateY(-1px);
-    filter: brightness(1.05);
+    transform: translateY(-2px);
+    box-shadow: var(--vria-shadow-hover);
+    filter: brightness(1.04);
   }
 
   &:active:not(:disabled) {
-    transform: translateY(0);
+    transform: translateY(1px) scale(0.97);
+    box-shadow: var(--vria-shadow-pressed);
+  }
+
+  &[disabled] {
+    box-shadow: none;
   }
 }
 
@@ -184,12 +353,13 @@ h6 {
 
   &.mat-mdc-outlined-button {
     --mdc-outlined-button-label-text-color: #{$color};
-    --mdc-outlined-button-outline-color: #{$color};
+    --mdc-outlined-button-outline-color: transparent;
+    background: rgba(0, 0, 0, 0.035);
     color: $color !important;
   }
 
   &.mat-mdc-icon-button:hover:not(:disabled) {
-    background-color: rgba(0, 0, 0, 0.04);
+    background-color: rgba(245, 20, 20, 0.04);
   }
 }
 
@@ -209,6 +379,32 @@ h6 {
   @include vria-btn-color(var(--vria-danger), var(--vria-danger-dark));
 }
 
+.vria-btn-accent {
+  @include vria-btn-color(var(--vria-accent), var(--vria-accent-dark));
+}
+
+.mat-mdc-outlined-button {
+  --mdc-outlined-button-outline-color: transparent;
+  background: var(--vria-surface-alt);
+}
+
+// Botones/iconos "planos" de Material (menús, toolbar, celdas) reciben un
+// pequeño relieve de arcilla al pasar el cursor, sin necesitar .vria-btn.
+.mat-mdc-icon-button:not(.vria-btn) {
+  transition: transform 160ms ease, box-shadow 160ms ease, background-color 160ms ease;
+
+  &:hover:not(:disabled) {
+    box-shadow: var(--vria-shadow-sm);
+    background-color: var(--vria-surface-alt);
+    transform: translateY(-1px);
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(0) scale(0.94);
+    box-shadow: var(--vria-shadow-pressed);
+  }
+}
+
 // ---- Utilidades compartidas para páginas de listado (tablas CRUD) ----
 
 .list-toolbar {
@@ -217,7 +413,7 @@ h6 {
   justify-content: space-between;
   gap: 1rem;
   flex-wrap: wrap;
-  margin-bottom: 1rem;
+  margin-bottom: 1.25rem;
 
   .list-toolbar__search {
     flex: 1 1 18rem;
@@ -243,46 +439,84 @@ h6 {
 .data-table {
   width: 100%;
 
+  .mat-mdc-header-row {
+    background: var(--vria-surface-alt);
+  }
+
   .mat-mdc-header-cell {
     color: var(--vria-text-secondary);
-    font-weight: 600;
-    font-size: 0.78rem;
+    font-weight: 700;
+    font-size: 0.76rem;
     text-transform: uppercase;
-    letter-spacing: 0.04em;
+    letter-spacing: 0.05em;
+    border-bottom-color: transparent;
   }
 
   .mat-mdc-row {
-    transition: background-color 140ms ease, transform 140ms ease;
+    transition: background-color 160ms ease, transform 160ms ease;
 
     &:hover {
-      background-color: rgba(59, 130, 246, 0.07);
+      background-color: rgba(0, 163, 224, 0.07);
     }
+  }
+
+  .mat-mdc-cell {
+    border-bottom-color: var(--vria-border);
   }
 
   .cell-actions {
     display: flex;
     justify-content: flex-end;
-    gap: 0.15rem;
+    gap: 0.2rem;
   }
 }
 
 .state-chip {
   font-size: 0.75rem !important;
-  min-height: 24px !important;
-  font-weight: 600 !important;
+  min-height: 26px !important;
+  font-weight: 700 !important;
+  box-shadow: var(--vria-shadow-sm);
 }
 
+// Entrada escalonada y "aparición mullida" de las filas al cargar/filtrar.
 .fade-row {
-  animation: fadeRow 220ms ease-out;
+  animation: fadeRow 320ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@for $i from 1 through 14 {
+  .data-table tr.fade-row:nth-of-type(#{$i}) {
+    animation-delay: #{$i * 35}ms;
+  }
 }
 
 @keyframes fadeRow {
   from {
     opacity: 0;
-    transform: translateY(4px);
+    transform: translateY(10px) scale(0.99);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes clayPop {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }

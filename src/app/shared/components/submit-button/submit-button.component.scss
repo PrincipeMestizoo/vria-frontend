@@ -4,17 +4,17 @@
   gap: 0.5rem;
   min-width: 9rem;
   justify-content: center;
-  transition: transform 160ms ease, box-shadow 160ms ease;
-  box-shadow: 0 4px 14px rgba(94, 53, 177, 0.25);
+  transition: transform 180ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 180ms ease;
+  box-shadow: var(--vria-shadow-sm);
 
   &:not([disabled]):hover {
-    transform: translateY(-1px);
-    box-shadow: 0 8px 20px rgba(94, 53, 177, 0.32);
+    transform: translateY(-2px);
+    box-shadow: var(--vria-shadow-hover);
   }
 
   &:not([disabled]):active {
-    transform: translateY(0) scale(0.97);
-    box-shadow: 0 2px 8px rgba(94, 53, 177, 0.28);
+    transform: translateY(1px) scale(0.97);
+    box-shadow: var(--vria-shadow-pressed);
   }
 
   &[disabled] {

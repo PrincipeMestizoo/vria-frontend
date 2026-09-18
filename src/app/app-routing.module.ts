@@ -26,19 +26,23 @@ const routes: Routes = [
       },
       {
         path: 'products',
+        canActivate: [roleGuard(['ADMIN', 'WAREHOUSE_KEEPER'])],
         loadChildren: () => import('./features/products/products.module').then((m) => m.ProductsModule),
       },
       {
         path: 'categories',
+        canActivate: [roleGuard(['ADMIN', 'WAREHOUSE_KEEPER'])],
         loadChildren: () => import('./features/categories/categories.module').then((m) => m.CategoriesModule),
       },
       {
         path: 'type-categories',
+        canActivate: [roleGuard(['ADMIN', 'WAREHOUSE_KEEPER'])],
         loadChildren: () =>
           import('./features/type-categories/type-categories.module').then((m) => m.TypeCategoriesModule),
       },
       {
         path: 'deliveries',
+        canActivate: [roleGuard(['ADMIN', 'COMMERCIAL_ADVISOR'])],
         loadChildren: () => import('./features/deliveries/deliveries.module').then((m) => m.DeliveriesModule),
       },
       {
