@@ -30,6 +30,105 @@
     </div>
   </ng-template>
 
+  <section class="vria-card panel stock-light" aria-labelledby="stock-light-title">
+    <div class="panel__header">
+      <div class="stock-light__heading">
+        <h2 id="stock-light-title">Semáforo de stock</h2>
+        <span class="stock-light__updated" *ngIf="stockUpdatedAt">
+          Actualizado {{ stockUpdatedAt | date: 'shortTime' }}
+        </span>
+      </div>
+      <div class="stock-light__actions">
+        <a mat-button color="primary" routerLink="/products" *ngIf="canSeeInventory">Ver inventario</a>
+        <button
+          mat-icon-button
+          type="button"
+          matTooltip="Actualizar stock"
+          aria-label="Actualizar stock"
+          [disabled]="refreshingStock"
+          (click)="refreshStock()"
+        >
+          <mat-icon [class.spin]="refreshingStock">refresh</mat-icon>
+        </button>
+      </div>
+    </div>
+
+    <div class="stock-light__body" *ngIf="!loadingStats; else stockSkeleton">
+      <div class="signal" role="group" aria-label="Filtrar productos por nivel de stock">
+        <button
+          type="button"
+          class="signal__lamp"
+          *ngFor="let level of stockLevels"
+          [ngClass]="'signal__lamp--' + level.toLowerCase()"
+          [class.signal__lamp--on]="stockSummary[level] > 0"
+          [class.signal__lamp--selected]="stockFilter === level"
+          [class.signal__lamp--dimmed]="stockFilter && stockFilter !== level"
+          [attr.aria-pressed]="stockFilter === level"
+          (click)="toggleStockFilter(level)"
+        >
+          <span class="signal__bulb" aria-hidden="true"></span>
+          <span class="signal__text">
+            <span class="signal__count">{{ stockSummary[level] }}</span>
+            <span class="signal__label">{{ stockLevelLabels[level] }}</span>
+          </span>
+        </button>
+      </div>
+
+      <div class="stock-list">
+        <div class="stock-list__filter" *ngIf="stockFilter">
+          <span>Mostrando: {{ stockLevelLabels[stockFilter] }}</span>
+          <button mat-button type="button" (click)="toggleStockFilter(stockFilter)">
+            <mat-icon>close</mat-icon>
+            Quitar filtro
+          </button>
+        </div>
+
+        <app-empty-state
+          *ngIf="stockError && !stockItems.length"
+          icon="cloud_off"
+          title="No se pudo cargar el stock"
+          message="Intenta actualizar en unos segundos."
+        ></app-empty-state>
+
+        <app-empty-state
+          *ngIf="!stockError && !stockItems.length"
+          icon="inventory_2"
+          title="Sin productos"
+          message="Aún no hay productos registrados en el inventario."
+        ></app-empty-state>
+
+        <app-empty-state
+          *ngIf="stockItems.length && !visibleStockItems.length"
+          icon="task_alt"
+          title="Nada por aquí"
+          message="No hay productos en este nivel."
+        ></app-empty-state>
+
+        <ul class="stock-list__items" *ngIf="visibleStockItems.length">
+          <li
+            class="stock-item"
+            *ngFor="let item of visibleStockItems; trackBy: trackByStockItem"
+            [ngClass]="'stock-item--' + item.level.toLowerCase()"
+          >
+            <span class="stock-item__dot" aria-hidden="true"></span>
+            <span class="stock-item__info">
+              <span class="stock-item__name">{{ item.name }}</span>
+              <span class="stock-item__category">{{ item.category }}</span>
+            </span>
+            <span class="stock-item__stock">
+              <strong>{{ item.stock }}</strong>
+              <span>{{ item.stock === 0 ? 'Agotado' : stockLevelLabels[item.level] }}</span>
+            </span>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <ng-template #stockSkeleton>
+      <div class="stock-light__skeleton"></div>
+    </ng-template>
+  </section>
+
   <div class="vria-card panel quick-actions" *ngIf="quickActions.length">
     <div class="panel__header">
       <h2>Accesos rápidos</h2>

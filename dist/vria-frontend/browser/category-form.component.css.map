@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/features/categories/category-form/category-form.component.scss"],
+  "sourcesContent": ["mat-dialog-content {\n  display: flex;\n  flex-direction: column;\n  gap: 0.25rem;\n  min-width: 22rem;\n\n  @media (max-width: 480px) {\n    min-width: 0;\n  }\n}\n"],
+  "mappings": ";AAAA;AACE,WAAA;AACA,kBAAA;AACA,OAAA;AACA,aAAA;;AAEA,OAAA,CAAA,SAAA,EAAA;AANF;AAOI,eAAA;;;",
+  "names": []
+}

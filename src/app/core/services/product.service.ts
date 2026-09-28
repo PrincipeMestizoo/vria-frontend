@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
+import { silentContext } from '../interceptors/silent-request';
 import { ProductRequestDTO, ProductResponseDTO } from '../models';
 
 @Injectable({ providedIn: 'root' })
@@ -10,8 +11,10 @@ export class ProductService {
 
   constructor(private readonly http: HttpClient) {}
 
-  findAll(): Observable<ProductResponseDTO[]> {
-    return this.http.get<ProductResponseDTO[]>(this.baseUrl);
+  findAll(options: { silent?: boolean } = {}): Observable<ProductResponseDTO[]> {
+    return this.http.get<ProductResponseDTO[]>(this.baseUrl, {
+      context: options.silent ? silentContext() : undefined,
+    });
   }
 
   findById(id: number): Observable<ProductResponseDTO> {

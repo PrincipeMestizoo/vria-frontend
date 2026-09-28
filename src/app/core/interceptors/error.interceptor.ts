@@ -5,6 +5,7 @@ import { catchError, throwError } from 'rxjs';
 import { AuthService } from '../services/auth.service';
 import { NotificationService } from '../services/notification.service';
 import { ApiErrorResponse } from '../models';
+import { SILENT_REQUEST } from './silent-request';
 
 export const errorInterceptor: HttpInterceptorFn = (req, next) => {
   const authService = inject(AuthService);
@@ -14,6 +15,10 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
   return next(req).pipe(
     catchError((error: HttpErrorResponse) => {
       const body = error.error as ApiErrorResponse | null;
+
+      if (req.context.get(SILENT_REQUEST) && error.status !== 401) {
+        return throwError(() => error);
+      }
 
       if (error.status === 401) {
         const wasAuthenticated = authService.isAuthenticated;

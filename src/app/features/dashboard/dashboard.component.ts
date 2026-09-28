@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { forkJoin, of } from 'rxjs';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Subscription, forkJoin, interval, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { AuthService } from '../../core/services/auth.service';
 import { ProductService } from '../../core/services/product.service';
@@ -8,8 +8,24 @@ import { TypeCategoryService } from '../../core/services/type-category.service';
 import { DeliveryService } from '../../core/services/delivery.service';
 import { TransferService } from '../../core/services/transfer.service';
 import { UserService } from '../../core/services/user.service';
-import { CurrentUser, DeliveryDTO, TypeRole } from '../../core/models';
+import { CurrentUser, DeliveryDTO, ProductResponseDTO, TypeRole } from '../../core/models';
 import { listStagger } from '../../shared/animations/animations';
+import {
+  STOCK_LEVELS,
+  STOCK_LEVEL_LABELS,
+  StockLevel,
+  getStockLevel,
+} from '../../shared/utils/stock-level';
+
+const STOCK_REFRESH_MS = 60_000;
+
+interface StockItem {
+  id: number;
+  name: string;
+  category: string;
+  stock: number;
+  level: StockLevel;
+}
 
 interface StatCard {
   label: string;
@@ -64,13 +80,26 @@ const QUICK_ACTIONS: QuickAction[] = [
   styleUrl: './dashboard.component.scss',
   animations: [listStagger],
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent implements OnInit, OnDestroy {
   currentUser: CurrentUser | null = null;
   loadingStats = true;
   stats: StatCard[] = [];
   quickActions: QuickAction[] = [];
   pendingDeliveries: DeliveryDTO[] = [];
   canSeeDeliveries = false;
+  canSeeInventory = false;
+
+  readonly stockLevels = STOCK_LEVELS;
+  readonly stockLevelLabels = STOCK_LEVEL_LABELS;
+  stockItems: StockItem[] = [];
+  visibleStockItems: StockItem[] = [];
+  stockSummary: Record<StockLevel, number> = { OK: 0, LOW: 0, CRITICAL: 0 };
+  stockFilter: StockLevel | null = null;
+  stockError = false;
+  refreshingStock = false;
+  stockUpdatedAt: Date | null = null;
+
+  private stockRefreshSub?: Subscription;
 
   constructor(
     private readonly authService: AuthService,
@@ -89,11 +118,17 @@ export class DashboardComponent implements OnInit {
     const canSeeTransfers = this.authService.hasAnyRole(['ADMIN', 'COMMERCIAL_ADVISOR']);
     const canSeeUsers = this.authService.hasAnyRole(['ADMIN']);
     this.canSeeDeliveries = canSeeDeliveries;
+    this.canSeeInventory = canSeeInventory;
 
     this.quickActions = QUICK_ACTIONS.filter((action) => this.authService.hasAnyRole(action.roles));
 
     forkJoin({
-      products: canSeeInventory ? this.productService.findAll().pipe(catchError(() => of([]))) : of([]),
+      products: this.productService.findAll().pipe(
+        catchError(() => {
+          this.stockError = true;
+          return of([]);
+        })
+      ),
       categories: canSeeInventory ? this.categoryService.findAll().pipe(catchError(() => of([]))) : of([]),
       typeCategories: canSeeInventory
         ? this.typeCategoryService.findAll().pipe(catchError(() => of([])))
@@ -106,6 +141,7 @@ export class DashboardComponent implements OnInit {
     })
       .pipe(
         map(({ products, categories, typeCategories, deliveries, transfers, users }) => {
+          this.setStockItems(products);
           this.pendingDeliveries = canSeeDeliveries
             ? deliveries.filter((delivery) => delivery.state !== 'DELIVERED').slice(0, 5)
             : [];
@@ -175,5 +211,67 @@ export class DashboardComponent implements OnInit {
         this.stats = cards;
         this.loadingStats = false;
       });
+
+    this.stockRefreshSub = interval(STOCK_REFRESH_MS).subscribe(() => this.refreshStock(true));
+  }
+
+  ngOnDestroy(): void {
+    this.stockRefreshSub?.unsubscribe();
+  }
+
+  refreshStock(silent = false): void {
+    if (this.refreshingStock) {
+      return;
+    }
+    this.refreshingStock = true;
+    this.productService.findAll({ silent }).subscribe({
+      next: (products) => {
+        this.stockError = false;
+        this.setStockItems(products);
+        const productsCard = this.stats.find((stat) => stat.path === '/products');
+        if (productsCard) {
+          productsCard.value = products.length;
+        }
+        this.refreshingStock = false;
+      },
+      error: () => {
+        this.stockError = true;
+        this.refreshingStock = false;
+      },
+    });
+  }
+
+  toggleStockFilter(level: StockLevel): void {
+    this.stockFilter = this.stockFilter === level ? null : level;
+    this.applyStockFilter();
+  }
+
+  trackByStockItem(_: number, item: StockItem): number {
+    return item.id;
+  }
+
+  private setStockItems(products: ProductResponseDTO[]): void {
+    this.stockItems = products
+      .map((product) => ({
+        id: product.idProduct,
+        name: product.nameProduct,
+        category: product.nameCategory,
+        stock: product.stock,
+        level: getStockLevel(product.stock),
+      }))
+      .sort((a, b) => a.stock - b.stock || a.name.localeCompare(b.name));
+
+    this.stockSummary = { OK: 0, LOW: 0, CRITICAL: 0 };
+    for (const item of this.stockItems) {
+      this.stockSummary[item.level]++;
+    }
+    this.stockUpdatedAt = new Date();
+    this.applyStockFilter();
+  }
+
+  private applyStockFilter(): void {
+    this.visibleStockItems = this.stockFilter
+      ? this.stockItems.filter((item) => item.level === this.stockFilter)
+      : this.stockItems;
   }
 }

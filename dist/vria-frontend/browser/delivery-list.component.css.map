@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/features/deliveries/delivery-list/delivery-list.component.scss"],
+  "sourcesContent": [".state-filter {\n  width: 12rem;\n  margin-bottom: -1.25em;\n\n  @media (max-width: 600px) {\n    width: 100%;\n  }\n}\n\n.delivery-cell {\n  display: flex;\n  flex-direction: column;\n\n  small {\n    color: var(--vria-text-secondary);\n  }\n}\n\n.state-select {\n  width: 11rem;\n  font-size: 0.85rem;\n}\n"],
+  "mappings": ";AAAA,CAAA;AACE,SAAA;AACA,iBAAA;;AAEA,OAAA,CAAA,SAAA,EAAA;AAJF,GAAA;AAKI,WAAA;;;AAIJ,CAAA;AACE,WAAA;AACA,kBAAA;;AAEA,CAJF,cAIE;AACE,SAAA,IAAA;;AAIJ,CAAA;AACE,SAAA;AACA,aAAA;;",
+  "names": []
+}

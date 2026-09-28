@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/features/deliveries/delivery-form/delivery-form.component.scss"],
+  "sourcesContent": ["mat-dialog-content {\n  display: flex;\n  flex-direction: column;\n  gap: 0.25rem;\n  min-width: 26rem;\n\n  @media (max-width: 480px) {\n    min-width: 0;\n  }\n}\n\n.form-row {\n  display: grid;\n  grid-template-columns: 1fr 1fr;\n  gap: 0 1rem;\n\n  @media (max-width: 480px) {\n    grid-template-columns: 1fr;\n  }\n}\n"],
+  "mappings": ";AAAA;AACE,WAAA;AACA,kBAAA;AACA,OAAA;AACA,aAAA;;AAEA,OAAA,CAAA,SAAA,EAAA;AANF;AAOI,eAAA;;;AAIJ,CAAA;AACE,WAAA;AACA,yBAAA,IAAA;AACA,OAAA,EAAA;;AAEA,OAAA,CAAA,SAAA,EAAA;AALF,GAAA;AAMI,2BAAA;;;",
+  "names": []
+}

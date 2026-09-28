@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/core/interceptors/silent-request.ts"],
+  "sourcesContent": ["import { HttpContext, HttpContextToken } from '@angular/common/http';\n\n// Peticiones en segundo plano: sin overlay de carga ni notificaciones de error.\nexport const SILENT_REQUEST = new HttpContextToken<boolean>(() => false);\n\nexport function silentContext(): HttpContext {\n  return new HttpContext().set(SILENT_REQUEST, true);\n}\n"],
+  "mappings": ";;;;;;AAGO,IAAM,iBAAiB,IAAI,iBAA0B,MAAM,KAAK;AAEjE,SAAU,gBAAa;AAC3B,SAAO,IAAI,YAAW,EAAG,IAAI,gBAAgB,IAAI;AACnD;",
+  "names": []
+}

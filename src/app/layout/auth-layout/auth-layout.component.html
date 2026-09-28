@@ -1,6 +1,8 @@
 <app-loading-overlay></app-loading-overlay>
 
-<div class="auth-shell">
+<app-splash-screen *ngIf="showSplash" @splashLeave></app-splash-screen>
+
+<div class="auth-shell" *ngIf="!showSplash" @shellEnter>
   <div class="auth-shell__aside">
     <img class="brand-logo" src="assets/images/logo1.png" alt="VRIA" />
     <h1>VRIA</h1>
