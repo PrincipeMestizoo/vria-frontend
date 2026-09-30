@@ -1,0 +1,286 @@
+.catalog-toolbar {
+  margin-bottom: 0.5rem;
+
+  &__filters {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  &__select {
+    width: 12rem;
+    margin-bottom: -1.25em;
+  }
+
+  @media (max-width: 600px) {
+    &__filters,
+    &__select {
+      width: 100%;
+    }
+
+    &__select {
+      flex: 1 1 100%;
+    }
+  }
+}
+
+.catalog-results {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 2.25rem;
+  margin: 0 0 0.5rem;
+  color: var(--vria-text-secondary);
+  font-size: 0.875rem;
+}
+
+.level-option {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  &__dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+
+    &--ok {
+      background: var(--vria-success);
+    }
+
+    &--low {
+      background: var(--vria-warning);
+    }
+
+    &--critical {
+      background: var(--vria-danger);
+    }
+  }
+}
+
+.catalog-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1.5rem;
+  padding: 0.5rem 0.25rem 1rem;
+
+  @media (max-width: 1200px) {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  @media (max-width: 900px) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  @media (max-width: 520px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+// Colores del semaforo de stock (mismas reglas que el dashboard)
+.product-card {
+  --lamp: var(--vria-text-secondary);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--vria-surface);
+  border-radius: var(--vria-radius-lg);
+  box-shadow: var(--vria-shadow);
+  transition: transform 260ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 260ms cubic-bezier(0.22, 1, 0.36, 1);
+
+  &--ok {
+    --lamp: var(--vria-success);
+  }
+
+  &--low {
+    --lamp: var(--vria-warning);
+  }
+
+  &--critical {
+    --lamp: var(--vria-danger);
+  }
+
+  &:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--vria-shadow-hover);
+  }
+
+  &:hover img {
+    transform: scale(1.07);
+  }
+
+  &__media {
+    position: relative;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    background: var(--vria-surface-alt);
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 420ms cubic-bezier(0.22, 1, 0.36, 1);
+    }
+  }
+
+  &__placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    color: var(--vria-text-secondary);
+
+    mat-icon {
+      font-size: 3rem;
+      width: 3rem;
+      height: 3rem;
+      opacity: 0.5;
+    }
+  }
+
+  &__body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 1rem 1.15rem 1.2rem;
+    flex: 1;
+  }
+
+  &__name {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 600;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    margin-top: auto;
+  }
+
+  &__price {
+    font-size: 1.2rem;
+    font-weight: 700;
+    background: var(--vria-gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  &__stock {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--lamp);
+
+    mat-icon {
+      font-size: 1rem;
+      width: 1rem;
+      height: 1rem;
+    }
+  }
+}
+
+.stock-badge {
+  position: absolute;
+  top: 0.75rem;
+  left: 0.75rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.3rem 0.7rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--vria-text-primary);
+  background: color-mix(in srgb, var(--vria-surface) 88%, transparent);
+  backdrop-filter: blur(6px);
+  box-shadow: var(--vria-shadow-sm);
+
+  &__dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--lamp);
+    box-shadow: 0 0 8px var(--lamp);
+  }
+}
+
+.product-card--critical .stock-badge__dot {
+  animation: catalog-pulse 1.8s ease-in-out infinite;
+}
+
+@keyframes catalog-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.35;
+  }
+}
+
+// Esqueleto de carga
+.product-card--skeleton {
+  pointer-events: none;
+
+  .product-card__media,
+  .skeleton-line {
+    animation: catalog-shimmer 1.4s ease-in-out infinite;
+  }
+}
+
+.skeleton-line {
+  display: block;
+  height: 0.9rem;
+  border-radius: 6px;
+  background: var(--vria-surface-alt);
+
+  &--short {
+    width: 45%;
+  }
+}
+
+@keyframes catalog-shimmer {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.catalog-paginator {
+  margin-top: 0.5rem;
+  background: transparent;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .product-card,
+  .product-card img {
+    transition: none;
+  }
+
+  .product-card:hover {
+    transform: none;
+  }
+
+  .product-card:hover img {
+    transform: none;
+  }
+
+  .product-card--critical .stock-badge__dot,
+  .product-card--skeleton .product-card__media,
+  .skeleton-line {
+    animation: none;
+  }
+}

@@ -1,0 +1,139 @@
+<div class="vria-page">
+  <app-page-header title="Catálogo" subtitle="Productos disponibles en VRIA." icon="storefront"></app-page-header>
+
+  <div class="list-toolbar catalog-toolbar">
+    <mat-form-field appearance="outline" class="list-toolbar__search">
+      <mat-label>Buscar</mat-label>
+      <input matInput [(ngModel)]="searchTerm" (ngModelChange)="applyFilters()" placeholder="Nombre del producto" />
+      <button
+        *ngIf="searchTerm"
+        matSuffix
+        mat-icon-button
+        aria-label="Limpiar búsqueda"
+        (click)="searchTerm = ''; applyFilters()"
+      >
+        <mat-icon>close</mat-icon>
+      </button>
+      <mat-icon *ngIf="!searchTerm" matSuffix>search</mat-icon>
+    </mat-form-field>
+
+    <div class="catalog-toolbar__filters">
+      <mat-form-field appearance="outline" class="catalog-toolbar__select">
+        <mat-label>Categoría</mat-label>
+        <mat-select [(ngModel)]="categoryFilter" (ngModelChange)="applyFilters()">
+          <mat-option value="ALL">Todas</mat-option>
+          <mat-option *ngFor="let category of categories" [value]="category.idCategory">
+            {{ category.nameCategory }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="catalog-toolbar__select">
+        <mat-label>Nivel de stock</mat-label>
+        <mat-select [(ngModel)]="levelFilter" (ngModelChange)="applyFilters()">
+          <mat-select-trigger>
+            <span class="level-option" *ngIf="levelFilter !== 'ALL'; else allLevels">
+              <span class="level-option__dot" [ngClass]="'level-option__dot--' + levelFilter.toLowerCase()"></span>
+              {{ levelLabels[levelFilter] }}
+            </span>
+            <ng-template #allLevels>Todos</ng-template>
+          </mat-select-trigger>
+          <mat-option value="ALL">Todos</mat-option>
+          <mat-option *ngFor="let level of stockLevels" [value]="level">
+            <span class="level-option">
+              <span class="level-option__dot" [ngClass]="'level-option__dot--' + level.toLowerCase()"></span>
+              {{ levelLabels[level] }}
+            </span>
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <p class="catalog-results" *ngIf="!loading && items.length">
+    {{ filtered.length }} {{ filtered.length === 1 ? 'producto' : 'productos' }}
+    <button mat-button color="primary" *ngIf="hasFilters" (click)="clearFilters()">
+      <mat-icon>filter_alt_off</mat-icon>
+      Limpiar filtros
+    </button>
+  </p>
+
+  <div class="catalog-grid" *ngIf="loading">
+    <div class="product-card product-card--skeleton" *ngFor="let _ of [].constructor(pageSize)">
+      <div class="product-card__media"></div>
+      <div class="product-card__body">
+        <span class="skeleton-line"></span>
+        <span class="skeleton-line skeleton-line--short"></span>
+      </div>
+    </div>
+  </div>
+
+  <div
+    class="catalog-grid"
+    *ngIf="!loading && pageItems.length"
+    [@listStagger]="pageIndex + '|' + searchTerm + '|' + categoryFilter + '|' + levelFilter"
+  >
+    <article
+      *ngFor="let item of pageItems; trackBy: trackById"
+      class="product-card"
+      [ngClass]="'product-card--' + item.level.toLowerCase()"
+    >
+      <div class="product-card__media">
+        <img
+          *ngIf="!item.imageFailed; else noImage"
+          [src]="item.product.photo"
+          [alt]="item.product.nameProduct"
+          loading="lazy"
+          (error)="item.imageFailed = true"
+        />
+        <ng-template #noImage>
+          <div class="product-card__placeholder">
+            <mat-icon>image_not_supported</mat-icon>
+          </div>
+        </ng-template>
+
+        <span class="stock-badge">
+          <span class="stock-badge__dot"></span>
+          {{ levelLabels[item.level] }}
+        </span>
+      </div>
+
+      <div class="product-card__body">
+        <h3 class="product-card__name" [matTooltip]="item.product.nameProduct">{{ item.product.nameProduct }}</h3>
+
+        <div class="product-card__footer">
+          <span class="product-card__price">{{ item.product.price | currency: 'COP' : 'symbol-narrow' : '1.0-0' }}</span>
+          <span class="product-card__stock">
+            <mat-icon>inventory_2</mat-icon>
+            {{ item.product.stock }} und.
+          </span>
+        </div>
+      </div>
+    </article>
+  </div>
+
+  <app-empty-state
+    *ngIf="!loading && items.length === 0"
+    icon="storefront"
+    title="Catálogo vacío"
+    message="Aún no hay productos registrados."
+  ></app-empty-state>
+
+  <app-empty-state
+    *ngIf="!loading && items.length > 0 && filtered.length === 0"
+    icon="search_off"
+    title="Sin resultados"
+    message="Ningún producto coincide con la búsqueda o los filtros seleccionados."
+  ></app-empty-state>
+
+  <mat-paginator
+    *ngIf="filtered.length > pageSize"
+    class="catalog-paginator"
+    [length]="filtered.length"
+    [pageSize]="pageSize"
+    [pageIndex]="pageIndex"
+    [hidePageSize]="true"
+    [showFirstLastButtons]="true"
+    (page)="onPage($event)"
+  ></mat-paginator>
+</div>

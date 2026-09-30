@@ -4,7 +4,6 @@ import { catchError, map } from 'rxjs/operators';
 import { AuthService } from '../../core/services/auth.service';
 import { ProductService } from '../../core/services/product.service';
 import { CategoryService } from '../../core/services/category.service';
-import { TypeCategoryService } from '../../core/services/type-category.service';
 import { DeliveryService } from '../../core/services/delivery.service';
 import { TransferService } from '../../core/services/transfer.service';
 import { UserService } from '../../core/services/user.service';
@@ -105,7 +104,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
     private readonly authService: AuthService,
     private readonly productService: ProductService,
     private readonly categoryService: CategoryService,
-    private readonly typeCategoryService: TypeCategoryService,
     private readonly deliveryService: DeliveryService,
     private readonly transferService: TransferService,
     private readonly userService: UserService
@@ -130,9 +128,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
         })
       ),
       categories: canSeeInventory ? this.categoryService.findAll().pipe(catchError(() => of([]))) : of([]),
-      typeCategories: canSeeInventory
-        ? this.typeCategoryService.findAll().pipe(catchError(() => of([])))
-        : of([]),
       deliveries: canSeeDeliveries ? this.deliveryService.findAll().pipe(catchError(() => of([]))) : of([]),
       transfers: canSeeTransfers
         ? this.transferService.findAll().pipe(catchError(() => of([])))
@@ -140,7 +135,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       users: canSeeUsers ? this.userService.findAll().pipe(catchError(() => of([]))) : of([]),
     })
       .pipe(
-        map(({ products, categories, typeCategories, deliveries, transfers, users }) => {
+        map(({ products, categories, deliveries, transfers, users }) => {
           this.setStockItems(products);
           this.pendingDeliveries = canSeeDeliveries
             ? deliveries.filter((delivery) => delivery.state !== 'DELIVERED').slice(0, 5)
@@ -163,13 +158,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
                 icon: 'category',
                 accent: 'purple',
                 path: '/categories',
-              },
-              {
-                label: 'Tipos de categoría',
-                value: typeCategories.length,
-                icon: 'sell',
-                accent: 'amber',
-                path: '/type-categories',
               }
             );
           }

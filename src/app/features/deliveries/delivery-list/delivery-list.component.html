@@ -13,7 +13,7 @@
         matInput
         [(ngModel)]="searchTerm"
         (ngModelChange)="applyFilter()"
-        placeholder="Cliente, repartidor o dirección"
+        placeholder="Cliente, repartidor, dirección o responsable"
       />
       <mat-icon matSuffix>search</mat-icon>
     </mat-form-field>
@@ -42,6 +42,17 @@
       <ng-container matColumnDef="nameDelivery">
         <th mat-header-cell *matHeaderCellDef>Repartidor</th>
         <td mat-cell *matCellDef="let row">{{ row.nameDelivery }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="nameUser">
+        <th mat-header-cell *matHeaderCellDef>Despachado por</th>
+        <td mat-cell *matCellDef="let row">
+          <div class="delivery-cell" *ngIf="row.nameUser; else noUser">
+            <strong>{{ row.nameUser }}</strong>
+            <small *ngIf="row.roleUser">{{ row.roleUser | roleLabel }}</small>
+          </div>
+          <ng-template #noUser><small class="muted">—</small></ng-template>
+        </td>
       </ng-container>
 
       <ng-container matColumnDef="payMode">

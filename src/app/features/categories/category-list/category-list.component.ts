@@ -14,7 +14,7 @@ import { CategoryFormComponent } from '../category-form/category-form.component'
   styleUrl: './category-list.component.scss',
 })
 export class CategoryListComponent implements OnInit {
-  readonly displayedColumns = ['nameCategory', 'nameTypeCategory', 'actions'];
+  readonly displayedColumns = ['nameCategory', 'actions'];
   loading = true;
   categories: CategoryDTO[] = [];
   filtered: CategoryDTO[] = [];

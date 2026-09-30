@@ -14,7 +14,7 @@ import { DeliveryFormComponent } from '../delivery-form/delivery-form.component'
   styleUrl: './delivery-list.component.scss',
 })
 export class DeliveryListComponent implements OnInit {
-  readonly displayedColumns = ['nameClient', 'nameDelivery', 'payMode', 'dateDelivery', 'state', 'actions'];
+  readonly displayedColumns = ['nameClient', 'nameDelivery', 'nameUser', 'payMode', 'dateDelivery', 'state', 'actions'];
   readonly states: StateDelivery[] = DELIVERY_STATES;
   loading = true;
   deliveries: DeliveryDTO[] = [];
@@ -61,7 +61,8 @@ export class DeliveryListComponent implements OnInit {
         !term ||
         d.nameClient.toLowerCase().includes(term) ||
         d.nameDelivery.toLowerCase().includes(term) ||
-        d.address.toLowerCase().includes(term);
+        d.address.toLowerCase().includes(term) ||
+        (d.nameUser ?? '').toLowerCase().includes(term);
       return matchesState && matchesTerm;
     });
   }

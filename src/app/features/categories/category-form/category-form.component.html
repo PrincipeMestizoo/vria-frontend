@@ -9,21 +9,6 @@
         {{ errorFor('nameCategory', 'El nombre') }}
       </mat-error>
     </mat-form-field>
-
-    <mat-form-field appearance="outline">
-      <mat-label>Tipo de categoría</mat-label>
-      <mat-select formControlName="idTypeCategory">
-        <mat-option *ngFor="let type of types" [value]="type.idTypeCategory">
-          {{ type.nameTypeCategory }}
-        </mat-option>
-      </mat-select>
-      <mat-hint *ngIf="!loadingTypes && types.length === 0">
-        No hay tipos de categoría. Crea uno primero.
-      </mat-hint>
-      <mat-error *ngIf="form.get('idTypeCategory')?.invalid">
-        {{ errorFor('idTypeCategory', 'El tipo de categoría') }}
-      </mat-error>
-    </mat-form-field>
   </mat-dialog-content>
 
   <mat-dialog-actions align="end">

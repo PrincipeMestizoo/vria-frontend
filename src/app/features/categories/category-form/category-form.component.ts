@@ -1,11 +1,10 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { finalize } from 'rxjs';
 import { CategoryService } from '../../../core/services/category.service';
-import { TypeCategoryService } from '../../../core/services/type-category.service';
 import { NotificationService } from '../../../core/services/notification.service';
-import { CategoryDTO, TypeCategoryDTO } from '../../../core/models';
+import { CategoryDTO } from '../../../core/models';
 import { firstErrorMessage } from '../../../shared/utils/form-errors';
 
 @Component({
@@ -13,21 +12,17 @@ import { firstErrorMessage } from '../../../shared/utils/form-errors';
   templateUrl: './category-form.component.html',
   styleUrl: './category-form.component.scss',
 })
-export class CategoryFormComponent implements OnInit {
+export class CategoryFormComponent {
   loading = false;
-  loadingTypes = true;
   readonly isEdit: boolean;
-  types: TypeCategoryDTO[] = [];
 
   readonly form = this.fb.nonNullable.group({
     nameCategory: ['', [Validators.required]],
-    idTypeCategory: [null as number | null, [Validators.required]],
   });
 
   constructor(
     private readonly fb: FormBuilder,
     private readonly categoryService: CategoryService,
-    private readonly typeCategoryService: TypeCategoryService,
     private readonly notification: NotificationService,
     private readonly dialogRef: MatDialogRef<CategoryFormComponent, boolean>,
     @Inject(MAT_DIALOG_DATA) public readonly data: { category: CategoryDTO | null }
@@ -36,16 +31,8 @@ export class CategoryFormComponent implements OnInit {
     if (data.category) {
       this.form.patchValue({
         nameCategory: data.category.nameCategory,
-        idTypeCategory: data.category.idTypeCategory,
       });
     }
-  }
-
-  ngOnInit(): void {
-    this.typeCategoryService
-      .findAll()
-      .pipe(finalize(() => (this.loadingTypes = false)))
-      .subscribe((types) => (this.types = types));
   }
 
   errorFor(controlName: string, label: string): string {
@@ -62,7 +49,6 @@ export class CategoryFormComponent implements OnInit {
     const payload: CategoryDTO = {
       idCategory: this.data.category?.idCategory ?? null,
       nameCategory: value.nameCategory,
-      idTypeCategory: value.idTypeCategory as number,
     };
 
     this.loading = true;

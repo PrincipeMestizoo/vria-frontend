@@ -165,6 +165,7 @@
         <tr>
           <th>Cliente</th>
           <th>Repartidor</th>
+          <th>Despachado por</th>
           <th>Estado</th>
         </tr>
       </thead>
@@ -172,6 +173,7 @@
         <tr *ngFor="let delivery of pendingDeliveries">
           <td>{{ delivery.nameClient }}</td>
           <td>{{ delivery.nameDelivery }}</td>
+          <td>{{ delivery.nameUser || '—' }}</td>
           <td>
             <mat-chip class="chip" [class.chip--ready]="delivery.state === 'READY'">
               {{ delivery.state | deliveryStateLabel }}
