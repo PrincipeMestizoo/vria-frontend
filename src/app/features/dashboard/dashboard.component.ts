@@ -7,7 +7,7 @@ import { CategoryService } from '../../core/services/category.service';
 import { DeliveryService } from '../../core/services/delivery.service';
 import { TransferService } from '../../core/services/transfer.service';
 import { UserService } from '../../core/services/user.service';
-import { CurrentUser, DeliveryDTO, ProductResponseDTO, TypeRole } from '../../core/models';
+import { CurrentUser, DeliveryDTO, ProductResponseDTO } from '../../core/models';
 import { listStagger } from '../../shared/animations/animations';
 import {
   STOCK_LEVELS,
@@ -34,45 +34,6 @@ interface StatCard {
   path: string;
 }
 
-interface QuickAction {
-  label: string;
-  icon: string;
-  path: string;
-  colorClass: string;
-  roles: TypeRole[];
-}
-
-const QUICK_ACTIONS: QuickAction[] = [
-  {
-    label: 'Nueva entrega',
-    icon: 'local_shipping',
-    path: '/deliveries',
-    colorClass: 'vria-btn-info',
-    roles: ['ADMIN', 'COMMERCIAL_ADVISOR'],
-  },
-  {
-    label: 'Nuevo producto',
-    icon: 'inventory_2',
-    path: '/products',
-    colorClass: 'vria-btn-success',
-    roles: ['ADMIN', 'WAREHOUSE_KEEPER'],
-  },
-  {
-    label: 'Nueva transferencia',
-    icon: 'receipt_long',
-    path: '/transfers',
-    colorClass: 'vria-btn-warning',
-    roles: ['ADMIN', 'COMMERCIAL_ADVISOR'],
-  },
-  {
-    label: 'Gestionar usuarios',
-    icon: 'manage_accounts',
-    path: '/users',
-    colorClass: 'vria-btn-danger',
-    roles: ['ADMIN'],
-  },
-];
-
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -83,7 +44,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
   currentUser: CurrentUser | null = null;
   loadingStats = true;
   stats: StatCard[] = [];
-  quickActions: QuickAction[] = [];
   pendingDeliveries: DeliveryDTO[] = [];
   canSeeDeliveries = false;
   canSeeInventory = false;
@@ -117,8 +77,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
     const canSeeUsers = this.authService.hasAnyRole(['ADMIN']);
     this.canSeeDeliveries = canSeeDeliveries;
     this.canSeeInventory = canSeeInventory;
-
-    this.quickActions = QUICK_ACTIONS.filter((action) => this.authService.hasAnyRole(action.roles));
 
     forkJoin({
       products: this.productService.findAll().pipe(

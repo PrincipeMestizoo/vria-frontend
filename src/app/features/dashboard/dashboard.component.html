@@ -1,19 +1,11 @@
 <div class="vria-page">
-  <app-page-header
-    [title]="'Hola, ' + (currentUser?.name || '')"
-    subtitle="Este es el resumen general de la operación VRIA."
-    icon="space_dashboard"
-  ></app-page-header>
+  <app-page-header [title]="'Hola, ' + (currentUser?.name || '')"
+    subtitle="Este es el resumen general de la operación VRIA." icon="space_dashboard"></app-page-header>
 
   <div class="stats-grid" *ngIf="!loadingStats; else statsSkeleton" [@listStagger]="stats.length">
-    <a
-      class="stat-card vria-card"
-      [class.stat-card--purple]="stat.accent === 'purple'"
-      [class.stat-card--green]="stat.accent === 'green'"
-      [class.stat-card--amber]="stat.accent === 'amber'"
-      *ngFor="let stat of stats"
-      [routerLink]="stat.path"
-    >
+    <a class="stat-card vria-card" [class.stat-card--purple]="stat.accent === 'purple'"
+      [class.stat-card--green]="stat.accent === 'green'" [class.stat-card--amber]="stat.accent === 'amber'"
+      *ngFor="let stat of stats" [routerLink]="stat.path">
       <div class="stat-card__icon">
         <mat-icon>{{ stat.icon }}</mat-icon>
       </div>
@@ -40,14 +32,8 @@
       </div>
       <div class="stock-light__actions">
         <a mat-button color="primary" routerLink="/products" *ngIf="canSeeInventory">Ver inventario</a>
-        <button
-          mat-icon-button
-          type="button"
-          matTooltip="Actualizar stock"
-          aria-label="Actualizar stock"
-          [disabled]="refreshingStock"
-          (click)="refreshStock()"
-        >
+        <button mat-icon-button type="button" matTooltip="Actualizar stock" aria-label="Actualizar stock"
+          [disabled]="refreshingStock" (click)="refreshStock()">
           <mat-icon [class.spin]="refreshingStock">refresh</mat-icon>
         </button>
       </div>
@@ -55,17 +41,11 @@
 
     <div class="stock-light__body" *ngIf="!loadingStats; else stockSkeleton">
       <div class="signal" role="group" aria-label="Filtrar productos por nivel de stock">
-        <button
-          type="button"
-          class="signal__lamp"
-          *ngFor="let level of stockLevels"
-          [ngClass]="'signal__lamp--' + level.toLowerCase()"
-          [class.signal__lamp--on]="stockSummary[level] > 0"
+        <button type="button" class="signal__lamp" *ngFor="let level of stockLevels"
+          [ngClass]="'signal__lamp--' + level.toLowerCase()" [class.signal__lamp--on]="stockSummary[level] > 0"
           [class.signal__lamp--selected]="stockFilter === level"
           [class.signal__lamp--dimmed]="stockFilter && stockFilter !== level"
-          [attr.aria-pressed]="stockFilter === level"
-          (click)="toggleStockFilter(level)"
-        >
+          [attr.aria-pressed]="stockFilter === level" (click)="toggleStockFilter(level)">
           <span class="signal__bulb" aria-hidden="true"></span>
           <span class="signal__text">
             <span class="signal__count">{{ stockSummary[level] }}</span>
@@ -83,33 +63,18 @@
           </button>
         </div>
 
-        <app-empty-state
-          *ngIf="stockError && !stockItems.length"
-          icon="cloud_off"
-          title="No se pudo cargar el stock"
-          message="Intenta actualizar en unos segundos."
-        ></app-empty-state>
+        <app-empty-state *ngIf="stockError && !stockItems.length" icon="cloud_off" title="No se pudo cargar el stock"
+          message="Intenta actualizar en unos segundos."></app-empty-state>
 
-        <app-empty-state
-          *ngIf="!stockError && !stockItems.length"
-          icon="inventory_2"
-          title="Sin productos"
-          message="Aún no hay productos registrados en el inventario."
-        ></app-empty-state>
+        <app-empty-state *ngIf="!stockError && !stockItems.length" icon="inventory_2" title="Sin productos"
+          message="Aún no hay productos registrados en el inventario."></app-empty-state>
 
-        <app-empty-state
-          *ngIf="stockItems.length && !visibleStockItems.length"
-          icon="task_alt"
-          title="Nada por aquí"
-          message="No hay productos en este nivel."
-        ></app-empty-state>
+        <app-empty-state *ngIf="stockItems.length && !visibleStockItems.length" icon="task_alt" title="Nada por aquí"
+          message="No hay productos en este nivel."></app-empty-state>
 
         <ul class="stock-list__items" *ngIf="visibleStockItems.length">
-          <li
-            class="stock-item"
-            *ngFor="let item of visibleStockItems; trackBy: trackByStockItem"
-            [ngClass]="'stock-item--' + item.level.toLowerCase()"
-          >
+          <li class="stock-item" *ngFor="let item of visibleStockItems; trackBy: trackByStockItem"
+            [ngClass]="'stock-item--' + item.level.toLowerCase()">
             <span class="stock-item__dot" aria-hidden="true"></span>
             <span class="stock-item__info">
               <span class="stock-item__name">{{ item.name }}</span>
@@ -129,36 +94,14 @@
     </ng-template>
   </section>
 
-  <div class="vria-card panel quick-actions" *ngIf="quickActions.length">
-    <div class="panel__header">
-      <h2>Accesos rápidos</h2>
-    </div>
-    <div class="quick-actions__list">
-      <a
-        mat-flat-button
-        class="vria-btn"
-        [class]="action.colorClass"
-        *ngFor="let action of quickActions"
-        [routerLink]="action.path"
-      >
-        <mat-icon>{{ action.icon }}</mat-icon>
-        {{ action.label }}
-      </a>
-    </div>
-  </div>
-
   <div class="vria-card panel" *ngIf="canSeeDeliveries">
     <div class="panel__header">
       <h2>Entregas pendientes</h2>
       <a mat-button color="primary" routerLink="/deliveries">Ver todas</a>
     </div>
 
-    <app-empty-state
-      *ngIf="!loadingStats && pendingDeliveries.length === 0"
-      icon="task_alt"
-      title="Todo al día"
-      message="No hay entregas pendientes en este momento."
-    ></app-empty-state>
+    <app-empty-state *ngIf="!loadingStats && pendingDeliveries.length === 0" icon="task_alt" title="Todo al día"
+      message="No hay entregas pendientes en este momento."></app-empty-state>
 
     <table *ngIf="pendingDeliveries.length" class="mini-table">
       <thead>

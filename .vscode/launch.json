@@ -3,6 +3,13 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "type": "java",
+      "name": "User",
+      "request": "launch",
+      "mainClass": "User",
+      "projectName": "vria-frontend_f03b4f20"
+    },
+    {
       "name": "ng serve",
       "type": "chrome",
       "request": "launch",

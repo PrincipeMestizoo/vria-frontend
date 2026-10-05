@@ -1,7 +1,8 @@
 export interface ProductResponseDTO {
   idProduct: number;
   nameProduct: string;
-  idCategory: number;
+  // null cuando la categoria del producto fue eliminada
+  idCategory: number | null;
   nameCategory: string;
   stock: number;
   price: number;

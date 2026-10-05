@@ -10,7 +10,7 @@ import { STOCK_LEVELS, STOCK_LEVEL_LABELS, StockLevel, getStockLevel } from '../
 const PAGE_SIZE = 12;
 
 interface CategoryOption {
-  idCategory: number;
+  idCategory: number | null;
   nameCategory: string;
 }
 
@@ -39,7 +39,7 @@ export class CatalogListComponent implements OnInit {
   // Las categorias se derivan de los productos: /categories no esta abierto a todos los roles
   categories: CategoryOption[] = [];
   searchTerm = '';
-  categoryFilter: number | 'ALL' = 'ALL';
+  categoryFilter: number | null | 'ALL' = 'ALL';
   levelFilter: StockLevel | 'ALL' = 'ALL';
 
   constructor(private readonly productService: ProductService) {}
@@ -96,7 +96,7 @@ export class CatalogListComponent implements OnInit {
   }
 
   private extractCategories(products: ProductResponseDTO[]): CategoryOption[] {
-    const byId = new Map<number, string>();
+    const byId = new Map<number | null, string>();
     products.forEach((p) => byId.set(p.idCategory, p.nameCategory));
     return [...byId]
       .map(([idCategory, nameCategory]) => ({ idCategory, nameCategory }))
