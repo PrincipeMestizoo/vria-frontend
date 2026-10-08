@@ -21,13 +21,13 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
       }
 
       if (error.status === 401) {
-        const wasAuthenticated = authService.isAuthenticated;
-        authService.logout();
-        if (wasAuthenticated) {
+        // authInterceptor ya intento el refresh: la sesion no es recuperable
+        if (req.url.includes('/auth/login')) {
+          notification.error('Credenciales inválidas.');
+        } else if (authService.isAuthenticated) {
+          authService.clearSession();
           notification.error('Tu sesión expiró. Inicia sesión nuevamente.');
           router.navigate(['/auth/login']);
-        } else {
-          notification.error('Credenciales inválidas.');
         }
       } else if (error.status === 403) {
         notification.error('No tienes permisos para realizar esta acción.');

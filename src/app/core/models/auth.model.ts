@@ -5,10 +5,8 @@ export interface LoginRequest {
   password: string;
 }
 
+// Los JWT viajan en cookies HttpOnly: el body solo trae los datos del usuario.
 export interface AuthResponse {
-  accessToken: string;
-  refreshToken: string;
-  tokenType: string;
   idUser: number;
   name: string;
   email: string;
