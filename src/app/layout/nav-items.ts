@@ -27,6 +27,12 @@ export const NAV_ITEMS: NavItem[] = [
     roles: ['ADMIN', 'WAREHOUSE_KEEPER'],
   },
   {
+    label: 'Salida de stock',
+    icon: 'outbox',
+    path: '/stock-out',
+    roles: ['ADMIN', 'WAREHOUSE_KEEPER'],
+  },
+  {
     label: 'Categorías',
     icon: 'category',
     path: '/categories',

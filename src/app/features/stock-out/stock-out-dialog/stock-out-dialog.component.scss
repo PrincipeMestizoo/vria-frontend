@@ -1,0 +1,145 @@
+mat-dialog-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  min-width: 30rem;
+
+  @media (max-width: 560px) {
+    min-width: 0;
+  }
+}
+
+.product-summary {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem;
+  border-radius: var(--vria-radius-lg);
+  background: var(--vria-surface-alt);
+
+  &__media {
+    flex: 0 0 5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 5rem;
+    height: 5rem;
+    overflow: hidden;
+    border-radius: var(--vria-radius-lg);
+    background: var(--vria-surface);
+    color: var(--vria-text-secondary);
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  &__info {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+
+  &__label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--vria-text-secondary);
+  }
+
+  &__name {
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: var(--vria-text-primary);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__meta {
+    font-size: 0.85rem;
+    color: var(--vria-text-secondary);
+  }
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 1rem;
+
+  @media (max-width: 480px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.all-button {
+  margin-right: 0.25rem;
+}
+
+// Vista previa del stock resultante con el color del semaforo
+.stock-preview {
+  --lamp: var(--vria-text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  padding: 0.85rem 1rem;
+  border-left: 4px solid var(--lamp);
+  border-radius: var(--vria-radius-lg);
+  background: var(--vria-surface-alt);
+
+  &--ok {
+    --lamp: var(--vria-success);
+  }
+
+  &--low {
+    --lamp: var(--vria-warning);
+  }
+
+  &--critical {
+    --lamp: var(--vria-danger);
+  }
+
+  &__values {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1.1rem;
+    color: var(--vria-text-secondary);
+
+    strong {
+      font-size: 1.5rem;
+      color: var(--vria-text-primary);
+    }
+
+    mat-icon {
+      font-size: 1.2rem;
+      width: 1.2rem;
+      height: 1.2rem;
+    }
+  }
+
+  &__unit {
+    font-size: 0.9rem;
+  }
+
+  &__label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--vria-text-primary);
+  }
+
+  &__dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--lamp);
+    box-shadow: 0 0 8px var(--lamp);
+  }
+}

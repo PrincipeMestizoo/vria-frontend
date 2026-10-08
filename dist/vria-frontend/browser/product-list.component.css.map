@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["src/app/features/products/product-list/product-list.component.scss"],
-  "sourcesContent": [".product-cell {\n  display: flex;\n  flex-direction: column;\n\n  &__name {\n    font-weight: 500;\n  }\n\n  &__ref {\n    font-size: 0.75rem;\n    color: var(--vria-text-secondary);\n  }\n}\n\n.stock-badge {\n  display: inline-flex;\n  align-items: center;\n  justify-content: center;\n  min-width: 2.2rem;\n  padding: 0.2rem 0.6rem;\n  border-radius: 999px;\n  font-weight: 700;\n  background: rgba(0, 163, 224, 0.1);\n  color: var(--vria-blue-dark);\n  box-shadow: var(--vria-shadow-sm);\n\n  &--low {\n    background: rgba(220, 38, 38, 0.12);\n    color: var(--vria-danger-dark);\n  }\n}\n"],
-  "mappings": ";AAAA,CAAA;AACE,WAAA;AACA,kBAAA;;AAEA,CAAA;AACE,eAAA;;AAGF,CAAA;AACE,aAAA;AACA,SAAA,IAAA;;AAIJ,CAAA;AACE,WAAA;AACA,eAAA;AACA,mBAAA;AACA,aAAA;AACA,WAAA,OAAA;AACA,iBAAA;AACA,eAAA;AACA,cAAA,KAAA,CAAA,EAAA,GAAA,EAAA,GAAA,EAAA;AACA,SAAA,IAAA;AACA,cAAA,IAAA;;AAEA,CAAA;AACE,cAAA,KAAA,GAAA,EAAA,EAAA,EAAA,EAAA,EAAA;AACA,SAAA,IAAA;;",
-  "names": []
-}

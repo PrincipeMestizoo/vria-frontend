@@ -34,6 +34,11 @@ const routes: Routes = [
         loadChildren: () => import('./features/products/products.module').then((m) => m.ProductsModule),
       },
       {
+        path: 'stock-out',
+        canActivate: [roleGuard(['ADMIN', 'WAREHOUSE_KEEPER'])],
+        loadChildren: () => import('./features/stock-out/stock-out.module').then((m) => m.StockOutModule),
+      },
+      {
         path: 'categories',
         canActivate: [roleGuard(['ADMIN', 'WAREHOUSE_KEEPER'])],
         loadChildren: () => import('./features/categories/categories.module').then((m) => m.CategoriesModule),

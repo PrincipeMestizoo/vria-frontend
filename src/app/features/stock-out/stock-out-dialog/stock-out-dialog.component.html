@@ -1,0 +1,66 @@
+<h2 mat-dialog-title>Registrar salida de stock</h2>
+
+<form [formGroup]="form" (ngSubmit)="submit()">
+  <mat-dialog-content>
+    <section class="product-summary">
+      <div class="product-summary__media">
+        <img
+          *ngIf="!imageFailed; else noImage"
+          [src]="product.photo"
+          [alt]="product.nameProduct"
+          (error)="imageFailed = true"
+        />
+        <ng-template #noImage><mat-icon>image_not_supported</mat-icon></ng-template>
+      </div>
+
+      <div class="product-summary__info">
+        <span class="product-summary__label">Producto</span>
+        <span class="product-summary__name">{{ product.nameProduct }}</span>
+        <span class="product-summary__meta">
+          {{ product.nameCategory }}<ng-container *ngIf="product.reference"> · Ref. {{ product.reference }}</ng-container>
+        </span>
+      </div>
+    </section>
+
+    <div class="form-row">
+      <mat-form-field appearance="outline">
+        <mat-label>Stock actual</mat-label>
+        <input matInput [value]="product.stock + ' und.'" readonly />
+        <mat-icon matSuffix>inventory_2</mat-icon>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Cantidad a reducir</mat-label>
+        <input matInput type="number" min="1" [max]="product.stock" formControlName="quantity" cdkFocusInitial />
+        <button mat-button matSuffix type="button" class="all-button" [disabled]="loading" (click)="setAll()">
+          Todo
+        </button>
+        <mat-error *ngIf="form.controls.quantity.invalid">{{ quantityError }}</mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="stock-preview" [ngClass]="'stock-preview--' + remainingLevel.toLowerCase()">
+      <div class="stock-preview__values">
+        <span>{{ product.stock }}</span>
+        <mat-icon>arrow_forward</mat-icon>
+        <strong>{{ form.valid ? remainingStock : '—' }}</strong>
+        <span class="stock-preview__unit">und.</span>
+      </div>
+      <span class="stock-preview__label" *ngIf="form.valid">
+        <span class="stock-preview__dot"></span>
+        Quedará en: {{ remainingStock === 0 ? 'Agotado' : levelLabels[remainingLevel] }}
+      </span>
+    </div>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-button type="button" [disabled]="loading" (click)="cancel()">Cancelar</button>
+    <app-submit-button
+      label="Enviar"
+      loadingLabel="Enviando…"
+      icon="send"
+      [loading]="loading"
+      [disabled]="form.invalid"
+    ></app-submit-button>
+  </mat-dialog-actions>
+</form>

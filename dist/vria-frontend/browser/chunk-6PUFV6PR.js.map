@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["src/app/shared/utils/stock-level.ts"],
-  "sourcesContent": ["export type StockLevel = 'OK' | 'LOW' | 'CRITICAL';\n\n// Umbrales internos del semaforo: no se muestran en la interfaz.\nconst CRITICAL_MAX = 5;\nconst LOW_MAX = 15;\n\nexport const STOCK_LEVELS: StockLevel[] = ['CRITICAL', 'LOW', 'OK'];\n\nexport const STOCK_LEVEL_LABELS: Record<StockLevel, string> = {\n  OK: 'Disponible',\n  LOW: 'Stock bajo',\n  CRITICAL: 'Crítico',\n};\n\nexport function getStockLevel(stock: number): StockLevel {\n  if (stock <= CRITICAL_MAX) {\n    return 'CRITICAL';\n  }\n  if (stock <= LOW_MAX) {\n    return 'LOW';\n  }\n  return 'OK';\n}\n"],
-  "mappings": ";AAGA,IAAM,eAAe;AACrB,IAAM,UAAU;AAET,IAAM,eAA6B,CAAC,YAAY,OAAO,IAAI;AAE3D,IAAM,qBAAiD;EAC5D,IAAI;EACJ,KAAK;EACL,UAAU;;AAGN,SAAU,cAAc,OAAa;AACzC,MAAI,SAAS,cAAc;AACzB,WAAO;EACT;AACA,MAAI,SAAS,SAAS;AACpB,WAAO;EACT;AACA,SAAO;AACT;",
-  "names": []
-}

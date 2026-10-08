@@ -44,6 +44,12 @@ export class ProductService {
     return this.http.put<ProductResponseDTO>(`${this.baseUrl}/${id}`, dto).pipe(map(withCategoryLabel));
   }
 
+  reduceStock(id: number, quantity: number): Observable<ProductResponseDTO> {
+    return this.http
+      .patch<ProductResponseDTO>(`${this.baseUrl}/${id}/reduce`, null, { params: { quantity } })
+      .pipe(map(withCategoryLabel));
+  }
+
   delete(id: number): Observable<void> {
     return this.http.delete<void>(`${this.baseUrl}/${id}`);
   }

@@ -1,0 +1,120 @@
+<div class="vria-page">
+  <app-page-header
+    title="Salida de stock"
+    subtitle="Selecciona un producto y registra la cantidad que sale de bodega."
+    icon="outbox"
+  ></app-page-header>
+
+  <div class="list-toolbar">
+    <mat-form-field appearance="outline" class="list-toolbar__search">
+      <mat-label>Buscar</mat-label>
+      <input matInput [(ngModel)]="searchTerm" (ngModelChange)="applyFilter()" placeholder="Nombre o referencia" />
+      <button
+        *ngIf="searchTerm"
+        matSuffix
+        mat-icon-button
+        aria-label="Limpiar búsqueda"
+        (click)="searchTerm = ''; applyFilter()"
+      >
+        <mat-icon>close</mat-icon>
+      </button>
+      <mat-icon *ngIf="!searchTerm" matSuffix>search</mat-icon>
+    </mat-form-field>
+  </div>
+
+  <div class="product-grid" *ngIf="loading">
+    <div class="product-card product-card--skeleton" *ngFor="let _ of [].constructor(6)">
+      <div class="product-card__media"></div>
+      <div class="product-card__body">
+        <span class="skeleton-line"></span>
+        <span class="skeleton-line skeleton-line--short"></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="product-grid" *ngIf="!loading && filtered.length" [@listStagger]="searchTerm">
+    <button
+      type="button"
+      *ngFor="let card of filtered; trackBy: trackById"
+      class="product-card"
+      [ngClass]="'product-card--' + card.level.toLowerCase()"
+      [class.product-card--selected]="selected === card"
+      [disabled]="card.product.stock <= 0"
+      [attr.aria-pressed]="selected === card"
+      (click)="select(card)"
+    >
+      <div class="product-card__media">
+        <img
+          *ngIf="!card.imageFailed; else noImage"
+          [src]="card.product.photo"
+          [alt]="card.product.nameProduct"
+          loading="lazy"
+          (error)="card.imageFailed = true"
+        />
+        <ng-template #noImage>
+          <div class="product-card__placeholder">
+            <mat-icon>image_not_supported</mat-icon>
+          </div>
+        </ng-template>
+
+        <span class="stock-badge">
+          <span class="stock-badge__dot"></span>
+          {{ card.product.stock <= 0 ? 'Agotado' : levelLabels[card.level] }}
+        </span>
+
+        <span class="product-card__check" *ngIf="selected === card">
+          <mat-icon>check</mat-icon>
+        </span>
+      </div>
+
+      <div class="product-card__body">
+        <span class="product-card__name" [matTooltip]="card.product.nameProduct">
+          {{ card.product.nameProduct }}
+        </span>
+        <span class="product-card__ref" *ngIf="card.product.reference">Ref. {{ card.product.reference }}</span>
+        <span class="product-card__stock">
+          <mat-icon>inventory_2</mat-icon>
+          {{ card.product.stock }} und.
+        </span>
+      </div>
+    </button>
+  </div>
+
+  <app-empty-state
+    *ngIf="!loading && cards.length === 0"
+    icon="inventory_2"
+    title="No hay productos"
+    message="Aún no hay productos registrados en bodega."
+  ></app-empty-state>
+
+  <app-empty-state
+    *ngIf="!loading && cards.length > 0 && filtered.length === 0"
+    icon="search_off"
+    title="Sin resultados"
+    message="Ningún producto coincide con la búsqueda."
+  ></app-empty-state>
+
+  <div class="action-bar vria-card">
+    <div class="action-bar__info">
+      <ng-container *ngIf="selected; else noSelection">
+        <span class="action-bar__label">Producto seleccionado</span>
+        <span class="action-bar__name">{{ selected.product.nameProduct }}</span>
+        <span class="action-bar__stock">Stock actual: {{ selected.product.stock }} und.</span>
+      </ng-container>
+      <ng-template #noSelection>
+        <span class="action-bar__hint">
+          <mat-icon>touch_app</mat-icon>
+          Selecciona un producto para registrar su salida.
+        </span>
+      </ng-template>
+    </div>
+
+    <div class="action-bar__actions">
+      <button mat-button type="button" *ngIf="selected" (click)="selected = null">Cancelar</button>
+      <button mat-flat-button color="primary" class="vria-btn" type="button" [disabled]="!selected" (click)="openForm()">
+        <mat-icon>outbox</mat-icon>
+        Registrar salida
+      </button>
+    </div>
+  </div>
+</div>

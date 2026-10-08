@@ -1,0 +1,272 @@
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1.25rem;
+  padding: 0.25rem 0.25rem 1rem;
+
+  @media (max-width: 1200px) {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  @media (max-width: 900px) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  @media (max-width: 520px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+// Colores del semaforo de stock (mismas reglas que el catalogo)
+.product-card {
+  --lamp: var(--vria-text-secondary);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding: 0;
+  border: 2px solid transparent;
+  font: inherit;
+  text-align: left;
+  color: inherit;
+  cursor: pointer;
+  background: var(--vria-surface);
+  border-radius: var(--vria-radius-lg);
+  box-shadow: var(--vria-shadow);
+  transition: transform 260ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 260ms cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 200ms ease;
+
+  &--ok {
+    --lamp: var(--vria-success);
+  }
+
+  &--low {
+    --lamp: var(--vria-warning);
+  }
+
+  &--critical {
+    --lamp: var(--vria-danger);
+  }
+
+  &:hover:not(:disabled) {
+    transform: translateY(-4px);
+    box-shadow: var(--vria-shadow-hover);
+  }
+
+  &:focus-visible {
+    outline: 3px solid var(--vria-purple);
+    outline-offset: 2px;
+  }
+
+  &--selected {
+    border-color: var(--vria-purple);
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.55;
+  }
+
+  &__media {
+    position: relative;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    background: var(--vria-surface-alt);
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+  }
+
+  &__placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    color: var(--vria-text-secondary);
+
+    mat-icon {
+      font-size: 3rem;
+      width: 3rem;
+      height: 3rem;
+      opacity: 0.5;
+    }
+  }
+
+  &__check {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    color: #fff;
+    background: var(--vria-gradient);
+    box-shadow: var(--vria-shadow-sm);
+  }
+
+  &__body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    padding: 0.85rem 1rem 1rem;
+    flex: 1;
+  }
+
+  &__name {
+    font-size: 1rem;
+    font-weight: 600;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__ref {
+    font-size: 0.8rem;
+    color: var(--vria-text-secondary);
+  }
+
+  &__stock {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    margin-top: auto;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--lamp);
+
+    mat-icon {
+      font-size: 1rem;
+      width: 1rem;
+      height: 1rem;
+    }
+  }
+}
+
+.stock-badge {
+  position: absolute;
+  top: 0.75rem;
+  left: 0.75rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.3rem 0.7rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--vria-text-primary);
+  background: color-mix(in srgb, var(--vria-surface) 88%, transparent);
+  backdrop-filter: blur(6px);
+  box-shadow: var(--vria-shadow-sm);
+
+  &__dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--lamp);
+    box-shadow: 0 0 8px var(--lamp);
+  }
+}
+
+// Esqueleto de carga
+.product-card--skeleton {
+  pointer-events: none;
+
+  .product-card__media,
+  .skeleton-line {
+    animation: stock-out-shimmer 1.4s ease-in-out infinite;
+  }
+}
+
+.skeleton-line {
+  display: block;
+  height: 0.9rem;
+  border-radius: 6px;
+  background: var(--vria-surface-alt);
+
+  &--short {
+    width: 45%;
+  }
+}
+
+@keyframes stock-out-shimmer {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+// Barra fija con el producto seleccionado y el boton que abre el formulario
+.action-bar {
+  position: sticky;
+  bottom: 1rem;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-top: 0.5rem;
+  padding: 0.85rem 1.25rem;
+
+  &__info {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+
+  &__label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--vria-text-secondary);
+  }
+
+  &__name {
+    font-weight: 600;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__stock {
+    font-size: 0.85rem;
+    color: var(--vria-text-secondary);
+  }
+
+  &__hint {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--vria-text-secondary);
+  }
+
+  &__actions {
+    display: flex;
+    gap: 0.5rem;
+    margin-left: auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .product-card {
+    transition: none;
+  }
+
+  .product-card:hover:not(:disabled) {
+    transform: none;
+  }
+
+  .product-card--skeleton .product-card__media,
+  .skeleton-line {
+    animation: none;
+  }
+}
