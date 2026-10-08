@@ -1,16 +1,19 @@
 import {
   SILENT_REQUEST
-} from "./chunk-ILXFKMR3.js";
+} from "./chunk-5BADP5GR.js";
 import {
   NotificationService
-} from "./chunk-X56Y7PIT.js";
+} from "./chunk-YGVAY7K4.js";
+import {
+  AuthService,
+  TokenStorageService
+} from "./chunk-S2O5XATP.js";
 import {
   ANIMATION_MODULE_TYPE,
   AUTO_STYLE,
   AnimationGroupPlayer,
   AnimationMetadataType,
   AsyncPipe,
-  AuthService,
   BehaviorSubject,
   BreakpointObserver,
   Breakpoints,
@@ -58,7 +61,6 @@ import {
   RouterOutlet,
   RuntimeError,
   SharedModule,
-  TokenStorageService,
   __objRest,
   __spreadValues,
   animate,
@@ -102,7 +104,7 @@ import {
   ɵɵtemplate,
   ɵɵtext,
   ɵɵtextInterpolate
-} from "./chunk-ODHWVYXN.js";
+} from "./chunk-UK26UTD3.js";
 
 // node_modules/@angular/common/locales/es-CO.mjs
 var u = void 0;
@@ -4234,6 +4236,12 @@ var NAV_ITEMS = [
     roles: ["ADMIN", "WAREHOUSE_KEEPER", "COMMERCIAL_ADVISOR"]
   },
   {
+    label: "Cat\xE1logo",
+    icon: "storefront",
+    path: "/catalog",
+    roles: ["ADMIN", "WAREHOUSE_KEEPER", "COMMERCIAL_ADVISOR"]
+  },
+  {
     label: "Productos",
     icon: "inventory_2",
     path: "/products",
@@ -4243,12 +4251,6 @@ var NAV_ITEMS = [
     label: "Categor\xEDas",
     icon: "category",
     path: "/categories",
-    roles: ["ADMIN", "WAREHOUSE_KEEPER"]
-  },
-  {
-    label: "Tipos de categor\xEDa",
-    icon: "sell",
-    path: "/type-categories",
     roles: ["ADMIN", "WAREHOUSE_KEEPER"]
   },
   {
@@ -4526,7 +4528,7 @@ var SplashScreenComponent = class _SplashScreenComponent {
         \u0275\u0275element(13, "span");
         \u0275\u0275elementEnd()()();
       }
-    }, styles: ["\n\n[_nghost-%COMP%] {\n  position: fixed;\n  inset: 0;\n  z-index: 1000;\n}\n.splash[_ngcontent-%COMP%] {\n  position: absolute;\n  inset: 0;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  overflow: hidden;\n  background:\n    radial-gradient(\n      circle at 50% 42%,\n      #2c1b42 0%,\n      #1a1821 62%,\n      #121017 100%);\n  color: #fff;\n}\n.splash__orb[_ngcontent-%COMP%] {\n  position: absolute;\n  width: 46vmax;\n  height: 46vmax;\n  border-radius: 50%;\n  filter: blur(80px);\n  opacity: 0.45;\n  animation: _ngcontent-%COMP%_orb-drift 6s ease-in-out infinite alternate;\n}\n.splash__orb--blue[_ngcontent-%COMP%] {\n  top: -18vmax;\n  left: -14vmax;\n  background: #00a3e0;\n}\n.splash__orb--pink[_ngcontent-%COMP%] {\n  bottom: -20vmax;\n  right: -14vmax;\n  background: #b01674;\n  animation-delay: -3s;\n}\n.splash__center[_ngcontent-%COMP%] {\n  position: relative;\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n  gap: 1.75rem;\n}\n.splash__emblem[_ngcontent-%COMP%] {\n  position: relative;\n  width: 240px;\n  height: 240px;\n  display: grid;\n  place-items: center;\n}\n.splash__ring[_ngcontent-%COMP%] {\n  position: absolute;\n  inset: 0;\n  border-radius: 50%;\n  background:\n    conic-gradient(\n      from 0deg,\n      #00a3e0,\n      #8b2fc9,\n      #e02495,\n      transparent 70%,\n      #00a3e0);\n  -webkit-mask:\n    radial-gradient(\n      farthest-side,\n      transparent calc(100% - 3px),\n      #000 calc(100% - 2px));\n  mask:\n    radial-gradient(\n      farthest-side,\n      transparent calc(100% - 3px),\n      #000 calc(100% - 2px));\n  opacity: 0;\n  animation: _ngcontent-%COMP%_ring-in 500ms 250ms ease-out forwards, _ngcontent-%COMP%_spin 1.6s linear infinite;\n}\n.splash__halo[_ngcontent-%COMP%] {\n  position: absolute;\n  inset: 30px;\n  border-radius: 50%;\n  background:\n    radial-gradient(\n      circle,\n      rgba(139, 47, 201, 0.75) 0%,\n      rgba(0, 163, 224, 0.35) 45%,\n      transparent 70%);\n  filter: blur(22px);\n  animation: _ngcontent-%COMP%_halo-pulse 1.8s ease-in-out infinite;\n}\n.splash__tile[_ngcontent-%COMP%] {\n  position: relative;\n  width: 200px;\n  height: 200px;\n  filter: drop-shadow(0 14px 28px rgba(0, 0, 0, 0.5));\n  animation: _ngcontent-%COMP%_logo-in 750ms cubic-bezier(0.34, 1.56, 0.64, 1) both, _ngcontent-%COMP%_float 2.4s 750ms ease-in-out infinite;\n}\n.splash__tile[_ngcontent-%COMP%]   img[_ngcontent-%COMP%] {\n  width: 100%;\n  height: 100%;\n  object-fit: contain;\n  display: block;\n}\n.splash__shine[_ngcontent-%COMP%] {\n  position: absolute;\n  inset: 0;\n  -webkit-mask: url(/assets/images/logo-splash.png) center/contain no-repeat;\n  mask: url(/assets/images/logo-splash.png) center/contain no-repeat;\n  background:\n    linear-gradient(\n      115deg,\n      transparent 40%,\n      rgba(255, 255, 255, 0.6) 50%,\n      transparent 60%) no-repeat;\n  background-size: 300% 100%;\n  background-position: 100% 0;\n  animation: _ngcontent-%COMP%_shine 900ms 650ms cubic-bezier(0.4, 0, 0.2, 1) forwards;\n}\n.splash__tagline[_ngcontent-%COMP%] {\n  margin: 0;\n  font-size: 0.8rem;\n  font-weight: 600;\n  letter-spacing: 0.32em;\n  text-transform: uppercase;\n  color: rgba(255, 255, 255, 0.72);\n  animation: _ngcontent-%COMP%_fade-up 600ms 350ms cubic-bezier(0.22, 1, 0.36, 1) both;\n}\n.splash__progress[_ngcontent-%COMP%] {\n  width: 180px;\n  height: 3px;\n  border-radius: 999px;\n  background: rgba(255, 255, 255, 0.12);\n  overflow: hidden;\n  animation: _ngcontent-%COMP%_fade-up 600ms 450ms cubic-bezier(0.22, 1, 0.36, 1) both;\n}\n.splash__progress[_ngcontent-%COMP%]   span[_ngcontent-%COMP%] {\n  display: block;\n  height: 100%;\n  border-radius: inherit;\n  background:\n    linear-gradient(\n      90deg,\n      #00a3e0,\n      #8b2fc9,\n      #e02495);\n  box-shadow: 0 0 10px rgba(224, 36, 149, 0.7);\n  transform-origin: left;\n  animation: _ngcontent-%COMP%_progress 1.3s 200ms cubic-bezier(0.65, 0, 0.35, 1) both;\n}\n@keyframes _ngcontent-%COMP%_logo-in {\n  from {\n    opacity: 0;\n    transform: scale(0.55) rotate(-6deg);\n    filter: blur(12px);\n  }\n  to {\n    opacity: 1;\n    transform: scale(1) rotate(0);\n    filter: blur(0);\n  }\n}\n@keyframes _ngcontent-%COMP%_float {\n  0%, 100% {\n    transform: translateY(0);\n  }\n  50% {\n    transform: translateY(-6px);\n  }\n}\n@keyframes _ngcontent-%COMP%_ring-in {\n  to {\n    opacity: 1;\n  }\n}\n@keyframes _ngcontent-%COMP%_spin {\n  to {\n    transform: rotate(360deg);\n  }\n}\n@keyframes _ngcontent-%COMP%_halo-pulse {\n  0%, 100% {\n    opacity: 0.6;\n    transform: scale(0.95);\n  }\n  50% {\n    opacity: 1;\n    transform: scale(1.08);\n  }\n}\n@keyframes _ngcontent-%COMP%_shine {\n  to {\n    background-position: 0% 0;\n  }\n}\n@keyframes _ngcontent-%COMP%_fade-up {\n  from {\n    opacity: 0;\n    transform: translateY(10px);\n  }\n  to {\n    opacity: 1;\n    transform: translateY(0);\n  }\n}\n@keyframes _ngcontent-%COMP%_progress {\n  from {\n    transform: scaleX(0);\n  }\n  to {\n    transform: scaleX(1);\n  }\n}\n@keyframes _ngcontent-%COMP%_orb-drift {\n  from {\n    transform: translate(0, 0) scale(1);\n  }\n  to {\n    transform: translate(4vmax, 3vmax) scale(1.12);\n  }\n}\n/*# sourceMappingURL=splash-screen.component.css.map */"] });
+    }, styles: ["\n\n[_nghost-%COMP%] {\n  position: fixed;\n  inset: 0;\n  z-index: 1000;\n}\n.splash[_ngcontent-%COMP%] {\n  position: absolute;\n  inset: 0;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  overflow: hidden;\n  background:\n    radial-gradient(\n      circle at 50% 42%,\n      #2c1b42 0%,\n      #1a1821 62%,\n      #121017 100%);\n  color: #fff;\n}\n.splash__orb[_ngcontent-%COMP%] {\n  position: absolute;\n  width: 46vmax;\n  height: 46vmax;\n  border-radius: 50%;\n  filter: blur(80px);\n  opacity: 0.45;\n  animation: _ngcontent-%COMP%_orb-drift 6s ease-in-out infinite alternate;\n}\n.splash__orb--blue[_ngcontent-%COMP%] {\n  top: -18vmax;\n  left: -14vmax;\n  background: #00a3e0;\n}\n.splash__orb--pink[_ngcontent-%COMP%] {\n  bottom: -20vmax;\n  right: -14vmax;\n  background: #b01674;\n  animation-delay: -3s;\n}\n.splash__center[_ngcontent-%COMP%] {\n  position: relative;\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n  gap: 1.75rem;\n}\n.splash__emblem[_ngcontent-%COMP%] {\n  position: relative;\n  width: 240px;\n  height: 240px;\n  display: grid;\n  place-items: center;\n}\n.splash__ring[_ngcontent-%COMP%] {\n  position: absolute;\n  inset: 0;\n  border-radius: 50%;\n  background:\n    conic-gradient(\n      from 0deg,\n      #00a3e0,\n      #8b2fc9,\n      #e02495,\n      transparent 70%,\n      #00a3e0);\n  -webkit-mask:\n    radial-gradient(\n      farthest-side,\n      transparent calc(100% - 3px),\n      #000 calc(100% - 2px));\n  mask:\n    radial-gradient(\n      farthest-side,\n      transparent calc(100% - 3px),\n      #000 calc(100% - 2px));\n  opacity: 0;\n  animation: _ngcontent-%COMP%_ring-in 500ms 250ms ease-out forwards, _ngcontent-%COMP%_spin 1.6s linear infinite;\n}\n.splash__halo[_ngcontent-%COMP%] {\n  position: absolute;\n  inset: 30px;\n  border-radius: 50%;\n  background:\n    radial-gradient(\n      circle,\n      rgba(139, 47, 201, 0.75) 0%,\n      rgba(0, 163, 224, 0.35) 45%,\n      transparent 70%);\n  filter: blur(22px);\n  animation: _ngcontent-%COMP%_halo-pulse 1.8s ease-in-out infinite;\n}\n.splash__tile[_ngcontent-%COMP%] {\n  position: relative;\n  width: 200px;\n  height: 200px;\n  filter: drop-shadow(0 14px 28px rgba(0, 0, 0, 0.5));\n  animation: _ngcontent-%COMP%_logo-in 750ms cubic-bezier(0.34, 1.56, 0.64, 1) both, _ngcontent-%COMP%_float 2.4s 750ms ease-in-out infinite;\n}\n.splash__tile[_ngcontent-%COMP%]   img[_ngcontent-%COMP%] {\n  width: 100%;\n  height: 100%;\n  object-fit: contain;\n  display: block;\n}\n.splash__shine[_ngcontent-%COMP%] {\n  position: absolute;\n  inset: 0;\n  -webkit-mask: url(/assets/images/logo-splash.png) center/contain no-repeat;\n  mask: url(/assets/images/logo-splash.png) center/contain no-repeat;\n  background:\n    linear-gradient(\n      115deg,\n      transparent 40%,\n      rgba(255, 255, 255, 0.6) 50%,\n      transparent 60%) no-repeat;\n  background-size: 300% 100%;\n  background-position: 100% 0;\n  animation: _ngcontent-%COMP%_shine 900ms 650ms cubic-bezier(0.4, 0, 0.2, 1) forwards;\n}\n.splash__tagline[_ngcontent-%COMP%] {\n  margin: 0;\n  font-size: 0.8rem;\n  font-weight: 600;\n  letter-spacing: 0.32em;\n  text-transform: uppercase;\n  color: rgba(255, 255, 255, 0.72);\n  animation: _ngcontent-%COMP%_fade-up 600ms 350ms cubic-bezier(0.22, 1, 0.36, 1) both;\n}\n.splash__progress[_ngcontent-%COMP%] {\n  width: 180px;\n  height: 3px;\n  border-radius: 999px;\n  background: rgba(255, 255, 255, 0.12);\n  overflow: hidden;\n  animation: _ngcontent-%COMP%_fade-up 600ms 450ms cubic-bezier(0.22, 1, 0.36, 1) both;\n}\n.splash__progress[_ngcontent-%COMP%]   span[_ngcontent-%COMP%] {\n  display: block;\n  height: 100%;\n  border-radius: inherit;\n  background:\n    linear-gradient(\n      90deg,\n      #00a3e0,\n      #8b2fc9,\n      #e02495);\n  box-shadow: 0 0 10px rgba(224, 36, 149, 0.7);\n  animation: _ngcontent-%COMP%_progress 1.3s 200ms cubic-bezier(0.65, 0, 0.35, 1) both;\n}\n@keyframes _ngcontent-%COMP%_logo-in {\n  from {\n    opacity: 0;\n    transform: scale(0.55) rotate(-6deg);\n    filter: blur(12px);\n  }\n  to {\n    opacity: 1;\n    transform: scale(1) rotate(0);\n    filter: blur(0);\n  }\n}\n@keyframes _ngcontent-%COMP%_float {\n  0%, 100% {\n    transform: translateY(0);\n  }\n  50% {\n    transform: translateY(-6px);\n  }\n}\n@keyframes _ngcontent-%COMP%_ring-in {\n  to {\n    opacity: 1;\n  }\n}\n@keyframes _ngcontent-%COMP%_spin {\n  to {\n    transform: rotate(360deg);\n  }\n}\n@keyframes _ngcontent-%COMP%_halo-pulse {\n  0%, 100% {\n    opacity: 0.6;\n    transform: scale(0.95);\n  }\n  50% {\n    opacity: 1;\n    transform: scale(1.08);\n  }\n}\n@keyframes _ngcontent-%COMP%_shine {\n  to {\n    background-position: 0% 0;\n  }\n}\n@keyframes _ngcontent-%COMP%_fade-up {\n  from {\n    opacity: 0;\n    transform: translateY(10px);\n  }\n  to {\n    opacity: 1;\n    transform: translateY(0);\n  }\n}\n@keyframes _ngcontent-%COMP%_progress {\n  from {\n    width: 0;\n  }\n  to {\n    width: 100%;\n  }\n}\n@keyframes _ngcontent-%COMP%_orb-drift {\n  from {\n    transform: translate(0, 0) scale(1);\n  }\n  to {\n    transform: translate(4vmax, 3vmax) scale(1.12);\n  }\n}\n/*# sourceMappingURL=splash-screen.component.css.map */"] });
   }
 };
 (() => {
@@ -4679,7 +4681,7 @@ var routes = [
     path: "auth",
     component: AuthLayoutComponent,
     canActivate: [guestGuard],
-    loadChildren: () => import("./chunk-LBPSG7MJ.js").then((m) => m.AuthModule)
+    loadChildren: () => import("./chunk-DG36ATIF.js").then((m) => m.AuthModule)
   },
   {
     path: "",
@@ -4689,37 +4691,36 @@ var routes = [
       { path: "", pathMatch: "full", redirectTo: "dashboard" },
       {
         path: "dashboard",
-        loadChildren: () => import("./chunk-SFOMSDIJ.js").then((m) => m.DashboardModule)
+        loadChildren: () => import("./chunk-BSBSUQRP.js").then((m) => m.DashboardModule)
+      },
+      {
+        path: "catalog",
+        loadChildren: () => import("./chunk-2PYQ75EL.js").then((m) => m.CatalogModule)
       },
       {
         path: "products",
         canActivate: [roleGuard(["ADMIN", "WAREHOUSE_KEEPER"])],
-        loadChildren: () => import("./chunk-NM3VGQQH.js").then((m) => m.ProductsModule)
+        loadChildren: () => import("./chunk-AITE4M33.js").then((m) => m.ProductsModule)
       },
       {
         path: "categories",
         canActivate: [roleGuard(["ADMIN", "WAREHOUSE_KEEPER"])],
-        loadChildren: () => import("./chunk-FGQYARLA.js").then((m) => m.CategoriesModule)
-      },
-      {
-        path: "type-categories",
-        canActivate: [roleGuard(["ADMIN", "WAREHOUSE_KEEPER"])],
-        loadChildren: () => import("./chunk-NPTPWZ2F.js").then((m) => m.TypeCategoriesModule)
+        loadChildren: () => import("./chunk-GCLGWTRM.js").then((m) => m.CategoriesModule)
       },
       {
         path: "deliveries",
         canActivate: [roleGuard(["ADMIN", "COMMERCIAL_ADVISOR"])],
-        loadChildren: () => import("./chunk-U4PGVA7Q.js").then((m) => m.DeliveriesModule)
+        loadChildren: () => import("./chunk-L6GLTQTM.js").then((m) => m.DeliveriesModule)
       },
       {
         path: "transfers",
         canActivate: [roleGuard(["ADMIN", "COMMERCIAL_ADVISOR"])],
-        loadChildren: () => import("./chunk-M657JATT.js").then((m) => m.TransfersModule)
+        loadChildren: () => import("./chunk-WAM6VJZT.js").then((m) => m.TransfersModule)
       },
       {
         path: "users",
         canActivate: [roleGuard(["ADMIN"])],
-        loadChildren: () => import("./chunk-2NDTOCPY.js").then((m) => m.UsersModule)
+        loadChildren: () => import("./chunk-5M23MUIA.js").then((m) => m.UsersModule)
       }
     ]
   },

@@ -41,10 +41,37 @@
       <input matInput formControlName="reference" />
     </mat-form-field>
 
-    <mat-form-field appearance="outline">
-      <mat-label>URL de foto</mat-label>
-      <input matInput formControlName="photo" placeholder="https://…" />
-    </mat-form-field>
+    <div class="image-field">
+      <span class="image-field__label">Imagen del producto</span>
+
+      <div class="image-field__body">
+        <div class="image-field__preview" [class.image-field__preview--empty]="!previewUrl">
+          <img *ngIf="previewUrl; else noImage" [src]="previewUrl" alt="Vista previa del producto" />
+          <ng-template #noImage><mat-icon>image</mat-icon></ng-template>
+        </div>
+
+        <div class="image-field__actions">
+          <input
+            #fileInput
+            type="file"
+            hidden
+            [accept]="acceptedImageTypes"
+            (change)="onFileSelected($event)"
+          />
+          <button mat-stroked-button type="button" [disabled]="loading" (click)="fileInput.click()">
+            <mat-icon>upload</mat-icon>
+            {{ previewUrl ? 'Cambiar imagen' : 'Subir imagen' }}
+          </button>
+          <button *ngIf="previewUrl" mat-button type="button" color="warn" [disabled]="loading" (click)="removeImage()">
+            <mat-icon>delete</mat-icon>
+            Quitar
+          </button>
+          <span class="image-field__hint">JPG, PNG o WEBP. Máx. 5 MB.</span>
+        </div>
+      </div>
+
+      <mat-error *ngIf="imageError">{{ imageError }}</mat-error>
+    </div>
 
     <mat-form-field appearance="outline">
       <mat-label>Descripción</mat-label>
