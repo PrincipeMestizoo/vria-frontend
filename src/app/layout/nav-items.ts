@@ -15,6 +15,12 @@ export const NAV_ITEMS: NavItem[] = [
     roles: ['ADMIN', 'WAREHOUSE_KEEPER', 'COMMERCIAL_ADVISOR'],
   },
   {
+    label: 'Salida de stock',
+    icon: 'outbox',
+    path: '/stock-out',
+    roles: ['ADMIN', 'WAREHOUSE_KEEPER'],
+  },
+  {
     label: 'Catálogo',
     icon: 'storefront',
     path: '/catalog',
@@ -24,12 +30,6 @@ export const NAV_ITEMS: NavItem[] = [
     label: 'Productos',
     icon: 'inventory_2',
     path: '/products',
-    roles: ['ADMIN', 'WAREHOUSE_KEEPER'],
-  },
-  {
-    label: 'Salida de stock',
-    icon: 'outbox',
-    path: '/stock-out',
     roles: ['ADMIN', 'WAREHOUSE_KEEPER'],
   },
   {
