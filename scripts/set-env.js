@@ -7,7 +7,7 @@ const root = path.resolve(__dirname, '..');
 const envFile = path.join(root, '.env');
 const outFile = path.join(root, 'src/environments/env.generated.ts');
 
-const REQUIRED = ['API_URL', 'CLOUDINARY_CLOUD_NAME', 'CLOUDINARY_UPLOAD_PRESET', 'CLOUDINARY_FOLDER'];
+const REQUIRED = ['API_URL', 'STORAGE_CLOUD_NAME', 'STORAGE_UPLOAD_PRESET', 'STORAGE_FOLDER'];
 
 function parseEnvFile(file) {
   if (!fs.existsSync(file)) {
@@ -39,9 +39,9 @@ const content = `// Archivo generado por scripts/set-env.js. No editar ni subir 
 export const env = {
   apiUrl: ${JSON.stringify(value('API_URL'))},
   cloudinary: {
-    cloudName: ${JSON.stringify(value('CLOUDINARY_CLOUD_NAME'))},
-    uploadPreset: ${JSON.stringify(value('CLOUDINARY_UPLOAD_PRESET'))},
-    folder: ${JSON.stringify(value('CLOUDINARY_FOLDER'))},
+    cloudName: ${JSON.stringify(value('STORAGE_CLOUD_NAME'))},
+    uploadPreset: ${JSON.stringify(value('STORAGE_UPLOAD_PRESET'))},
+    folder: ${JSON.stringify(value('STORAGE_FOLDER'))},
   },
 };
 `;
