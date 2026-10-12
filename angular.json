@@ -80,6 +80,12 @@
             },
             "development": {
               "buildTarget": "vria-frontend:build:development"
+            },
+            "tunnel": {
+              "buildTarget": "vria-frontend:build:development",
+              "host": "0.0.0.0",
+              "proxyConfig": "proxy.conf.json",
+              "allowedHosts": [".tunnelmole.net"]
             }
           },
           "defaultConfiguration": "development"

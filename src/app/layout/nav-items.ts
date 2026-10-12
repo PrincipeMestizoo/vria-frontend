@@ -24,7 +24,7 @@ export const NAV_ITEMS: NavItem[] = [
     label: 'Catálogo',
     icon: 'storefront',
     path: '/catalog',
-    roles: ['ADMIN', 'WAREHOUSE_KEEPER', 'COMMERCIAL_ADVISOR'],
+    roles: ['ADMIN', 'COMMERCIAL_ADVISOR'],
   },
   {
     label: 'Productos',

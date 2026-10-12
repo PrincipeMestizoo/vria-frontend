@@ -5,6 +5,7 @@
     "ng": "ng",
     "prestart": "node scripts/set-env.js",
     "start": "ng serve",
+    "start:tunnel": "node scripts/set-env.js --api-url=/api/v1 && ng serve --configuration tunnel",
     "prebuild": "node scripts/set-env.js",
     "build": "ng build",
     "prewatch": "node scripts/set-env.js",

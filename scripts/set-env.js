@@ -23,9 +23,10 @@ function parseEnvFile(file) {
   return vars;
 }
 
-// Las variables del sistema (CI / despliegue) tienen prioridad sobre .env
+// Prioridad: argumento --api-url (p. ej. start:tunnel) > variables del sistema (CI / despliegue) > .env
 const fileVars = parseEnvFile(envFile);
-const value = (key) => process.env[key] ?? fileVars[key];
+const apiUrlArg = process.argv.find((arg) => arg.startsWith('--api-url='))?.split('=')[1];
+const value = (key) => (key === 'API_URL' && apiUrlArg) || (process.env[key] ?? fileVars[key]);
 
 const missing = REQUIRED.filter((key) => !value(key));
 if (missing.length) {

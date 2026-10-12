@@ -26,6 +26,7 @@ const routes: Routes = [
       },
       {
         path: 'catalog',
+        canActivate: [roleGuard(['ADMIN', 'COMMERCIAL_ADVISOR'])],
         loadChildren: () => import('./features/catalog/catalog.module').then((m) => m.CatalogModule),
       },
       {

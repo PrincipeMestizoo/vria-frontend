@@ -243,6 +243,31 @@ h6 {
     overflow: hidden;
     text-overflow: ellipsis;
   }
+
+  // Con el borde del outline oculto, el label flotante de Material quedaba
+  // centrado sobre el borde superior (medio fuera de la caja) y pegado al
+  // texto. Se baja dentro de la caja y se empuja el input hacia abajo para
+  // dejarle espacio, sin cambiar la altura total del campo.
+  .mdc-text-field--outlined:not(.mdc-text-field--no-label):not(.mdc-text-field--textarea) {
+    .mat-mdc-form-field-infix {
+      padding-top: 26px;
+      padding-bottom: 6px;
+    }
+
+    .mdc-floating-label--float-above {
+      transform: translateY(-24.75px) scale(0.75) !important;
+    }
+  }
+
+  // Separa el mensaje de error/hint del borde inferior del campo.
+  .mat-mdc-form-field-subscript-wrapper {
+    margin-top: 0.3rem;
+  }
+
+  .mat-mdc-form-field-error-wrapper,
+  .mat-mdc-form-field-hint-wrapper {
+    padding: 0 0.75rem;
+  }
 }
 
 // Los formularios en dos columnas (`.form-row`) deben poder encogerse por
