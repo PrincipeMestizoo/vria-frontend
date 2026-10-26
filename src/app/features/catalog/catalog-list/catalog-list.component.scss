@@ -284,3 +284,52 @@
     animation: none;
   }
 }
+
+// ---- Productos modificados recientemente ----
+
+.product-card--changed {
+  outline: 2px solid color-mix(in srgb, var(--vria-purple) 45%, transparent);
+  outline-offset: -2px;
+}
+
+.product-card--highlight {
+  animation: cardPulse 1.6s ease-out;
+}
+
+@keyframes cardPulse {
+  0%,
+  100% {
+    box-shadow: var(--vria-shadow);
+  }
+  30% {
+    box-shadow: 0 0 0 6px color-mix(in srgb, var(--vria-accent) 35%, transparent), var(--vria-shadow-hover);
+  }
+}
+
+.change-ribbon {
+  position: absolute;
+  bottom: 0.75rem;
+  left: 0.75rem;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  max-width: calc(100% - 1.5rem);
+  padding: 0.25rem 0.6rem 0.25rem 0.45rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  background: var(--vria-gradient-accent);
+  box-shadow: 0 4px 12px rgba(107, 31, 158, 0.35);
+
+  mat-icon {
+    font-size: 14px;
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
+  }
+}

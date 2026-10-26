@@ -1,0 +1,100 @@
+<button
+  mat-icon-button
+  class="bell"
+  [class.bell--active]="unreadCount > 0"
+  [matMenuTriggerFor]="feed"
+  (menuOpened)="onOpened()"
+  (menuClosed)="onClosed()"
+  [matTooltip]="unreadCount ? unreadCount + ' sin leer' : 'Notificaciones'"
+  [attr.aria-label]="unreadCount ? 'Notificaciones, ' + unreadCount + ' sin leer' : 'Notificaciones'"
+>
+  <mat-icon
+    [matBadge]="badgeLabel"
+    [matBadgeHidden]="unreadCount === 0"
+    matBadgeColor="warn"
+    matBadgeSize="small"
+    aria-hidden="false"
+  >{{ unreadCount ? 'notifications_active' : 'notifications' }}</mat-icon>
+</button>
+
+<mat-menu #feed="matMenu" class="notification-menu" xPosition="before">
+  <!-- El panel no debe cerrarse al interactuar con filtros o botones internos -->
+  <div class="feed" (click)="$event.stopPropagation()" (keydown.tab)="$event.stopPropagation()">
+    <header class="feed__header">
+      <div>
+        <h2 class="feed__title">Notificaciones</h2>
+        <p class="feed__subtitle">{{ unreadCount ? unreadCount + ' sin leer' : 'Estás al día' }}</p>
+      </div>
+      <button mat-button color="primary" class="feed__mark" *ngIf="hasUnreadItems" (click)="markAllAsRead()">
+        <mat-icon>done_all</mat-icon>
+        Marcar leídas
+      </button>
+    </header>
+
+    <div class="feed__filters" role="tablist">
+      <button
+        type="button"
+        role="tab"
+        class="feed__filter"
+        [class.feed__filter--active]="filter === 'ALL'"
+        [attr.aria-selected]="filter === 'ALL'"
+        (click)="filter = 'ALL'"
+      >
+        Todas
+      </button>
+      <button
+        type="button"
+        role="tab"
+        class="feed__filter"
+        [class.feed__filter--active]="filter === 'UNREAD'"
+        [attr.aria-selected]="filter === 'UNREAD'"
+        (click)="filter = 'UNREAD'"
+      >
+        No leídas
+      </button>
+    </div>
+
+    <div class="feed__body">
+      <div class="feed__state" *ngIf="loading">
+        <mat-spinner diameter="28"></mat-spinner>
+      </div>
+
+      <div class="feed__state" *ngIf="!loading && failed">
+        <mat-icon>cloud_off</mat-icon>
+        <span>No pudimos cargar las notificaciones.</span>
+        <button mat-button color="primary" (click)="retry()">Reintentar</button>
+      </div>
+
+      <div class="feed__state" *ngIf="!loading && !failed && visibleItems.length === 0">
+        <mat-icon>{{ filter === 'UNREAD' ? 'mark_email_read' : 'notifications_off' }}</mat-icon>
+        <span>{{ filter === 'UNREAD' ? 'No tienes notificaciones sin leer.' : 'Aún no hay movimientos.' }}</span>
+      </div>
+
+      <ul class="feed__list" *ngIf="!loading && !failed && visibleItems.length">
+        <li *ngFor="let item of visibleItems; trackBy: trackById">
+          <button
+            type="button"
+            class="feed-item"
+            [class.feed-item--unread]="item.unread"
+            [ngClass]="'feed-item--' + meta(item).tone"
+            (click)="open(item)"
+          >
+            <span class="feed-item__icon"><mat-icon>{{ meta(item).icon }}</mat-icon></span>
+            <span class="feed-item__content">
+              <span class="feed-item__title">{{ item.title }}</span>
+              <span class="feed-item__message">{{ item.message }}</span>
+              <span class="feed-item__meta">
+                {{ item.actorName }} · {{ item.createdAt | relativeTime }}
+              </span>
+            </span>
+            <span class="feed-item__dot" *ngIf="item.unread" aria-label="Sin leer"></span>
+          </button>
+        </li>
+      </ul>
+
+      <button mat-button class="feed__more" *ngIf="canLoadMore && filter === 'ALL'" [disabled]="loadingMore" (click)="loadMore()">
+        {{ loadingMore ? 'Cargando…' : 'Ver anteriores' }}
+      </button>
+    </div>
+  </div>
+</mat-menu>

@@ -6,3 +6,4 @@ export * from './category.model';
 export * from './delivery.model';
 export * from './transfer.model';
 export * from './api-error.model';
+export * from './notification.model';

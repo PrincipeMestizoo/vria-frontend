@@ -1,0 +1,249 @@
+.bell {
+  color: var(--vria-text-secondary);
+  transition: color 160ms ease;
+
+  &:hover,
+  &--active {
+    color: var(--vria-purple);
+  }
+
+  &--active mat-icon {
+    animation: bellRing 900ms cubic-bezier(0.36, 0.07, 0.19, 0.97) 1;
+    transform-origin: 50% 10%;
+  }
+}
+
+@keyframes bellRing {
+  0%,
+  100% {
+    transform: rotate(0);
+  }
+  20% {
+    transform: rotate(14deg);
+  }
+  40% {
+    transform: rotate(-12deg);
+  }
+  60% {
+    transform: rotate(8deg);
+  }
+  80% {
+    transform: rotate(-4deg);
+  }
+}
+
+// El panel del menu vive en el overlay, fuera del encapsulamiento del componente
+::ng-deep .mat-mdc-menu-panel.notification-menu {
+  width: min(400px, calc(100vw - 32px));
+  max-width: min(400px, calc(100vw - 32px)) !important;
+  max-height: min(560px, calc(100vh - 96px));
+  padding: 0 !important;
+
+  .mat-mdc-menu-content {
+    padding: 0;
+  }
+}
+
+.feed {
+  display: flex;
+  flex-direction: column;
+  max-height: min(560px, calc(100vh - 96px));
+  cursor: default;
+
+  &__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding: 1rem 1rem 0.5rem;
+  }
+
+  &__title {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--vria-text-primary);
+  }
+
+  &__subtitle {
+    margin: 0.15rem 0 0;
+    font-size: 0.78rem;
+    color: var(--vria-text-secondary);
+  }
+
+  &__mark {
+    flex-shrink: 0;
+    font-size: 0.8rem;
+  }
+
+  &__filters {
+    display: flex;
+    gap: 0.4rem;
+    padding: 0 1rem 0.6rem;
+    border-bottom: 1px solid var(--vria-border);
+  }
+
+  &__filter {
+    border: none;
+    cursor: pointer;
+    padding: 0.3rem 0.85rem;
+    border-radius: 999px;
+    font: inherit;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--vria-text-secondary);
+    background: transparent;
+    transition: background-color 160ms ease, color 160ms ease;
+
+    &:hover {
+      background: rgba(139, 47, 201, 0.08);
+    }
+
+    &:focus-visible {
+      outline: none;
+      box-shadow: var(--vria-focus-ring);
+    }
+
+    &--active {
+      color: #fff;
+      background: var(--vria-gradient);
+    }
+  }
+
+  &__body {
+    overflow-y: auto;
+    padding: 0.4rem;
+  }
+
+  &__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  &__state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 2rem 1rem;
+    text-align: center;
+    font-size: 0.85rem;
+    color: var(--vria-text-secondary);
+
+    mat-icon {
+      font-size: 2rem;
+      width: 2rem;
+      height: 2rem;
+      opacity: 0.6;
+    }
+  }
+
+  &__more {
+    width: 100%;
+    margin-top: 0.25rem;
+  }
+}
+
+.feed-item {
+  --tone: var(--vria-info);
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.7rem 0.75rem;
+  border: none;
+  border-radius: var(--vria-radius-sm);
+  background: transparent;
+  font: inherit;
+  text-align: left;
+  color: inherit;
+  cursor: pointer;
+  transition: background-color 140ms ease;
+
+  &--success {
+    --tone: var(--vria-success);
+  }
+
+  &--warning {
+    --tone: var(--vria-warning);
+  }
+
+  &--danger {
+    --tone: var(--vria-danger);
+  }
+
+  &--accent {
+    --tone: var(--vria-purple);
+  }
+
+  &:hover {
+    background: rgba(139, 47, 201, 0.06);
+  }
+
+  &:focus-visible {
+    outline: none;
+    box-shadow: var(--vria-focus-ring);
+  }
+
+  &--unread {
+    background: rgba(0, 163, 224, 0.07);
+  }
+
+  &__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 36px;
+    height: 36px;
+    border-radius: 12px;
+    color: var(--tone);
+    background: color-mix(in srgb, var(--tone) 14%, transparent);
+
+    mat-icon {
+      font-size: 20px;
+      width: 20px;
+      height: 20px;
+    }
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+    min-width: 0;
+    flex: 1;
+  }
+
+  &__title {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--vria-text-primary);
+  }
+
+  &__message {
+    font-size: 0.82rem;
+    color: var(--vria-text-primary);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+
+  &__meta {
+    font-size: 0.72rem;
+    color: var(--vria-text-secondary);
+  }
+
+  &__dot {
+    flex-shrink: 0;
+    width: 8px;
+    height: 8px;
+    margin-top: 0.4rem;
+    border-radius: 50%;
+    background: var(--vria-accent);
+  }
+}

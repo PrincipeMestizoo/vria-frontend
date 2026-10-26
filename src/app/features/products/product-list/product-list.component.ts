@@ -1,11 +1,19 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { finalize } from 'rxjs';
+import { catchError, finalize, forkJoin, of } from 'rxjs';
 import { ProductService } from '../../../core/services/product.service';
 import { NotificationService } from '../../../core/services/notification.service';
 import { ConfirmDialogService } from '../../../shared/services/confirm-dialog.service';
 import { AuthService } from '../../../core/services/auth.service';
-import { ProductResponseDTO } from '../../../core/models';
+import { ActivityNotificationService } from '../../../core/services/activity-notification.service';
+import { ActivityNotification, ProductResponseDTO } from '../../../core/models';
+import {
+  PRODUCT_CHANGE_LABELS,
+  latestChangeByProduct,
+  prioritizeChanged,
+} from '../../../shared/utils/notification-meta';
+
+const HIGHLIGHT_MS = 1800;
 import { ProductFormComponent } from '../product-form/product-form.component';
 
 @Component({
@@ -19,12 +27,18 @@ export class ProductListComponent implements OnInit {
   products: ProductResponseDTO[] = [];
   filtered: ProductResponseDTO[] = [];
   searchTerm = '';
+  readonly changeLabels = PRODUCT_CHANGE_LABELS;
+  recentChanges: ActivityNotification[] = [];
+  // Ultimo cambio por producto (24 h): esas filas se muestran primero
+  changesById = new Map<number, ActivityNotification>();
+  highlightedId: number | null = null;
 
   constructor(
     private readonly productService: ProductService,
     private readonly notification: NotificationService,
     private readonly dialog: MatDialog,
     private readonly confirmDialog: ConfirmDialogService,
+    private readonly activityService: ActivityNotificationService,
     readonly authService: AuthService
   ) {}
 
@@ -42,11 +56,15 @@ export class ProductListComponent implements OnInit {
 
   load(): void {
     this.loading = true;
-    this.productService
-      .findAll()
+    forkJoin({
+      products: this.productService.findAll(),
+      changes: this.activityService.recentProductChanges().pipe(catchError(() => of([]))),
+    })
       .pipe(finalize(() => (this.loading = false)))
-      .subscribe((data) => {
-        this.products = data;
+      .subscribe(({ products, changes }) => {
+        this.recentChanges = changes;
+        this.changesById = latestChangeByProduct(changes);
+        this.products = prioritizeChanged(products, (p) => p.idProduct, this.changesById);
         this.applyFilter();
       });
   }
@@ -61,6 +79,20 @@ export class ProductListComponent implements OnInit {
             (p.reference || '').toLowerCase().includes(term)
         )
       : this.products;
+  }
+
+  /** Ubica y resalta la fila del producto elegido en la ventana de cambios. */
+  focusProduct(change: ActivityNotification): void {
+    if (change.entityId == null) {
+      return;
+    }
+    this.searchTerm = '';
+    this.applyFilter();
+    this.highlightedId = change.entityId;
+    setTimeout(() =>
+      document.getElementById(`product-row-${change.entityId}`)?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    );
+    setTimeout(() => (this.highlightedId = null), HIGHLIGHT_MS);
   }
 
   openForm(product: ProductResponseDTO | null): void {

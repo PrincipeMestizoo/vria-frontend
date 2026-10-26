@@ -1,6 +1,12 @@
 <div class="vria-page">
   <app-page-header title="Catálogo" subtitle="Productos disponibles en VRIA." icon="storefront"></app-page-header>
 
+  <app-recent-changes
+    title="Novedades en productos"
+    [changes]="recentChanges"
+    (selectChange)="focusProduct($event)"
+  ></app-recent-changes>
+
   <div class="list-toolbar catalog-toolbar">
     <mat-form-field appearance="outline" class="list-toolbar__search">
       <mat-label>Buscar</mat-label>
@@ -76,7 +82,10 @@
     <article
       *ngFor="let item of pageItems; trackBy: trackById"
       class="product-card"
+      [id]="'product-' + item.product.idProduct"
       [ngClass]="'product-card--' + item.level.toLowerCase()"
+      [class.product-card--changed]="item.change"
+      [class.product-card--highlight]="highlightedId === item.product.idProduct"
     >
       <div class="product-card__media">
         <img
@@ -91,6 +100,15 @@
             <mat-icon>image_not_supported</mat-icon>
           </div>
         </ng-template>
+
+        <span
+          class="change-ribbon"
+          *ngIf="item.change"
+          [matTooltip]="item.change.title + ' por ' + item.change.actorName"
+        >
+          <mat-icon>auto_awesome</mat-icon>
+          {{ changeLabels[item.change.action] }} · {{ item.change.createdAt | relativeTime }}
+        </span>
 
         <span class="stock-badge">
           <span class="stock-badge__dot"></span>

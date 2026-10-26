@@ -29,3 +29,43 @@
     color: var(--vria-danger-dark);
   }
 }
+
+// ---- Productos modificados recientemente ----
+
+.change-tag {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  gap: 0.25rem;
+  margin-top: 0.3rem;
+  padding: 0.12rem 0.55rem 0.12rem 0.4rem;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--vria-purple-dark);
+  background: color-mix(in srgb, var(--vria-purple) 12%, transparent);
+
+  mat-icon {
+    font-size: 13px;
+    width: 13px;
+    height: 13px;
+  }
+}
+
+.row--changed {
+  background: color-mix(in srgb, var(--vria-purple) 4%, transparent);
+
+  td:first-child {
+    box-shadow: inset 3px 0 0 var(--vria-purple);
+  }
+}
+
+.row--highlight {
+  animation: rowPulse 1.6s ease-out;
+}
+
+@keyframes rowPulse {
+  30% {
+    background: color-mix(in srgb, var(--vria-accent) 16%, transparent);
+  }
+}

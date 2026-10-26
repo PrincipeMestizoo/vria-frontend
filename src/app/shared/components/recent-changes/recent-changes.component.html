@@ -1,0 +1,51 @@
+<section class="recent" *ngIf="changes.length && !dismissed" aria-live="polite">
+  <header class="recent__header">
+    <div class="recent__heading">
+      <h2>
+        <mat-icon>auto_awesome</mat-icon>
+        {{ title }}
+      </h2>
+      <p>
+        {{ changes.length === 1 ? 'Hubo 1 cambio' : 'Hubo ' + changes.length + ' cambios' }} en las últimas 24 horas
+      </p>
+    </div>
+
+    <div class="recent__actions">
+      <button mat-button color="primary" *ngIf="hiddenCount || expanded" (click)="expanded = !expanded">
+        {{ expanded ? 'Ver menos' : 'Ver todos (' + changes.length + ')' }}
+      </button>
+      <button mat-icon-button (click)="dismiss()" matTooltip="Ocultar" aria-label="Ocultar novedades">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+  </header>
+
+  <ul class="recent__grid">
+    <li *ngFor="let change of visible; trackBy: trackById">
+      <button
+        type="button"
+        class="change-card"
+        [ngClass]="'change-card--' + meta(change).tone"
+        [disabled]="change.action === 'DELETED'"
+        [attr.aria-label]="change.message + ' Por ' + change.actorName"
+        (click)="selectChange.emit(change)"
+      >
+        <span class="change-card__top">
+          <span class="change-card__tag">
+            <mat-icon>{{ meta(change).icon }}</mat-icon>
+            {{ labels[change.action] || change.title }}
+          </span>
+          <time class="change-card__time" [attr.datetime]="change.createdAt">{{ change.createdAt | relativeTime }}</time>
+        </span>
+
+        <span class="change-card__message">{{ change.message }}</span>
+
+        <span class="change-card__author">
+          <span class="change-card__avatar">{{ change.actorName | initials }}</span>
+          <span class="change-card__name">{{ change.actorName }}</span>
+          <mat-icon class="change-card__go" *ngIf="change.action !== 'DELETED'">arrow_forward</mat-icon>
+        </span>
+      </button>
+    </li>
+  </ul>
+</section>

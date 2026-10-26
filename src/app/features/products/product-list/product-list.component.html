@@ -10,6 +10,12 @@
     </button>
   </app-page-header>
 
+  <app-recent-changes
+    title="Novedades en productos"
+    [changes]="recentChanges"
+    (selectChange)="focusProduct($event)"
+  ></app-recent-changes>
+
   <div class="list-toolbar">
     <mat-form-field appearance="outline" class="list-toolbar__search">
       <mat-label>Buscar</mat-label>
@@ -31,6 +37,14 @@
           <div class="product-cell">
             <span class="product-cell__name">{{ row.nameProduct }}</span>
             <span class="product-cell__ref" *ngIf="row.reference">Ref. {{ row.reference }}</span>
+            <span
+              class="change-tag"
+              *ngIf="changesById.get(row.idProduct) as change"
+              [matTooltip]="change.message + ' — ' + change.actorName"
+            >
+              <mat-icon>auto_awesome</mat-icon>
+              {{ changeLabels[change.action] }} · {{ change.createdAt | relativeTime }}
+            </span>
           </div>
         </td>
       </ng-container>
@@ -69,7 +83,14 @@
       </ng-container>
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns" class="fade-row"></tr>
+      <tr
+        mat-row
+        *matRowDef="let row; columns: displayedColumns"
+        class="fade-row"
+        [id]="'product-row-' + row.idProduct"
+        [class.row--changed]="changesById.has(row.idProduct)"
+        [class.row--highlight]="highlightedId === row.idProduct"
+      ></tr>
     </table>
 
     <app-empty-state

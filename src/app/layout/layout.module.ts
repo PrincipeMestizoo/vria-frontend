@@ -4,9 +4,10 @@ import { SharedModule } from '../shared/shared.module';
 import { MainLayoutComponent } from './main-layout/main-layout.component';
 import { AuthLayoutComponent } from './auth-layout/auth-layout.component';
 import { SplashScreenComponent } from './splash-screen/splash-screen.component';
+import { NotificationBellComponent } from './notification-bell/notification-bell.component';
 
 @NgModule({
-  declarations: [MainLayoutComponent, AuthLayoutComponent, SplashScreenComponent],
+  declarations: [MainLayoutComponent, AuthLayoutComponent, SplashScreenComponent, NotificationBellComponent],
   imports: [SharedModule, CdkLayoutModule],
   exports: [MainLayoutComponent, AuthLayoutComponent],
 })
