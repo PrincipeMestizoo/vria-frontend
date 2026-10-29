@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/shared/services/confirm-dialog.service.ts"],
+  "sourcesContent": ["import { Injectable } from '@angular/core';\nimport { MatDialog } from '@angular/material/dialog';\nimport { Observable, map } from 'rxjs';\nimport {\n  ConfirmDialogComponent,\n  ConfirmDialogData,\n} from '../components/confirm-dialog/confirm-dialog.component';\n\n@Injectable({ providedIn: 'root' })\nexport class ConfirmDialogService {\n  constructor(private readonly dialog: MatDialog) {}\n\n  confirm(data: ConfirmDialogData): Observable<boolean> {\n    const ref = this.dialog.open(ConfirmDialogComponent, {\n      width: '420px',\n      maxWidth: '95vw',\n      data,\n      autoFocus: false,\n    });\n\n    return ref.afterClosed().pipe(map((result) => !!result));\n  }\n}\n"],
+  "mappings": ";;;;;;;;;AASM,IAAO,uBAAP,MAAO,sBAAoB;EAC/B,YAA6B,QAAiB;AAAjB,SAAA,SAAA;EAAoB;EAEjD,QAAQ,MAAuB;AAC7B,UAAM,MAAM,KAAK,OAAO,KAAK,wBAAwB;MACnD,OAAO;MACP,UAAU;MACV;MACA,WAAW;KACZ;AAED,WAAO,IAAI,YAAW,EAAG,KAAK,IAAI,CAAC,WAAW,CAAC,CAAC,MAAM,CAAC;EACzD;;;uBAZW,uBAAoB,mBAAA,SAAA,CAAA;IAAA;EAAA;;4EAApB,uBAAoB,SAApB,sBAAoB,WAAA,YADP,OAAM,CAAA;EAAA;;",
+  "names": []
+}

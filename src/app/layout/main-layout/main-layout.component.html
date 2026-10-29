@@ -25,6 +25,16 @@
         <span matListItemTitle>{{ item.label }}</span>
       </a>
     </mat-nav-list>
+
+    <button
+      type="button"
+      class="assistant-trigger"
+      [class.assistant-trigger--active]="assistantOpen"
+      (click)="assistantOpen = !assistantOpen; isHandset && sidenav.close()"
+    >
+      <mat-icon>auto_awesome</mat-icon>
+      <span>Asistente IA</span>
+    </button>
   </mat-sidenav>
 
   <mat-sidenav-content>
@@ -75,3 +85,5 @@
     </main>
   </mat-sidenav-content>
 </mat-sidenav-container>
+
+<app-ai-assistant [open]="assistantOpen" (closed)="assistantOpen = false"></app-ai-assistant>

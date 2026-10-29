@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/shared/components/loading-overlay/loading-overlay.component.scss"],
+  "sourcesContent": [".loading-overlay {\n  position: fixed;\n  inset: 0;\n  z-index: 2000;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  background: rgba(17, 12, 46, 0.28);\n  backdrop-filter: blur(2px);\n\n  &__card {\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    width: 6.5rem;\n    height: 6.5rem;\n    border-radius: var(--vria-radius-lg);\n    background: var(--vria-surface);\n    box-shadow: var(--vria-shadow-lg);\n    animation: clayPop 280ms cubic-bezier(0.34, 1.56, 0.64, 1) both;\n  }\n\n  ::ng-deep .mat-mdc-progress-spinner circle {\n    stroke: var(--vria-purple);\n  }\n}\n"],
+  "mappings": ";AAAA,CAAA;AACE,YAAA;AACA,SAAA;AACA,WAAA;AACA,WAAA;AACA,eAAA;AACA,mBAAA;AACA,cAAA,KAAA,EAAA,EAAA,EAAA,EAAA,EAAA,EAAA;AACA,2BAAA,KAAA;AAAA,mBAAA,KAAA;;AAEA,CAAA;AACE,WAAA;AACA,eAAA;AACA,mBAAA;AACA,SAAA;AACA,UAAA;AACA,iBAAA,IAAA;AACA,cAAA,IAAA;AACA,cAAA,IAAA;AACA,aAAA,QAAA,MAAA,aAAA,IAAA,EAAA,IAAA,EAAA,IAAA,EAAA,GAAA;;AAGF,CAtBF,gBAsBE,UAAA,CAAA,yBAAA;AACE,UAAA,IAAA;;",
+  "names": []
+}

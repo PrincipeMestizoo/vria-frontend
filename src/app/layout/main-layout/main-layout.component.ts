@@ -4,6 +4,7 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { map, shareReplay } from 'rxjs';
 import { AuthService } from '../../core/services/auth.service';
 import { ThemeService, AppTheme } from '../../core/services/theme.service';
+import { ViewportService } from '../../core/services/viewport.service';
 import { CurrentUser } from '../../core/models';
 import { NAV_ITEMS, NavItem } from '../nav-items';
 import { routeFade } from '../../shared/animations/animations';
@@ -19,6 +20,7 @@ export class MainLayoutComponent implements OnInit {
   navItems: NavItem[] = [];
   isHandset = false;
   theme: AppTheme = 'light';
+  assistantOpen = false;
 
   readonly isHandset$ = this.breakpointObserver.observe(Breakpoints.Handset).pipe(
     map((result) => result.matches),
@@ -28,11 +30,14 @@ export class MainLayoutComponent implements OnInit {
   constructor(
     private readonly authService: AuthService,
     private readonly themeService: ThemeService,
+    private readonly viewportService: ViewportService,
     readonly router: Router,
     private readonly breakpointObserver: BreakpointObserver
   ) {}
 
   ngOnInit(): void {
+    this.viewportService.start();
+
     this.authService.currentUser$.subscribe((user) => {
       this.currentUser = user;
       this.navItems = NAV_ITEMS.filter((item) => !user || item.roles.includes(user.role));

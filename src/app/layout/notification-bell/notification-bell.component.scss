@@ -33,11 +33,19 @@
 }
 
 // El panel del menu vive en el overlay, fuera del encapsulamiento del componente
+// --vv-height (ViewportService) refleja el area visible real; 100vh no se encoge con el teclado ni la barra del navegador
 ::ng-deep .mat-mdc-menu-panel.notification-menu {
+  --feed-max-height: min(560px, calc(var(--vv-height, 100dvh) - 88px));
   width: min(400px, calc(100vw - 32px));
   max-width: min(400px, calc(100vw - 32px)) !important;
-  max-height: min(560px, calc(100vh - 96px));
+  max-height: var(--feed-max-height) !important;
   padding: 0 !important;
+  overflow: hidden;
+
+  @media (max-width: 599px) {
+    width: calc(100vw - 16px);
+    max-width: calc(100vw - 16px) !important;
+  }
 
   .mat-mdc-menu-content {
     padding: 0;
@@ -47,10 +55,11 @@
 .feed {
   display: flex;
   flex-direction: column;
-  max-height: min(560px, calc(100vh - 96px));
+  max-height: var(--feed-max-height);
   cursor: default;
 
   &__header {
+    flex-shrink: 0;
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
@@ -77,6 +86,7 @@
   }
 
   &__filters {
+    flex-shrink: 0;
     display: flex;
     gap: 0.4rem;
     padding: 0 1rem 0.6rem;
@@ -111,7 +121,11 @@
   }
 
   &__body {
+    flex: 1 1 auto;
+    min-height: 0;
     overflow-y: auto;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
     padding: 0.4rem;
   }
 

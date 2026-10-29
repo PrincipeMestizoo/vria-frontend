@@ -1,0 +1,41 @@
+<section class="assistant" *ngIf="open" role="dialog" aria-modal="true" aria-label="Asistente IA">
+  <header class="assistant__header">
+    <span class="assistant__avatar"><mat-icon>smart_toy</mat-icon></span>
+    <div class="assistant__title">
+      <strong>Asistente IA</strong>
+      <small><span class="assistant__dot"></span>En línea</small>
+    </div>
+    <button mat-icon-button (click)="closed.emit()" aria-label="Cerrar asistente">
+      <mat-icon>close</mat-icon>
+    </button>
+  </header>
+
+  <div class="assistant__body" #body>
+    <div *ngFor="let msg of messages" class="bubble" [class.bubble--user]="msg.from === 'user'">
+      {{ msg.text }}
+    </div>
+    <div class="bubble bubble--typing" aria-label="Escribiendo">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+
+  <div class="assistant__footer">
+    <div class="assistant__chips">
+      <button type="button" class="chip" *ngFor="let s of suggestions">{{ s }}</button>
+    </div>
+
+    <form class="assistant__composer" (submit)="$event.preventDefault()">
+      <input
+        type="text"
+        placeholder="Escribe tu pregunta..."
+        aria-label="Mensaje"
+        autocomplete="off"
+        enterkeyhint="send"
+        (focus)="scrollToEnd()"
+      />
+      <button mat-icon-button type="submit" class="assistant__send" aria-label="Enviar">
+        <mat-icon>send</mat-icon>
+      </button>
+    </form>
+  </div>
+</section>

@@ -5,9 +5,16 @@ import { MainLayoutComponent } from './main-layout/main-layout.component';
 import { AuthLayoutComponent } from './auth-layout/auth-layout.component';
 import { SplashScreenComponent } from './splash-screen/splash-screen.component';
 import { NotificationBellComponent } from './notification-bell/notification-bell.component';
+import { AiAssistantComponent } from './ai-assistant/ai-assistant.component';
 
 @NgModule({
-  declarations: [MainLayoutComponent, AuthLayoutComponent, SplashScreenComponent, NotificationBellComponent],
+  declarations: [
+    MainLayoutComponent,
+    AuthLayoutComponent,
+    SplashScreenComponent,
+    NotificationBellComponent,
+    AiAssistantComponent,
+  ],
   imports: [SharedModule, CdkLayoutModule],
   exports: [MainLayoutComponent, AuthLayoutComponent],
 })
