@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["src/app/shared/utils/form-errors.ts"],
-  "sourcesContent": ["import { AbstractControl } from '@angular/forms';\n\nexport function firstErrorMessage(control: AbstractControl | null, fieldLabel: string): string {\n  if (!control || !control.errors) {\n    return '';\n  }\n\n  const errors = control.errors;\n\n  if (errors['required']) {\n    return `${fieldLabel} es obligatorio.`;\n  }\n  if (errors['email']) {\n    return 'El correo no tiene un formato válido.';\n  }\n  if (errors['minlength']) {\n    return `${fieldLabel} debe tener al menos ${errors['minlength'].requiredLength} caracteres.`;\n  }\n  if (errors['min']) {\n    return `${fieldLabel} debe ser mayor o igual a ${errors['min'].min}.`;\n  }\n  if (errors['passwordMismatch']) {\n    return 'Las contraseñas no coinciden.';\n  }\n\n  return `${fieldLabel} no es válido.`;\n}\n"],
-  "mappings": ";AAEM,SAAU,kBAAkB,SAAiC,YAAkB;AACnF,MAAI,CAAC,WAAW,CAAC,QAAQ,QAAQ;AAC/B,WAAO;EACT;AAEA,QAAM,SAAS,QAAQ;AAEvB,MAAI,OAAO,UAAU,GAAG;AACtB,WAAO,GAAG,UAAU;EACtB;AACA,MAAI,OAAO,OAAO,GAAG;AACnB,WAAO;EACT;AACA,MAAI,OAAO,WAAW,GAAG;AACvB,WAAO,GAAG,UAAU,wBAAwB,OAAO,WAAW,EAAE,cAAc;EAChF;AACA,MAAI,OAAO,KAAK,GAAG;AACjB,WAAO,GAAG,UAAU,6BAA6B,OAAO,KAAK,EAAE,GAAG;EACpE;AACA,MAAI,OAAO,kBAAkB,GAAG;AAC9B,WAAO;EACT;AAEA,SAAO,GAAG,UAAU;AACtB;",
-  "names": []
-}
