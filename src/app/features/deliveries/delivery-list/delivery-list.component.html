@@ -99,6 +99,15 @@
         <th mat-header-cell *matHeaderCellDef></th>
         <td mat-cell *matCellDef="let row">
           <div class="cell-actions">
+            <button
+              mat-icon-button
+              *ngIf="canViewHistory(row)"
+              (click)="openHistory(row)"
+              matTooltip="Ver historial"
+              aria-label="Ver historial"
+            >
+              <mat-icon>history</mat-icon>
+            </button>
             <button mat-icon-button *ngIf="canDelete(row)" (click)="remove(row)" matTooltip="Eliminar" color="warn">
               <mat-icon>delete</mat-icon>
             </button>

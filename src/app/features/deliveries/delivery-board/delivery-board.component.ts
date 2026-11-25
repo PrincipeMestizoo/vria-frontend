@@ -9,6 +9,10 @@ import { DeliveryService } from '../../../core/services/delivery.service';
 import { NotificationService } from '../../../core/services/notification.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { DeliveryFormComponent, DeliveryFormData } from '../delivery-form/delivery-form.component';
+import {
+  DeliveryHistoryDialogComponent,
+  DeliveryHistoryDialogData,
+} from '../delivery-history-dialog/delivery-history-dialog.component';
 import { DeliveryWorkflowService } from '../domain/delivery-workflow.service';
 import {
   DELIVERY_COLUMNS,
@@ -19,6 +23,7 @@ import {
   availableTransitions,
   canDeleteDelivery,
   canTransition,
+  canViewDeliveryHistory,
   compareDeliveries,
   deliveryUrgency,
   nextTransition,
@@ -169,8 +174,12 @@ export class DeliveryBoardComponent implements OnInit {
     return this.canManage && canDeleteDelivery(d);
   }
 
+  canViewHistory(d: DeliveryDTO): boolean {
+    return canViewDeliveryHistory(this.authService.currentUser, d);
+  }
+
   hasMenu(d: DeliveryDTO): boolean {
-    return this.canManage && (this.secondaryActions(d).length > 0 || this.canDelete(d));
+    return this.canViewHistory(d) || (this.canManage && (this.secondaryActions(d).length > 0 || this.canDelete(d)));
   }
 
   isPending(d: DeliveryDTO): boolean {
@@ -260,6 +269,11 @@ export class DeliveryBoardComponent implements OnInit {
         this.rebuild();
         this.notification.success('Domicilio eliminado.');
       });
+  }
+
+  openHistory(d: DeliveryDTO): void {
+    const data: DeliveryHistoryDialogData = { delivery: d };
+    this.dialog.open(DeliveryHistoryDialogComponent, { width: '560px', maxWidth: '95vw', autoFocus: false, data });
   }
 
   openForm(initialState: StateDelivery = 'PREPARING'): void {

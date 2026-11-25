@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { DeliveryDTO, StateDelivery } from '../models';
+import { DeliveryDTO, DeliveryStateHistoryDTO, StateDelivery } from '../models';
 
 @Injectable({ providedIn: 'root' })
 export class DeliveryService {
@@ -36,5 +36,10 @@ export class DeliveryService {
   /** El backend exige el motivo de la eliminación. */
   delete(id: number, reason: string): Observable<void> {
     return this.http.delete<void>(`${this.baseUrl}/${id}`, { params: { reason } });
+  }
+
+  /** Trazabilidad del domicilio. Solo para administradores o quien lo registró (si no, 403). */
+  findHistory(id: number): Observable<DeliveryStateHistoryDTO[]> {
+    return this.http.get<DeliveryStateHistoryDTO[]>(`${this.baseUrl}/${id}/history`);
   }
 }

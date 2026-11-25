@@ -1,0 +1,64 @@
+<h2 mat-dialog-title class="history-title">
+  <mat-icon>history</mat-icon>
+  <span>
+    Historial del domicilio
+    <small>#{{ data.delivery.idDelivery }} · {{ data.delivery.nameClient }}</small>
+  </span>
+</h2>
+
+<mat-dialog-content class="history-content">
+  <mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
+
+  <div class="history-state" *ngIf="!loading && failed">
+    <mat-icon>error_outline</mat-icon>
+    <span>No fue posible cargar el historial.</span>
+    <button mat-button color="primary" (click)="load()">Reintentar</button>
+  </div>
+
+  <div class="history-state" *ngIf="!loading && !failed && entries.length === 0">
+    <mat-icon>inbox</mat-icon>
+    <span>Este domicilio aún no tiene movimientos registrados.</span>
+  </div>
+
+  <ol class="timeline" *ngIf="!loading && !failed && entries.length">
+    <li
+      *ngFor="let entry of entries; trackBy: trackById"
+      class="timeline__item"
+      [ngClass]="'timeline__item--' + entry.action.toLowerCase()"
+    >
+      <span class="timeline__dot"><mat-icon>{{ actionIcons[entry.action] }}</mat-icon></span>
+      <div class="timeline__body">
+        <div class="timeline__head">
+          <strong>{{ actionLabels[entry.action] }}</strong>
+          <time [attr.datetime]="entry.changedAt">{{ entry.changedAt | date: 'd MMM y, h:mm a' }}</time>
+        </div>
+
+        <p class="timeline__states">
+          <ng-container [ngSwitch]="entry.action">
+            <span *ngSwitchCase="'CREATED'">Inició en <b>{{ entry.toState | deliveryStateLabel }}</b></span>
+            <span *ngSwitchCase="'DELETED'">Eliminado estando en <b>{{ entry.fromState | deliveryStateLabel }}</b></span>
+            <span *ngSwitchDefault>
+              {{ entry.fromState | deliveryStateLabel }}
+              <mat-icon class="timeline__arrow">arrow_forward</mat-icon>
+              <b>{{ entry.toState | deliveryStateLabel }}</b>
+            </span>
+          </ng-container>
+        </p>
+
+        <p class="timeline__reason" *ngIf="entry.reason">
+          <mat-icon>format_quote</mat-icon>
+          <span>{{ entry.reason }}</span>
+        </p>
+
+        <p class="timeline__actor">
+          <mat-icon>person</mat-icon>
+          <span>{{ entry.actorName }} · {{ entry.actorRole | roleLabel }}</span>
+        </p>
+      </div>
+    </li>
+  </ol>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Cerrar</button>
+</mat-dialog-actions>

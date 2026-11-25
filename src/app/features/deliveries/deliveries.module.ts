@@ -6,6 +6,7 @@ import { DeliveryListComponent } from './delivery-list/delivery-list.component';
 import { DeliveryFormComponent } from './delivery-form/delivery-form.component';
 import { DeliveryBoardComponent } from './delivery-board/delivery-board.component';
 import { DeliveryReasonDialogComponent } from './delivery-reason-dialog/delivery-reason-dialog.component';
+import { DeliveryHistoryDialogComponent } from './delivery-history-dialog/delivery-history-dialog.component';
 
 @NgModule({
   declarations: [
@@ -13,6 +14,7 @@ import { DeliveryReasonDialogComponent } from './delivery-reason-dialog/delivery
     DeliveryListComponent,
     DeliveryFormComponent,
     DeliveryReasonDialogComponent,
+    DeliveryHistoryDialogComponent,
   ],
   imports: [SharedModule, DragDropModule, DeliveriesRoutingModule],
 })

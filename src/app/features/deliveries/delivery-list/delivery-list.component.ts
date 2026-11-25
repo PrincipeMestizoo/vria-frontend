@@ -6,8 +6,12 @@ import { NotificationService } from '../../../core/services/notification.service
 import { AuthService } from '../../../core/services/auth.service';
 import { DELIVERY_STATES, DeliveryDTO, StateDelivery } from '../../../core/models';
 import { DeliveryFormComponent } from '../delivery-form/delivery-form.component';
+import {
+  DeliveryHistoryDialogComponent,
+  DeliveryHistoryDialogData,
+} from '../delivery-history-dialog/delivery-history-dialog.component';
 import { DeliveryWorkflowService } from '../domain/delivery-workflow.service';
-import { canDeleteDelivery, canTransition } from '../domain/delivery-workflow';
+import { canDeleteDelivery, canTransition, canViewDeliveryHistory } from '../domain/delivery-workflow';
 
 @Component({
   selector: 'app-delivery-list',
@@ -37,6 +41,15 @@ export class DeliveryListComponent implements OnInit {
 
   canDelete(delivery: DeliveryDTO): boolean {
     return this.authService.hasAnyRole(['ADMIN', 'COMMERCIAL_ADVISOR']) && canDeleteDelivery(delivery);
+  }
+
+  canViewHistory(delivery: DeliveryDTO): boolean {
+    return canViewDeliveryHistory(this.authService.currentUser, delivery);
+  }
+
+  openHistory(delivery: DeliveryDTO): void {
+    const data: DeliveryHistoryDialogData = { delivery };
+    this.dialog.open(DeliveryHistoryDialogComponent, { width: '560px', maxWidth: '95vw', autoFocus: false, data });
   }
 
   /** Opción habilitada en el selector: el estado actual o una transición permitida. */

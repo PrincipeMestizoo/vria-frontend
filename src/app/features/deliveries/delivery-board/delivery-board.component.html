@@ -158,6 +158,11 @@
                 <mat-icon>more_vert</mat-icon>
               </button>
               <mat-menu #cardMenu="matMenu" xPosition="before">
+                <button mat-menu-item *ngIf="canViewHistory(d)" (click)="openHistory(d)">
+                  <mat-icon>history</mat-icon>
+                  <span>Ver historial</span>
+                </button>
+                <mat-divider *ngIf="canViewHistory(d) && canManage && (secondaryActions(d).length || canDelete(d))"></mat-divider>
                 <ng-container *ngIf="canManage">
                 <button mat-menu-item *ngFor="let t of secondaryActions(d)" (click)="move(d, t.to)">
                   <mat-icon>{{ t.icon }}</mat-icon>

@@ -1,4 +1,4 @@
-import { DELIVERY_STATES, DeliveryDTO, StateDelivery } from '../../../core/models';
+import { CurrentUser, DELIVERY_STATES, DeliveryDTO, StateDelivery } from '../../../core/models';
 
 /**
  * Reglas de negocio del flujo de domicilios.
@@ -9,8 +9,9 @@ import { DELIVERY_STATES, DeliveryDTO, StateDelivery } from '../../../core/model
  *    excepto desde DELIVERED: una entrega confirmada es terminal e inmutable.
  *  - Solo pueden eliminarse domicilios que aún no han salido (PREPARING / READY).
  *  - Retroceder o eliminar exige un motivo, que queda en la trazabilidad.
+ *  - El historial solo lo ven administradores y el usuario que registró el domicilio.
  *
- * Espejo de `SequentialDeliveryWorkflowPolicy` en vria-backend.
+ * Espejo de `SequentialDeliveryWorkflowPolicy` y `CreatorOrAdminHistoryAccessPolicy` en vria-backend.
  */
 
 export type TransitionKind = 'forward' | 'backward';
@@ -78,6 +79,17 @@ export function isTerminal(state: StateDelivery): boolean {
 
 export function canDeleteDelivery(delivery: Pick<DeliveryDTO, 'state'>): boolean {
   return DELETABLE_STATES.includes(delivery.state);
+}
+
+/** Historial visible para administradores y para quien registró el domicilio. */
+export function canViewDeliveryHistory(
+  viewer: Pick<CurrentUser, 'idUser' | 'role'> | null,
+  delivery: Pick<DeliveryDTO, 'idUser'>
+): boolean {
+  if (!viewer) {
+    return false;
+  }
+  return viewer.role === 'ADMIN' || (delivery.idUser != null && delivery.idUser === viewer.idUser);
 }
 
 export function stateIndex(state: StateDelivery): number {

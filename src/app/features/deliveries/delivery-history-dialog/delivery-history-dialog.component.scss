@@ -1,0 +1,129 @@
+.history-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  small {
+    display: block;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--vria-text-secondary);
+  }
+}
+
+.history-content {
+  min-height: 120px;
+}
+
+.history-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1.5rem 0;
+  color: var(--vria-text-secondary);
+  text-align: center;
+}
+
+.timeline {
+  --line: var(--vria-border);
+  list-style: none;
+  margin: 0;
+  padding: 0.25rem 0 0;
+
+  &__item {
+    --tone: var(--vria-blue);
+    position: relative;
+    display: grid;
+    grid-template-columns: 2rem minmax(0, 1fr);
+    gap: 0.75rem;
+    padding-bottom: 1.125rem;
+
+    // Línea vertical que une los movimientos.
+    &:not(:last-child)::before {
+      content: '';
+      position: absolute;
+      left: calc(1rem - 1px);
+      top: 2rem;
+      bottom: 0;
+      width: 2px;
+      background: var(--line);
+    }
+
+    &--created { --tone: var(--vria-info); }
+    &--advanced { --tone: var(--vria-success); }
+    &--reverted { --tone: var(--vria-warning); }
+    &--deleted { --tone: var(--vria-danger); }
+  }
+
+  &__dot {
+    display: grid;
+    place-items: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    background: color-mix(in srgb, var(--tone) 16%, transparent);
+    color: var(--tone);
+
+    mat-icon {
+      font-size: 18px;
+      width: 18px;
+      height: 18px;
+    }
+  }
+
+  &__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.25rem 0.75rem;
+
+    strong {
+      color: var(--tone);
+    }
+
+    time {
+      font-size: 0.78rem;
+      color: var(--vria-text-secondary);
+    }
+  }
+
+  &__states,
+  &__reason,
+  &__actor {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.375rem;
+    margin: 0.25rem 0 0;
+    font-size: 0.85rem;
+    overflow-wrap: anywhere;
+
+    > mat-icon {
+      flex-shrink: 0;
+      font-size: 16px;
+      width: 16px;
+      height: 16px;
+      margin-top: 1px;
+    }
+  }
+
+  &__arrow {
+    font-size: 14px;
+    width: 14px;
+    height: 14px;
+    vertical-align: middle;
+  }
+
+  &__reason {
+    padding: 0.5rem 0.625rem;
+    border-radius: var(--vria-radius-sm);
+    background: var(--vria-surface-alt);
+    font-style: italic;
+  }
+
+  &__actor {
+    color: var(--vria-text-secondary);
+    font-size: 0.78rem;
+  }
+}

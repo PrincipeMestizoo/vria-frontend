@@ -26,3 +26,27 @@ export interface DeliveryDTO {
   nameUser?: string | null;
   roleUser?: TypeRole | null;
 }
+
+export type DeliveryTraceAction = 'CREATED' | 'ADVANCED' | 'REVERTED' | 'DELETED';
+
+export const DELIVERY_TRACE_ACTION_LABELS: Record<DeliveryTraceAction, string> = {
+  CREATED: 'Registrado',
+  ADVANCED: 'Avanzó',
+  REVERTED: 'Retrocedió',
+  DELETED: 'Eliminado',
+};
+
+/** Movimiento de la trazabilidad de un domicilio (solo lectura). */
+export interface DeliveryStateHistoryDTO {
+  idHistory: number;
+  idDelivery: number;
+  nameClient: string;
+  action: DeliveryTraceAction;
+  fromState: StateDelivery | null;
+  toState: StateDelivery | null;
+  reason: string | null;
+  actorId: number;
+  actorName: string;
+  actorRole: TypeRole;
+  changedAt: string;
+}
