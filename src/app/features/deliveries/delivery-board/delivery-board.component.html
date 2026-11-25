@@ -1,0 +1,249 @@
+<div class="vria-page board-page">
+  <app-page-header title="Domicilios" subtitle="Trazabilidad de domicilios por estado." icon="local_shipping">
+    <div class="view-switch" role="group" aria-label="Vista">
+      <a mat-stroked-button class="view-switch__btn view-switch__btn--active" routerLink="." aria-current="page">
+        <mat-icon>view_kanban</mat-icon>
+        <span>Tablero</span>
+      </a>
+      <a mat-stroked-button class="view-switch__btn" routerLink="lista">
+        <mat-icon>table_rows</mat-icon>
+        <span>Tabla</span>
+      </a>
+    </div>
+    <button mat-flat-button color="primary" class="vria-btn" *ngIf="canManage" (click)="openForm()">
+      <mat-icon>add</mat-icon>
+      Nuevo domicilio
+    </button>
+  </app-page-header>
+
+  <!-- Resumen -->
+  <div class="board-stats">
+    <div class="stat">
+      <span class="stat__value">{{ stats.active }}</span>
+      <span class="stat__label">Activos</span>
+    </div>
+    <button
+      type="button"
+      class="stat stat--danger stat--clickable"
+      [class.stat--selected]="onlyOverdue"
+      [attr.aria-pressed]="onlyOverdue"
+      (click)="toggleOverdue()"
+      matTooltip="Filtrar solo atrasados"
+    >
+      <span class="stat__value">{{ stats.overdue }}</span>
+      <span class="stat__label">Atrasados</span>
+    </button>
+    <div class="stat stat--warning">
+      <span class="stat__value">{{ stats.today }}</span>
+      <span class="stat__label">Para hoy</span>
+    </div>
+    <div class="stat stat--success">
+      <span class="stat__value">{{ stats.delivered }}</span>
+      <span class="stat__label">Entregados</span>
+    </div>
+  </div>
+
+  <div class="list-toolbar">
+    <mat-form-field appearance="outline" class="list-toolbar__search">
+      <mat-label>Buscar</mat-label>
+      <input
+        matInput
+        [(ngModel)]="searchTerm"
+        (ngModelChange)="rebuild()"
+        placeholder="Cliente, repartidor, dirección o responsable"
+      />
+      <mat-icon matSuffix>search</mat-icon>
+    </mat-form-field>
+
+    <div class="toolbar-actions">
+      <button *ngIf="onlyOverdue" mat-stroked-button class="filter-pill" (click)="toggleOverdue()">
+        Solo atrasados
+        <mat-icon iconPositionEnd>close</mat-icon>
+      </button>
+      <button mat-icon-button (click)="load()" matTooltip="Actualizar" aria-label="Actualizar tablero">
+        <mat-icon>refresh</mat-icon>
+      </button>
+    </div>
+  </div>
+
+  <!-- Selector de columna (móvil) -->
+  <nav class="state-tabs" *ngIf="isCompact" aria-label="Estados">
+    <button
+      *ngFor="let col of columns"
+      type="button"
+      class="state-tab"
+      [ngClass]="'tone-' + col.tone"
+      [class.state-tab--active]="activeState === col.state"
+      [attr.aria-pressed]="activeState === col.state"
+      (click)="activeState = col.state"
+    >
+      <mat-icon>{{ col.icon }}</mat-icon>
+      <span class="state-tab__label">{{ col.title }}</span>
+      <span class="count-badge">{{ board[col.state].length }}</span>
+    </button>
+  </nav>
+
+  <mat-progress-bar *ngIf="loading" mode="indeterminate" class="board-loading"></mat-progress-bar>
+
+  <div class="board" cdkDropListGroup [class.board--compact]="isCompact" [class.board--dragging]="draggingFrom">
+    <ng-container *ngFor="let col of columns">
+      <section
+        class="board-column"
+        *ngIf="!isCompact || activeState === col.state"
+        [ngClass]="'tone-' + col.tone"
+        [class.board-column--target]="isValidTarget(col.state)"
+        [class.board-column--blocked]="draggingFrom && draggingFrom !== col.state && !isValidTarget(col.state)"
+        [attr.aria-label]="col.title"
+      >
+        <header class="board-column__header">
+          <div class="board-column__title">
+            <span class="board-column__icon"><mat-icon>{{ col.icon }}</mat-icon></span>
+            <div>
+              <h2>{{ col.title }}</h2>
+              <small>{{ col.hint }}</small>
+            </div>
+          </div>
+          <div class="board-column__header-actions">
+            <span class="count-badge">{{ board[col.state].length }}</span>
+            <button
+              *ngIf="canManage && (col.state === 'PREPARING' || col.state === 'READY')"
+              mat-icon-button
+              class="board-column__add"
+              (click)="openForm(col.state)"
+              [matTooltip]="'Nuevo domicilio en ' + col.title"
+              [attr.aria-label]="'Nuevo domicilio en ' + col.title"
+            >
+              <mat-icon>add</mat-icon>
+            </button>
+          </div>
+        </header>
+
+        <div
+          class="board-column__body"
+          cdkDropList
+          [cdkDropListData]="col.state"
+          [cdkDropListEnterPredicate]="enterPredicate"
+          [cdkDropListDisabled]="!dragEnabled"
+          [cdkDropListSortingDisabled]="true"
+          (cdkDropListDropped)="onDrop($event)"
+        >
+          <article
+            *ngFor="let d of visibleCards(col.state); trackBy: trackById"
+            class="delivery-card"
+            [ngClass]="'urgency-' + urgency(d)"
+            [class.delivery-card--pending]="isPending(d)"
+            cdkDrag
+            [cdkDragData]="d"
+            [cdkDragDisabled]="!dragEnabled || isPending(d) || d.state === 'DELIVERED'"
+            (cdkDragStarted)="onDragStarted(d)"
+            (cdkDragEnded)="onDragEnded()"
+          >
+            <div class="delivery-card__placeholder" *cdkDragPlaceholder></div>
+
+            <div class="delivery-card__top">
+              <span class="urgency-pill" [ngClass]="'urgency-pill--' + urgency(d)">
+                <mat-icon *ngIf="urgency(d) === 'overdue'">schedule</mat-icon>
+                {{ urgencyLabels[urgency(d)] }}
+              </span>
+              <span class="delivery-card__id">#{{ d.idDelivery }}</span>
+              <button
+                *ngIf="canManage && (secondaryActions(d).length || canDelete(d))"
+                mat-icon-button
+                class="delivery-card__menu"
+                [matMenuTriggerFor]="cardMenu"
+                [disabled]="isPending(d)"
+                aria-label="Más acciones"
+                (mousedown)="$event.stopPropagation()"
+              >
+                <mat-icon>more_vert</mat-icon>
+              </button>
+              <mat-menu #cardMenu="matMenu" xPosition="before">
+                <button mat-menu-item *ngFor="let t of secondaryActions(d)" (click)="move(d, t.to)">
+                  <mat-icon>{{ t.icon }}</mat-icon>
+                  <span>{{ t.actionLabel }}</span>
+                </button>
+                <mat-divider *ngIf="secondaryActions(d).length && canDelete(d)"></mat-divider>
+                <button mat-menu-item *ngIf="canDelete(d)" class="menu-danger" (click)="remove(d)">
+                  <mat-icon>delete</mat-icon>
+                  <span>Eliminar</span>
+                </button>
+              </mat-menu>
+            </div>
+
+            <h3 class="delivery-card__client">{{ d.nameClient }}</h3>
+            <p class="delivery-card__line">
+              <mat-icon>place</mat-icon>
+              <span>{{ d.address }}</span>
+            </p>
+            <p class="delivery-card__line">
+              <mat-icon>two_wheeler</mat-icon>
+              <span>{{ d.nameDelivery }}</span>
+            </p>
+
+            <div class="delivery-card__meta">
+              <span class="meta-chip">
+                <mat-icon>event</mat-icon>
+                {{ d.dateDelivery | date: 'd MMM, h:mm a' }}
+              </span>
+              <span class="meta-chip">
+                <mat-icon>payments</mat-icon>
+                {{ d.payMode | payModeLabel }}
+              </span>
+            </div>
+
+            <ol class="delivery-steps" [attr.aria-label]="'Progreso: ' + (d.state | deliveryStateLabel)">
+              <li
+                *ngFor="let step of steps"
+                class="delivery-steps__step"
+                [class.delivery-steps__step--done]="stepReached(d, step)"
+                [attr.aria-current]="step === d.state ? 'step' : null"
+                [matTooltip]="step | deliveryStateLabel"
+              ></li>
+            </ol>
+
+            <footer class="delivery-card__footer">
+              <small class="delivery-card__user" *ngIf="d.nameUser">
+                <mat-icon>person</mat-icon>{{ d.nameUser }}
+              </small>
+              <button
+                *ngIf="canManage && primaryAction(d) as action"
+                mat-flat-button
+                color="primary"
+                class="delivery-card__action"
+                [disabled]="isPending(d)"
+                (click)="move(d, action.to)"
+                (mousedown)="$event.stopPropagation()"
+              >
+                <mat-spinner *ngIf="isPending(d)" diameter="16"></mat-spinner>
+                <mat-icon *ngIf="!isPending(d)">{{ action.icon }}</mat-icon>
+                {{ action.actionLabel }}
+              </button>
+              <span class="delivery-card__done" *ngIf="d.state === 'DELIVERED'">
+                <mat-icon>lock</mat-icon> Cerrado
+              </span>
+            </footer>
+          </article>
+
+          <div class="board-column__empty" *ngIf="!loading && board[col.state].length === 0">
+            <mat-icon>{{ col.icon }}</mat-icon>
+            <span>Sin domicilios</span>
+          </div>
+
+          <button
+            *ngIf="hiddenCount(col.state) > 0"
+            mat-button
+            class="board-column__more"
+            (click)="showMoreDelivered()"
+          >
+            Mostrar más ({{ hiddenCount(col.state) }})
+          </button>
+        </div>
+      </section>
+    </ng-container>
+  </div>
+
+  <p class="board-hint" *ngIf="dragEnabled">
+    <mat-icon>info</mat-icon>
+    Arrastra una tarjeta a la siguiente columna para avanzar su estado. Solo se resaltan los movimientos permitidos.
+  </p>
+</div>

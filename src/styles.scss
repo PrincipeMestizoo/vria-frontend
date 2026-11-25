@@ -545,3 +545,32 @@ h6 {
     transition-duration: 0.01ms !important;
   }
 }
+
+// ---------------------------------------------------------------------------
+// Cambio de vista (tablero / tabla) — compartido por las vistas de domicilios
+// ---------------------------------------------------------------------------
+.view-switch {
+  display: inline-flex;
+  gap: 0.25rem;
+  padding: 0.25rem;
+  border-radius: var(--vria-radius-sm);
+  box-shadow: var(--vria-shadow-inset);
+
+  &__btn {
+    border: none !important;
+    border-radius: calc(var(--vria-radius-sm) - 4px) !important;
+
+    &--active {
+      background: var(--vria-surface);
+      box-shadow: var(--vria-shadow-sm);
+      color: var(--vria-purple);
+    }
+  }
+
+  @media (max-width: 480px) {
+    &__btn span {
+      display: none;
+    }
+  }
+}
+
