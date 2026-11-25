@@ -3,7 +3,9 @@ import {
   availableTransitions,
   canDeleteDelivery,
   canTransition,
+  canViewDeliveryHistory,
   compareDeliveries,
+  findTransition,
   deliveryUrgency,
   nextTransition,
   progressPercent,
@@ -98,5 +100,33 @@ describe('delivery-workflow', () => {
     const late = delivery({ idDelivery: 3, dateDelivery: '2026-11-24T08:00:00' });
     const sorted = [later, soon, late].sort((a, b) => compareDeliveries(a, b, now));
     expect(sorted.map((d) => d.idDelivery)).toEqual([3, 2, 1]);
+  });
+
+  it('solo los retrocesos exigen motivo', () => {
+    expect(findTransition('READY', 'PREPARING')!.requiresReason).toBeTrue();
+    expect(findTransition('SHIPPED', 'READY')!.requiresReason).toBeTrue();
+    expect(findTransition('PREPARING', 'READY')!.requiresReason).toBeFalse();
+    expect(findTransition('SHIPPED', 'DELIVERED')!.requiresReason).toBeFalse();
+  });
+
+  describe('canViewDeliveryHistory', () => {
+    const own = { idUser: 10 };
+
+    it('el administrador ve cualquier historial', () => {
+      expect(canViewDeliveryHistory({ idUser: 1, role: 'ADMIN' }, own)).toBeTrue();
+    });
+
+    it('el creador ve el historial de su domicilio', () => {
+      expect(canViewDeliveryHistory({ idUser: 10, role: 'COMMERCIAL_ADVISOR' }, own)).toBeTrue();
+    });
+
+    it('otro asesor no ve el historial', () => {
+      expect(canViewDeliveryHistory({ idUser: 11, role: 'COMMERCIAL_ADVISOR' }, own)).toBeFalse();
+    });
+
+    it('sin usuario o sin creador conocido no se muestra', () => {
+      expect(canViewDeliveryHistory(null, own)).toBeFalse();
+      expect(canViewDeliveryHistory({ idUser: 10, role: 'COMMERCIAL_ADVISOR' }, { idUser: null })).toBeFalse();
+    });
   });
 });
