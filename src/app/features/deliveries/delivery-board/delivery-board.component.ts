@@ -8,7 +8,6 @@ import { DELIVERY_STATES, DeliveryDTO, StateDelivery } from '../../../core/model
 import { DeliveryService } from '../../../core/services/delivery.service';
 import { NotificationService } from '../../../core/services/notification.service';
 import { AuthService } from '../../../core/services/auth.service';
-import { ConfirmDialogService } from '../../../shared/services/confirm-dialog.service';
 import { DeliveryFormComponent, DeliveryFormData } from '../delivery-form/delivery-form.component';
 import { DeliveryWorkflowService } from '../domain/delivery-workflow.service';
 import {
@@ -62,7 +61,6 @@ export class DeliveryBoardComponent implements OnInit {
     private readonly deliveryService: DeliveryService,
     private readonly workflow: DeliveryWorkflowService,
     private readonly notification: NotificationService,
-    private readonly confirmDialog: ConfirmDialogService,
     private readonly dialog: MatDialog,
     private readonly breakpoints: BreakpointObserver,
     readonly authService: AuthService
@@ -171,6 +169,10 @@ export class DeliveryBoardComponent implements OnInit {
     return this.canManage && canDeleteDelivery(d);
   }
 
+  hasMenu(d: DeliveryDTO): boolean {
+    return this.canManage && (this.secondaryActions(d).length > 0 || this.canDelete(d));
+  }
+
   isPending(d: DeliveryDTO): boolean {
     return d.idDelivery != null && this.pending.has(d.idDelivery);
   }
@@ -221,12 +223,12 @@ export class DeliveryBoardComponent implements OnInit {
       .authorize(d, to)
       .pipe(
         filter(Boolean),
-        switchMap(() => {
+        switchMap(({ reason }) => {
           // Actualización optimista: la tarjeta cambia de columna de inmediato.
           this.pending.add(id);
           d.state = to;
           this.rebuild();
-          return this.deliveryService.updateState(id, to).pipe(finalize(() => this.pending.delete(id)));
+          return this.deliveryService.updateState(id, to, reason).pipe(finalize(() => this.pending.delete(id)));
         })
       )
       .subscribe({
@@ -243,20 +245,15 @@ export class DeliveryBoardComponent implements OnInit {
   }
 
   remove(d: DeliveryDTO): void {
-    if (!canDeleteDelivery(d)) {
-      this.notification.error('Solo se pueden eliminar domicilios que aún no han sido despachados.');
+    const id = d.idDelivery;
+    if (id == null) {
       return;
     }
-    this.confirmDialog
-      .confirm({
-        title: 'Eliminar domicilio',
-        message: `¿Seguro que deseas eliminar el domicilio de "${d.nameClient}"?`,
-        danger: true,
-        confirmLabel: 'Eliminar',
-      })
+    this.workflow
+      .authorizeDeletion(d)
       .pipe(
-        filter((ok) => ok && d.idDelivery != null),
-        switchMap(() => this.deliveryService.delete(d.idDelivery!))
+        filter(Boolean),
+        switchMap(({ reason }) => this.deliveryService.delete(id, reason!))
       )
       .subscribe(() => {
         this.deliveries = this.deliveries.filter((x) => x.idDelivery !== d.idDelivery);

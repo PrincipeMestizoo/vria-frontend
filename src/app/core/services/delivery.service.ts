@@ -26,13 +26,15 @@ export class DeliveryService {
     return this.http.post<DeliveryDTO>(this.baseUrl, dto);
   }
 
-  updateState(id: number, state: StateDelivery): Observable<DeliveryDTO> {
+  /** `reason` es obligatorio cuando el cambio es un retroceso (lo valida el backend). */
+  updateState(id: number, state: StateDelivery, reason?: string | null): Observable<DeliveryDTO> {
     return this.http.patch<DeliveryDTO>(`${this.baseUrl}/${id}/state`, null, {
-      params: { state },
+      params: reason ? { state, reason } : { state },
     });
   }
 
-  delete(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.baseUrl}/${id}`);
+  /** El backend exige el motivo de la eliminación. */
+  delete(id: number, reason: string): Observable<void> {
+    return this.http.delete<void>(`${this.baseUrl}/${id}`, { params: { reason } });
   }
 }

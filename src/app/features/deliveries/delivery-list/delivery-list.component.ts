@@ -3,7 +3,6 @@ import { MatDialog } from '@angular/material/dialog';
 import { finalize } from 'rxjs';
 import { DeliveryService } from '../../../core/services/delivery.service';
 import { NotificationService } from '../../../core/services/notification.service';
-import { ConfirmDialogService } from '../../../shared/services/confirm-dialog.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { DELIVERY_STATES, DeliveryDTO, StateDelivery } from '../../../core/models';
 import { DeliveryFormComponent } from '../delivery-form/delivery-form.component';
@@ -28,7 +27,6 @@ export class DeliveryListComponent implements OnInit {
     private readonly deliveryService: DeliveryService,
     private readonly notification: NotificationService,
     private readonly dialog: MatDialog,
-    private readonly confirmDialog: ConfirmDialogService,
     private readonly workflow: DeliveryWorkflowService,
     readonly authService: AuthService
   ) {}
@@ -94,12 +92,12 @@ export class DeliveryListComponent implements OnInit {
     if (id == null || state === delivery.state) {
       return;
     }
-    this.workflow.authorize(delivery, state).subscribe((ok) => {
-      if (!ok) {
+    this.workflow.authorize(delivery, state).subscribe((approval) => {
+      if (!approval) {
         if (select) select.value = delivery.state; // Revierte el selector si se cancela.
         return;
       }
-      this.deliveryService.updateState(id, state).subscribe({
+      this.deliveryService.updateState(id, state, approval.reason).subscribe({
         next: (updated) => {
           delivery.state = updated.state;
           this.notification.success('Estado del domicilio actualizado.');
@@ -110,21 +108,18 @@ export class DeliveryListComponent implements OnInit {
   }
 
   remove(delivery: DeliveryDTO): void {
-    this.confirmDialog
-      .confirm({
-        title: 'Eliminar entrega',
-        message: `¿Seguro que deseas eliminar la entrega de "${delivery.nameClient}"?`,
-        danger: true,
-        confirmLabel: 'Eliminar',
-      })
-      .subscribe((confirmed) => {
-        if (!confirmed || delivery.idDelivery == null) {
-          return;
-        }
-        this.deliveryService.delete(delivery.idDelivery).subscribe(() => {
-          this.notification.success('Entrega eliminada.');
-          this.load();
-        });
+    const id = delivery.idDelivery;
+    if (id == null) {
+      return;
+    }
+    this.workflow.authorizeDeletion(delivery).subscribe((approval) => {
+      if (!approval) {
+        return;
+      }
+      this.deliveryService.delete(id, approval.reason!).subscribe(() => {
+        this.notification.success('Domicilio eliminado.');
+        this.load();
       });
+    });
   }
 }

@@ -8,6 +8,9 @@ import { DELIVERY_STATES, DeliveryDTO, StateDelivery } from '../../../core/model
  *  - Se permite retroceder un paso como corrección (p. ej. un pedido enviado que regresa a bodega),
  *    excepto desde DELIVERED: una entrega confirmada es terminal e inmutable.
  *  - Solo pueden eliminarse domicilios que aún no han salido (PREPARING / READY).
+ *  - Retroceder o eliminar exige un motivo, que queda en la trazabilidad.
+ *
+ * Espejo de `SequentialDeliveryWorkflowPolicy` en vria-backend.
  */
 
 export type TransitionKind = 'forward' | 'backward';
@@ -21,6 +24,8 @@ export interface DeliveryTransition {
   icon: string;
   /** Requiere confirmación explícita del usuario antes de aplicarse. */
   requiresConfirmation: boolean;
+  /** Requiere justificar el motivo (queda en la trazabilidad). */
+  requiresReason: boolean;
 }
 
 export interface DeliveryColumnMeta {
@@ -40,15 +45,16 @@ export const DELIVERY_COLUMNS: DeliveryColumnMeta[] = [
 ];
 
 const TRANSITIONS: DeliveryTransition[] = [
-  { from: 'PREPARING', to: 'READY', kind: 'forward', actionLabel: 'Marcar lista', icon: 'task_alt', requiresConfirmation: false },
-  { from: 'READY', to: 'SHIPPED', kind: 'forward', actionLabel: 'Despachar', icon: 'local_shipping', requiresConfirmation: false },
-  { from: 'SHIPPED', to: 'DELIVERED', kind: 'forward', actionLabel: 'Confirmar entrega', icon: 'verified', requiresConfirmation: true },
-  { from: 'READY', to: 'PREPARING', kind: 'backward', actionLabel: 'Volver a preparación', icon: 'undo', requiresConfirmation: true },
-  { from: 'SHIPPED', to: 'READY', kind: 'backward', actionLabel: 'Regresó a bodega', icon: 'undo', requiresConfirmation: true },
+  { from: 'PREPARING', to: 'READY', kind: 'forward', actionLabel: 'Marcar lista', icon: 'task_alt', requiresConfirmation: false, requiresReason: false },
+  { from: 'READY', to: 'SHIPPED', kind: 'forward', actionLabel: 'Despachar', icon: 'local_shipping', requiresConfirmation: false, requiresReason: false },
+  { from: 'SHIPPED', to: 'DELIVERED', kind: 'forward', actionLabel: 'Confirmar entrega', icon: 'verified', requiresConfirmation: true, requiresReason: false },
+  { from: 'READY', to: 'PREPARING', kind: 'backward', actionLabel: 'Volver a preparación', icon: 'undo', requiresConfirmation: true, requiresReason: true },
+  { from: 'SHIPPED', to: 'READY', kind: 'backward', actionLabel: 'Regresó a bodega', icon: 'undo', requiresConfirmation: true, requiresReason: true },
 ];
 
 export const TERMINAL_STATES: readonly StateDelivery[] = ['DELIVERED'];
 export const DELETABLE_STATES: readonly StateDelivery[] = ['PREPARING', 'READY'];
+export const MAX_REASON_LENGTH = 255;
 
 export function findTransition(from: StateDelivery, to: StateDelivery): DeliveryTransition | undefined {
   return TRANSITIONS.find((t) => t.from === from && t.to === to);
