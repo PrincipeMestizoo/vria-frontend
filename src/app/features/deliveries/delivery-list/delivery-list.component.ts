@@ -7,6 +7,8 @@ import { ConfirmDialogService } from '../../../shared/services/confirm-dialog.se
 import { AuthService } from '../../../core/services/auth.service';
 import { DELIVERY_STATES, DeliveryDTO, StateDelivery } from '../../../core/models';
 import { DeliveryFormComponent } from '../delivery-form/delivery-form.component';
+import { DeliveryWorkflowService } from '../domain/delivery-workflow.service';
+import { canDeleteDelivery, canTransition } from '../domain/delivery-workflow';
 
 @Component({
   selector: 'app-delivery-list',
@@ -27,6 +29,7 @@ export class DeliveryListComponent implements OnInit {
     private readonly notification: NotificationService,
     private readonly dialog: MatDialog,
     private readonly confirmDialog: ConfirmDialogService,
+    private readonly workflow: DeliveryWorkflowService,
     readonly authService: AuthService
   ) {}
 
@@ -34,8 +37,13 @@ export class DeliveryListComponent implements OnInit {
     return this.authService.hasAnyRole(['ADMIN', 'COMMERCIAL_ADVISOR']);
   }
 
-  get canDelete(): boolean {
-    return this.authService.hasAnyRole(['ADMIN', 'COMMERCIAL_ADVISOR']);
+  canDelete(delivery: DeliveryDTO): boolean {
+    return this.authService.hasAnyRole(['ADMIN', 'COMMERCIAL_ADVISOR']) && canDeleteDelivery(delivery);
+  }
+
+  /** Opción habilitada en el selector: el estado actual o una transición permitida. */
+  isStateSelectable(delivery: DeliveryDTO, state: StateDelivery): boolean {
+    return state === delivery.state || canTransition(delivery.state, state);
   }
 
   ngOnInit(): void {
@@ -81,13 +89,23 @@ export class DeliveryListComponent implements OnInit {
     });
   }
 
-  changeState(delivery: DeliveryDTO, state: StateDelivery): void {
-    if (delivery.idDelivery == null || state === delivery.state) {
+  changeState(delivery: DeliveryDTO, state: StateDelivery, select?: { value: StateDelivery }): void {
+    const id = delivery.idDelivery;
+    if (id == null || state === delivery.state) {
       return;
     }
-    this.deliveryService.updateState(delivery.idDelivery, state).subscribe((updated) => {
-      delivery.state = updated.state;
-      this.notification.success('Estado de la entrega actualizado.');
+    this.workflow.authorize(delivery, state).subscribe((ok) => {
+      if (!ok) {
+        if (select) select.value = delivery.state; // Revierte el selector si se cancela.
+        return;
+      }
+      this.deliveryService.updateState(id, state).subscribe({
+        next: (updated) => {
+          delivery.state = updated.state;
+          this.notification.success('Estado del domicilio actualizado.');
+        },
+        error: () => select && (select.value = delivery.state),
+      });
     });
   }
 

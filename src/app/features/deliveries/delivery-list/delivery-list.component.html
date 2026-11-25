@@ -1,8 +1,18 @@
 <div class="vria-page">
-  <app-page-header title="Entregas" subtitle="Trazabilidad de entregas a clientes." icon="local_shipping">
+  <app-page-header title="Domicilios" subtitle="Trazabilidad de domicilios a clientes." icon="local_shipping">
+    <div class="view-switch" role="group" aria-label="Vista">
+      <a mat-stroked-button class="view-switch__btn" routerLink="..">
+        <mat-icon>view_kanban</mat-icon>
+        <span>Tablero</span>
+      </a>
+      <a mat-stroked-button class="view-switch__btn view-switch__btn--active" routerLink="." aria-current="page">
+        <mat-icon>table_rows</mat-icon>
+        <span>Tabla</span>
+      </a>
+    </div>
     <button mat-flat-button color="primary" class="vria-btn" *ngIf="canManage" (click)="openForm()">
       <mat-icon>add</mat-icon>
-      Nueva entrega
+      Nuevo domicilio
     </button>
   </app-page-header>
 
@@ -71,10 +81,13 @@
           <mat-select
             *ngIf="canManage; else stateChip"
             class="state-select"
+            #stateSelect
             [ngModel]="row.state"
-            (ngModelChange)="changeState(row, $event)"
+            (ngModelChange)="changeState(row, $event, stateSelect)"
           >
-            <mat-option *ngFor="let state of states" [value]="state">{{ state | deliveryStateLabel }}</mat-option>
+            <mat-option *ngFor="let state of states" [value]="state" [disabled]="!isStateSelectable(row, state)">
+              {{ state | deliveryStateLabel }}
+            </mat-option>
           </mat-select>
           <ng-template #stateChip>
             <mat-chip class="state-chip">{{ row.state | deliveryStateLabel }}</mat-chip>
@@ -86,7 +99,7 @@
         <th mat-header-cell *matHeaderCellDef></th>
         <td mat-cell *matCellDef="let row">
           <div class="cell-actions">
-            <button mat-icon-button *ngIf="canDelete" (click)="remove(row)" matTooltip="Eliminar" color="warn">
+            <button mat-icon-button *ngIf="canDelete(row)" (click)="remove(row)" matTooltip="Eliminar" color="warn">
               <mat-icon>delete</mat-icon>
             </button>
           </div>
