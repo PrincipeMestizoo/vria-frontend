@@ -1,11 +1,18 @@
-import { Component } from '@angular/core';
+import { Component, Inject, Optional } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { finalize } from 'rxjs';
 import { DeliveryService } from '../../../core/services/delivery.service';
 import { NotificationService } from '../../../core/services/notification.service';
-import { DELIVERY_STATES, DeliveryDTO, PAY_MODES, PayMode, StateDelivery } from '../../../core/models';
+import { DeliveryDTO, PAY_MODES, PayMode, StateDelivery } from '../../../core/models';
 import { firstErrorMessage } from '../../../shared/utils/form-errors';
+
+export interface DeliveryFormData {
+  initialState?: StateDelivery;
+}
+
+/** Un domicilio nuevo solo puede nacer antes de salir de bodega, para conservar la trazabilidad. */
+export const INITIAL_DELIVERY_STATES: StateDelivery[] = ['PREPARING', 'READY'];
 
 @Component({
   selector: 'app-delivery-form',
@@ -15,7 +22,7 @@ import { firstErrorMessage } from '../../../shared/utils/form-errors';
 export class DeliveryFormComponent {
   loading = false;
   readonly payModes: PayMode[] = PAY_MODES;
-  readonly states: StateDelivery[] = DELIVERY_STATES;
+  readonly states: StateDelivery[] = INITIAL_DELIVERY_STATES;
 
   readonly form = this.fb.nonNullable.group({
     nameClient: ['', [Validators.required]],
@@ -30,8 +37,14 @@ export class DeliveryFormComponent {
     private readonly fb: FormBuilder,
     private readonly deliveryService: DeliveryService,
     private readonly notification: NotificationService,
-    private readonly dialogRef: MatDialogRef<DeliveryFormComponent, boolean>
-  ) {}
+    private readonly dialogRef: MatDialogRef<DeliveryFormComponent, boolean>,
+    @Optional() @Inject(MAT_DIALOG_DATA) data: DeliveryFormData | null
+  ) {
+    const initial = data?.initialState;
+    if (initial && INITIAL_DELIVERY_STATES.includes(initial)) {
+      this.form.controls.state.setValue(initial);
+    }
+  }
 
   errorFor(controlName: string, label: string): string {
     return firstErrorMessage(this.form.get(controlName), label);
