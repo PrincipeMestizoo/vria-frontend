@@ -39,7 +39,7 @@ export const NAV_ITEMS: NavItem[] = [
     roles: ['ADMIN', 'WAREHOUSE_KEEPER'],
   },
   {
-    label: 'Entregas',
+    label: 'Domicilios',
     icon: 'local_shipping',
     path: '/deliveries',
     roles: ['ADMIN', 'COMMERCIAL_ADVISOR'],
