@@ -14,4 +14,16 @@ export interface TransferDTO {
   dateTransfer: string;
   nameClient: string;
   bank: string;
+  reference: string | null;
+  currency: string | null;
+  receiptId?: string | null;
+  // Solo lectura: los asigna el servidor
+  status?: TransferStatus;
+  nameUser?: string | null;
 }
+
+export type TransferStatus = 'PENDIENTE_CONCILIACION';
+
+export const TRANSFER_STATUS_LABELS: Record<TransferStatus, string> = {
+  PENDIENTE_CONCILIACION: 'Pendiente de conciliación',
+};

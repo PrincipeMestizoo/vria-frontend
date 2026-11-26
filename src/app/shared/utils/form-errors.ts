@@ -16,6 +16,9 @@ export function firstErrorMessage(control: AbstractControl | null, fieldLabel: s
   if (errors['minlength']) {
     return `${fieldLabel} debe tener al menos ${errors['minlength'].requiredLength} caracteres.`;
   }
+  if (errors['maxlength']) {
+    return `${fieldLabel} admite máximo ${errors['maxlength'].requiredLength} caracteres.`;
+  }
   if (errors['min']) {
     return `${fieldLabel} debe ser mayor o igual a ${errors['min'].min}.`;
   }

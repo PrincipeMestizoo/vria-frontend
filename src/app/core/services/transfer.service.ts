@@ -18,8 +18,10 @@ export class TransferService {
     return this.http.get<TransferDTO>(`${this.baseUrl}/${id}`);
   }
 
-  create(dto: TransferDTO): Observable<TransferDTO> {
-    return this.http.post<TransferDTO>(this.baseUrl, dto);
+  create(dto: TransferDTO, idempotencyKey: string): Observable<TransferDTO> {
+    return this.http.post<TransferDTO>(this.baseUrl, dto, {
+      headers: { 'Idempotency-Key': idempotencyKey },
+    });
   }
 
   delete(id: number): Observable<void> {
