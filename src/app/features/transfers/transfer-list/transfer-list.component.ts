@@ -5,7 +5,7 @@ import { TransferService } from '../../../core/services/transfer.service';
 import { NotificationService } from '../../../core/services/notification.service';
 import { ConfirmDialogService } from '../../../shared/services/confirm-dialog.service';
 import { AuthService } from '../../../core/services/auth.service';
-import { TransferDTO } from '../../../core/models';
+import { TRANSFER_STATUS_LABELS, TransferDTO } from '../../../core/models';
 import { TransferFormComponent } from '../transfer-form/transfer-form.component';
 
 @Component({
@@ -14,7 +14,16 @@ import { TransferFormComponent } from '../transfer-form/transfer-form.component'
   styleUrl: './transfer-list.component.scss',
 })
 export class TransferListComponent implements OnInit {
-  readonly displayedColumns = ['nameClient', 'bank', 'destination', 'dateTransfer', 'amount', 'actions'];
+  readonly displayedColumns = [
+    'nameClient',
+    'bank',
+    'reference',
+    'destination',
+    'dateTransfer',
+    'amount',
+    'status',
+    'actions',
+  ];
   loading = true;
   transfers: TransferDTO[] = [];
   filtered: TransferDTO[] = [];
@@ -47,6 +56,10 @@ export class TransferListComponent implements OnInit {
       });
   }
 
+  statusLabel(transfer: TransferDTO): string {
+    return transfer.status ? TRANSFER_STATUS_LABELS[transfer.status] : '—';
+  }
+
   applyFilter(): void {
     const term = this.searchTerm.trim().toLowerCase();
     this.filtered = term
@@ -54,7 +67,8 @@ export class TransferListComponent implements OnInit {
           (t) =>
             t.nameClient.toLowerCase().includes(term) ||
             t.bank.toLowerCase().includes(term) ||
-            t.destination.toLowerCase().includes(term)
+            t.destination.toLowerCase().includes(term) ||
+            !!t.reference?.toLowerCase().includes(term)
         )
       : this.transfers;
   }
