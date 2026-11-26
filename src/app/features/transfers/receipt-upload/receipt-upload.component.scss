@@ -1,13 +1,91 @@
+:host {
+  display: block;
+}
+
 .receipt {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
   margin-bottom: 1.25rem;
 
-  &__header {
+  &__preview {
+    position: relative;
+    margin: 0;
+    text-align: center;
+  }
+
+  &__frame {
     display: flex;
-    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    height: clamp(10rem, 32vh, 24rem);
+    padding: 0.5rem;
+    overflow: auto;
+    border-radius: var(--vria-radius-md);
+    background: var(--vria-surface-alt);
+    box-shadow: var(--vria-shadow-inset);
+
+    img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      border-radius: 8px;
+    }
+
+    // Ancho ampliado y desplazable para leer cifras pequeñas
+    &--zoomed {
+      display: block;
+
+      img {
+        width: 220%;
+        max-width: none;
+        max-height: none;
+      }
+    }
+
+    &--busy {
+      opacity: 0.6;
+    }
+
+    @media (max-width: 768px) {
+      height: min(18rem, 36vh);
+    }
+  }
+
+  &__pdf {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     gap: 0.5rem;
+    color: var(--vria-purple);
+    font-weight: 600;
+    text-decoration: none;
+
+    mat-icon {
+      width: 4rem;
+      height: 4rem;
+      font-size: 4rem;
+    }
+  }
+
+  &__zoom {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    background: var(--vria-surface);
+    box-shadow: var(--vria-shadow-sm);
+  }
+
+  &__progress {
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+  }
+
+  &__remove {
+    align-self: center;
   }
 
   &__hint {

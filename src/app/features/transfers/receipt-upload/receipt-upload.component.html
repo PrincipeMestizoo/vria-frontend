@@ -1,24 +1,31 @@
 <div class="receipt">
-  <input #fileInput type="file" hidden [accept]="acceptedTypes" (change)="onFileSelected($event)" />
+  <figure *ngIf="previewUrl" class="receipt__preview">
+    <div class="receipt__frame" [class.receipt__frame--zoomed]="zoomed" [class.receipt__frame--busy]="busy">
+      <img *ngIf="!isPdf" [src]="previewUrl" alt="Vista previa del comprobante" />
+      <a *ngIf="isPdf" class="receipt__pdf" [href]="previewUrl" target="_blank" rel="noopener">
+        <mat-icon>picture_as_pdf</mat-icon>
+        <span>Ver PDF</span>
+      </a>
+    </div>
 
-  <div class="receipt__header">
-    <button mat-stroked-button type="button" [disabled]="busy" (click)="fileInput.click()">
-      <mat-icon>upload_file</mat-icon>
-      {{ fileName ? 'Cambiar comprobante' : 'Subir comprobante' }}
+    <button
+      *ngIf="!isPdf"
+      mat-icon-button
+      type="button"
+      class="receipt__zoom"
+      [attr.aria-label]="zoomed ? 'Ajustar imagen' : 'Ampliar imagen'"
+      [attr.aria-pressed]="zoomed"
+      (click)="zoomed = !zoomed"
+    >
+      <mat-icon>{{ zoomed ? 'zoom_out' : 'zoom_in' }}</mat-icon>
     </button>
-    <button *ngIf="fileName" mat-button type="button" color="warn" (click)="remove()">
-      <mat-icon>close</mat-icon>
-      Quitar
-    </button>
-  </div>
 
-  <span class="receipt__hint">{{ fileName || 'Opcional. JPG, PNG, WEBP o PDF. Máx. 8 MB.' }}</span>
+    <figcaption class="receipt__hint">{{ fileName }}</figcaption>
+  </figure>
 
-  <div *ngIf="busy" role="status">
+  <div *ngIf="busy" class="receipt__progress" role="status">
+    <span>{{ busyLabel }}</span>
     <mat-progress-bar mode="indeterminate"></mat-progress-bar>
-    <span class="receipt__hint">
-      {{ step === 'uploading' ? 'Subiendo…' : 'Leyendo con IA…' }}
-    </span>
   </div>
 
   <div *ngIf="draft" role="status" class="receipt__notice" [class.receipt__notice--warn]="draft.requiresReview">
@@ -40,4 +47,20 @@
       <button *ngIf="step === 'failed' && canRetry" mat-button type="button" (click)="retry()">Reintentar</button>
     </div>
   </div>
+
+  <span *ngIf="!previewUrl && !busy" class="receipt__hint">
+    Comprobante opcional: adjúntalo y la IA llena los datos.
+  </span>
+
+  <app-receipt-source
+    [cameraLabel]="previewUrl ? 'Otra foto' : 'Tomar foto'"
+    [fileLabel]="previewUrl ? 'Otro archivo' : 'Cargar imagen o PDF'"
+    [disabled]="busy"
+    (fileSelected)="attach($event)"
+  ></app-receipt-source>
+
+  <button *ngIf="previewUrl || busy" mat-button type="button" color="warn" class="receipt__remove" (click)="remove()">
+    <mat-icon>delete_outline</mat-icon>
+    Quitar comprobante
+  </button>
 </div>

@@ -1,11 +1,27 @@
-mat-dialog-content {
+:host,
+form {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.content__fields {
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
-  min-width: 24rem;
+  padding-top: 0.5rem;
+}
 
-  @media (max-width: 480px) {
-    min-width: 0;
+.content--split {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+  align-items: start;
+  gap: 0 1.5rem;
+
+  // La imagen queda visible mientras se recorren los campos
+  .content__receipt {
+    position: sticky;
+    top: 0;
   }
 }
 
@@ -16,5 +32,33 @@ mat-dialog-content {
 
   @media (max-width: 480px) {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  :host,
+  form {
+    height: 100%;
+  }
+
+  form {
+    flex: 1;
+  }
+
+  mat-dialog-content {
+    flex: 1;
+    max-height: none;
+  }
+
+  .content--split {
+    display: block;
+
+    .content__receipt {
+      position: static;
+    }
+  }
+
+  mat-dialog-actions {
+    padding-bottom: calc(0.5rem + env(safe-area-inset-bottom));
   }
 }

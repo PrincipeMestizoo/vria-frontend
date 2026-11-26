@@ -1,14 +1,18 @@
-<h2 mat-dialog-title>Nueva transferencia</h2>
+<h2 mat-dialog-title>{{ hasPreview ? 'Revisa la transferencia' : 'Nueva transferencia' }}</h2>
 
 <form [formGroup]="form" (ngSubmit)="submit()">
-  <mat-dialog-content>
+  <mat-dialog-content class="content" [class.content--split]="hasPreview">
     <app-receipt-upload
+      class="content__receipt"
+      [initialFile]="initialFile"
+      (attachedChange)="onAttachedChange($event)"
       (receiptChange)="onReceiptChange($event)"
       (draftChange)="applyDraft($event)"
       (busyChange)="readingReceipt = $event"
       (alreadyUsedChange)="receiptAlreadyUsed = $event"
     ></app-receipt-upload>
 
+    <div class="content__fields">
     <mat-form-field appearance="outline">
       <mat-label>Cliente</mat-label>
       <input matInput formControlName="nameClient" />
@@ -16,7 +20,7 @@
     </mat-form-field>
 
     <div class="form-row">
-      <mat-form-field appearance="outline">
+      <mat-form-field appearance="outline" floatLabel="always">
         <mat-label>Monto</mat-label>
         <span matTextPrefix>$&nbsp;</span>
         <input matInput type="number" min="0" step="0.01" formControlName="amount" />
@@ -58,6 +62,7 @@
         {{ errorFor('dateTransfer', 'La fecha') }}
       </mat-error>
     </mat-form-field>
+    </div>
   </mat-dialog-content>
 
   <mat-dialog-actions align="end">

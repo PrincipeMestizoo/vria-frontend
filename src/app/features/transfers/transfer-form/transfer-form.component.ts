@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { finalize } from 'rxjs';
 import { TransferService } from '../../../core/services/transfer.service';
 import { NotificationService } from '../../../core/services/notification.service';
@@ -9,6 +9,14 @@ import { firstErrorMessage } from '../../../shared/utils/form-errors';
 import { IdempotencyKey } from '../../../shared/utils/idempotency-key';
 
 const REQUIRED_TEXT = [Validators.required, Validators.pattern(/.*\S.*/)];
+export interface TransferFormData {
+  /** Comprobante elegido antes de abrir; sin él, el registro es manual. */
+  file?: File;
+}
+
+const NARROW_WIDTH = '560px';
+const WIDE_WIDTH = '980px';
+
 type DraftField = 'amount' | 'bank' | 'reference' | 'currency' | 'dateTransfer';
 
 @Component({
@@ -21,6 +29,8 @@ export class TransferFormComponent {
   readingReceipt = false;
   receiptAlreadyUsed = false;
   dateWithoutTime = false;
+  readonly initialFile = inject<TransferFormData | null>(MAT_DIALOG_DATA)?.file ?? null;
+  hasPreview = false;
 
   private receiptId: string | null = null;
   private prefilled: Partial<Record<DraftField, string | number>> = {};
@@ -49,6 +59,11 @@ export class TransferFormComponent {
 
   errorFor(controlName: string, label: string): string {
     return firstErrorMessage(this.form.get(controlName), label);
+  }
+
+  onAttachedChange(attached: boolean): void {
+    this.hasPreview = attached;
+    this.dialogRef.updateSize(attached ? WIDE_WIDTH : NARROW_WIDTH);
   }
 
   onReceiptChange(receiptId: string | null): void {

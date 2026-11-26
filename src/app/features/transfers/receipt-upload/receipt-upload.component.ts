@@ -1,28 +1,34 @@
-import { Component, DestroyRef, EventEmitter, Output, inject } from '@angular/core';
+import { Component, DestroyRef, EventEmitter, Input, OnInit, Output, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { HttpErrorResponse } from '@angular/common/http';
-import { Subscription } from 'rxjs';
+import { Subscription, from } from 'rxjs';
 import { ReceiptService } from '../../../core/services/receipt.service';
 import { RECEIPT_ACCEPTED_TYPES, RECEIPT_MAX_SIZE_BYTES, ReceiptDraftDTO } from '../../../core/models';
+import { shrinkImage } from '../../../shared/utils/receipt-image';
 
-type Step = 'idle' | 'uploading' | 'extracting' | 'done' | 'failed';
+type Step = 'idle' | 'preparing' | 'uploading' | 'extracting' | 'done' | 'failed';
 
 @Component({
   selector: 'app-receipt-upload',
   templateUrl: './receipt-upload.component.html',
   styleUrl: './receipt-upload.component.scss',
 })
-export class ReceiptUploadComponent {
+export class ReceiptUploadComponent implements OnInit {
+  /** Archivo elegido antes de abrir el formulario. */
+  @Input() initialFile: File | null = null;
+  /** Indica si hay una vista previa, para que el formulario acomode el diseño. */
+  @Output() readonly attachedChange = new EventEmitter<boolean>();
   @Output() readonly receiptChange = new EventEmitter<string | null>();
   @Output() readonly draftChange = new EventEmitter<ReceiptDraftDTO | null>();
   @Output() readonly busyChange = new EventEmitter<boolean>();
   /** true mientras el archivo adjunto ya respalde otra transferencia. */
   @Output() readonly alreadyUsedChange = new EventEmitter<boolean>();
 
-  readonly acceptedTypes = RECEIPT_ACCEPTED_TYPES.join(',');
-
   step: Step = 'idle';
   fileName = '';
+  previewUrl = '';
+  isPdf = false;
+  zoomed = false;
   receiptId: string | null = null;
   draft: ReceiptDraftDTO | null = null;
   error = '';
@@ -32,34 +38,57 @@ export class ReceiptUploadComponent {
   private request?: Subscription;
   private readonly destroyRef = inject(DestroyRef);
 
-  constructor(private readonly receiptService: ReceiptService) {}
+  constructor(private readonly receiptService: ReceiptService) {
+    this.destroyRef.onDestroy(() => this.revokePreview());
+  }
+
+  ngOnInit(): void {
+    const file = this.initialFile;
+    if (file) {
+      // Se difiere para no cambiar el estado del formulario durante su primera detección de cambios
+      queueMicrotask(() => this.attach(file));
+    }
+  }
 
   get busy(): boolean {
-    return this.step === 'uploading' || this.step === 'extracting';
+    return this.step === 'preparing' || this.step === 'uploading' || this.step === 'extracting';
+  }
+
+  get busyLabel(): string {
+    if (this.step === 'preparing') {
+      return 'Preparando imagen…';
+    }
+    return this.step === 'uploading' ? 'Subiendo comprobante…' : 'Leyendo con IA…';
   }
 
   get confidencePercent(): number | null {
     return this.draft?.confidence == null ? null : Math.round(this.draft.confidence * 100);
   }
 
-  onFileSelected(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    const file = input.files?.[0];
-    input.value = '';
-    if (!file) {
-      return;
-    }
-
+  attach(file: File): void {
     this.remove();
-    const problem = this.validate(file);
-    if (problem) {
-      this.error = problem;
+    if (file.type && !RECEIPT_ACCEPTED_TYPES.includes(file.type)) {
+      this.error = 'Formato no admitido. Usa JPG, PNG, WEBP o PDF.';
       return;
     }
 
-    this.file = file;
-    this.fileName = file.name;
-    this.upload();
+    this.setStep('preparing');
+    // Como suscripción, quitar o cambiar el archivo también cancela la preparación
+    this.request = from(shrinkImage(file, RECEIPT_MAX_SIZE_BYTES))
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((prepared) => {
+        if (prepared.size > RECEIPT_MAX_SIZE_BYTES) {
+          this.setStep('idle');
+          this.error = 'El comprobante supera el máximo de 8 MB.';
+          return;
+        }
+        this.file = prepared;
+        this.fileName = prepared.name;
+        this.isPdf = prepared.type === 'application/pdf';
+        this.previewUrl = URL.createObjectURL(prepared);
+        this.attachedChange.emit(true);
+        this.upload();
+      });
   }
 
   retry(): void {
@@ -75,6 +104,9 @@ export class ReceiptUploadComponent {
     this.request?.unsubscribe();
     this.file = null;
     this.fileName = '';
+    this.revokePreview();
+    this.zoomed = false;
+    this.attachedChange.emit(false);
     this.error = '';
     this.draft = null;
     this.alreadyUsedChange.emit(false);
@@ -133,14 +165,11 @@ export class ReceiptUploadComponent {
     this.setStep('failed');
   }
 
-  private validate(file: File): string {
-    if (file.type && !RECEIPT_ACCEPTED_TYPES.includes(file.type)) {
-      return 'Formato no admitido. Usa JPG, PNG, WEBP o PDF.';
+  private revokePreview(): void {
+    if (this.previewUrl) {
+      URL.revokeObjectURL(this.previewUrl);
+      this.previewUrl = '';
     }
-    if (file.size > RECEIPT_MAX_SIZE_BYTES) {
-      return 'El comprobante supera el máximo de 8 MB.';
-    }
-    return '';
   }
 
   private setReceipt(receiptId: string | null): void {
