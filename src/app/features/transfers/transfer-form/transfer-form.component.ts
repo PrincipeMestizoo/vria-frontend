@@ -19,6 +19,7 @@ type DraftField = 'amount' | 'bank' | 'reference' | 'currency' | 'dateTransfer';
 export class TransferFormComponent {
   loading = false;
   readingReceipt = false;
+  receiptAlreadyUsed = false;
   dateWithoutTime = false;
 
   private receiptId: string | null = null;
@@ -78,7 +79,7 @@ export class TransferFormComponent {
   }
 
   submit(): void {
-    if (this.readingReceipt || this.loading) {
+    if (this.readingReceipt || this.receiptAlreadyUsed || this.loading) {
       return;
     }
     if (this.form.invalid) {

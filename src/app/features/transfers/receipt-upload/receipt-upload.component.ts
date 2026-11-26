@@ -16,6 +16,8 @@ export class ReceiptUploadComponent {
   @Output() readonly receiptChange = new EventEmitter<string | null>();
   @Output() readonly draftChange = new EventEmitter<ReceiptDraftDTO | null>();
   @Output() readonly busyChange = new EventEmitter<boolean>();
+  /** true mientras el archivo adjunto ya respalde otra transferencia. */
+  @Output() readonly alreadyUsedChange = new EventEmitter<boolean>();
 
   readonly acceptedTypes = RECEIPT_ACCEPTED_TYPES.join(',');
 
@@ -75,6 +77,7 @@ export class ReceiptUploadComponent {
     this.fileName = '';
     this.error = '';
     this.draft = null;
+    this.alreadyUsedChange.emit(false);
     this.setReceipt(null);
     this.draftChange.emit(null);
     this.setStep('idle');
@@ -89,7 +92,11 @@ export class ReceiptUploadComponent {
       .upload(this.file)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
-        next: ({ receiptId }) => {
+        next: ({ receiptId, status }) => {
+          if (status === 'USADO') {
+            this.rejectAsUsed();
+            return;
+          }
           this.setReceipt(receiptId);
           this.extract(receiptId);
         },
@@ -110,6 +117,13 @@ export class ReceiptUploadComponent {
         },
         error: (error: HttpErrorResponse) => this.fail(error, 'No fue posible leer el comprobante.'),
       });
+  }
+
+  private rejectAsUsed(): void {
+    this.error = 'Este comprobante ya se usó en una transferencia. Quítalo o adjunta otro.';
+    this.canRetry = false;
+    this.alreadyUsedChange.emit(true);
+    this.setStep('failed');
   }
 
   private fail(error: HttpErrorResponse, fallback: string): void {
