@@ -5,7 +5,12 @@ import { TransferService } from '../../../core/services/transfer.service';
 import { NotificationService } from '../../../core/services/notification.service';
 import { ConfirmDialogService } from '../../../shared/services/confirm-dialog.service';
 import { AuthService } from '../../../core/services/auth.service';
-import { TRANSFER_STATUS_LABELS, TransferDTO } from '../../../core/models';
+import {
+  TRANSFER_STATUS_LABELS,
+  TRANSFER_STATUSES,
+  TransferDTO,
+  TransferStatus,
+} from '../../../core/models';
 import { TransferFormComponent, TransferFormData } from '../transfer-form/transfer-form.component';
 
 @Component({
@@ -24,6 +29,10 @@ export class TransferListComponent implements OnInit {
     'status',
     'actions',
   ];
+  readonly statuses = TRANSFER_STATUSES;
+  readonly statusLabels = TRANSFER_STATUS_LABELS;
+  /** Transferencia cuyo estado se está guardando; evita envíos simultáneos. */
+  savingStatusId: number | null = null;
   loading = true;
   transfers: TransferDTO[] = [];
   filtered: TransferDTO[] = [];
@@ -36,6 +45,10 @@ export class TransferListComponent implements OnInit {
     private readonly confirmDialog: ConfirmDialogService,
     readonly authService: AuthService
   ) {}
+
+  get canChangeStatus(): boolean {
+    return this.authService.hasAnyRole(['ADMIN']);
+  }
 
   get canDelete(): boolean {
     return this.authService.hasAnyRole(['ADMIN']);
@@ -58,6 +71,21 @@ export class TransferListComponent implements OnInit {
 
   statusLabel(transfer: TransferDTO): string {
     return transfer.status ? TRANSFER_STATUS_LABELS[transfer.status] : '—';
+  }
+
+  changeStatus(transfer: TransferDTO, status: TransferStatus): void {
+    if (transfer.idTransfer == null || transfer.status === status || this.savingStatusId !== null) {
+      return;
+    }
+    this.savingStatusId = transfer.idTransfer;
+    this.transferService
+      .updateStatus(transfer.idTransfer, status)
+      .pipe(finalize(() => (this.savingStatusId = null)))
+      .subscribe((updated) => {
+        this.transfers = this.transfers.map((t) => (t.idTransfer === updated.idTransfer ? updated : t));
+        this.applyFilter();
+        this.notification.success('Estado actualizado.');
+      });
   }
 
   applyFilter(): void {

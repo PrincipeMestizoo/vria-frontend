@@ -22,8 +22,12 @@ export interface TransferDTO {
   nameUser?: string | null;
 }
 
-export type TransferStatus = 'PENDIENTE_CONCILIACION';
+export type TransferStatus = 'PENDIENTE_CONCILIACION' | 'RECIBIDO' | 'RECHAZADO';
+
+export const TRANSFER_STATUSES: TransferStatus[] = ['PENDIENTE_CONCILIACION', 'RECIBIDO', 'RECHAZADO'];
 
 export const TRANSFER_STATUS_LABELS: Record<TransferStatus, string> = {
   PENDIENTE_CONCILIACION: 'Pendiente de conciliación',
+  RECIBIDO: 'Recibido',
+  RECHAZADO: 'Rechazado',
 };
