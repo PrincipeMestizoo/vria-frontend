@@ -15,6 +15,8 @@ export interface ReceiptDraftDTO {
   date: string | null;
   reference: string | null;
   bank: string | null;
+  /** Número de cuenta destino, seguido de su banco si aparece */
+  destination: string | null;
   confidence: number | null;
   requiresReview: boolean;
   warnings: string[] | null;

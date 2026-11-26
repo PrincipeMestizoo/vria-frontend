@@ -17,7 +17,7 @@ export interface TransferFormData {
 const NARROW_WIDTH = '560px';
 const WIDE_WIDTH = '980px';
 
-type DraftField = 'amount' | 'bank' | 'reference' | 'currency' | 'dateTransfer';
+type DraftField = 'amount' | 'bank' | 'destination' | 'reference' | 'currency' | 'dateTransfer';
 
 @Component({
   selector: 'app-transfer-form',
@@ -80,6 +80,7 @@ export class TransferFormComponent {
     const values: Record<DraftField, string | number | null> = {
       amount: draft.amount,
       bank: draft.bank,
+      destination: draft.destination,
       reference: draft.reference,
       currency: draft.currency,
       dateTransfer: draft.date ? `${draft.date}T00:00` : null,
