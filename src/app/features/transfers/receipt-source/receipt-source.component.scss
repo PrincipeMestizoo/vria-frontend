@@ -1,0 +1,22 @@
+:host {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.source {
+  flex: 1 1 11rem;
+  min-height: 3rem;
+}
+
+.source.mat-mdc-outlined-button:not(:disabled) {
+  border: 2px dashed var(--vria-purple-light);
+  border-radius: var(--vria-radius-md);
+  line-height: 1.25;
+
+  &.source--primary {
+    background: var(--vria-surface-alt);
+    color: var(--vria-purple);
+    font-weight: 700;
+  }
+}

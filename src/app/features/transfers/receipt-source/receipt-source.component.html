@@ -1,0 +1,27 @@
+<input #cameraInput type="file" hidden accept="image/*" capture="environment" (change)="onChange($event)" />
+<input #fileInput type="file" hidden [accept]="acceptedTypes" (change)="onChange($event)" />
+
+<button
+  *ngIf="canUseCamera"
+  mat-flat-button
+  color="primary"
+  type="button"
+  class="source vria-btn"
+  [disabled]="disabled"
+  (click)="cameraInput.click()"
+>
+  <mat-icon>photo_camera</mat-icon>
+  {{ cameraLabel }}
+</button>
+
+<button
+  mat-stroked-button
+  type="button"
+  class="source"
+  [class.source--primary]="!canUseCamera"
+  [disabled]="disabled"
+  (click)="fileInput.click()"
+>
+  <mat-icon>add_photo_alternate</mat-icon>
+  {{ fileLabel }}
+</button>
