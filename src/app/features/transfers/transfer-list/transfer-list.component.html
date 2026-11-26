@@ -1,10 +1,37 @@
 <div class="vria-page">
   <app-page-header title="Transferencias" subtitle="Comprobantes de pago por transferencia." icon="receipt_long">
-    <button mat-flat-button color="primary" class="vria-btn" (click)="openForm()">
-      <mat-icon>add</mat-icon>
-      Nueva transferencia
-    </button>
   </app-page-header>
+
+  <section class="start" aria-labelledby="start-title">
+    <h2 id="start-title" class="start__title">¿Cómo quieres registrar la transferencia?</h2>
+
+    <div class="start__options">
+      <article class="vria-card option option--receipt">
+        <div class="option__head">
+          <span class="option__icon" aria-hidden="true"><mat-icon>document_scanner</mat-icon></span>
+          <div>
+            <h3>Con comprobante <span class="option__badge">Recomendado</span></h3>
+            <p>La IA lee los datos y tú solo los revisas. JPG, PNG, WEBP o PDF, máx. 8 MB.</p>
+          </div>
+        </div>
+        <app-receipt-source (fileSelected)="openForm($event)"></app-receipt-source>
+      </article>
+
+      <article class="vria-card option">
+        <div class="option__head">
+          <span class="option__icon" aria-hidden="true"><mat-icon>edit_note</mat-icon></span>
+          <div>
+            <h3>Registro manual</h3>
+            <p>Escribe los datos si no tienes el comprobante a la mano.</p>
+          </div>
+        </div>
+        <button mat-stroked-button type="button" class="option__action" (click)="openForm()">
+          <mat-icon>keyboard</mat-icon>
+          Llenar formulario
+        </button>
+      </article>
+    </div>
+  </section>
 
   <div class="list-toolbar">
     <mat-form-field appearance="outline" class="list-toolbar__search">
@@ -70,7 +97,7 @@
       *ngIf="!loading && filtered.length === 0"
       icon="receipt_long"
       title="No hay transferencias"
-      message="Registra el primer comprobante de transferencia."
+      message="Elige una de las opciones de arriba para registrar la primera."
     ></app-empty-state>
   </div>
 </div>

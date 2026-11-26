@@ -6,7 +6,7 @@ import { NotificationService } from '../../../core/services/notification.service
 import { ConfirmDialogService } from '../../../shared/services/confirm-dialog.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { TRANSFER_STATUS_LABELS, TransferDTO } from '../../../core/models';
-import { TransferFormComponent } from '../transfer-form/transfer-form.component';
+import { TransferFormComponent, TransferFormData } from '../transfer-form/transfer-form.component';
 
 @Component({
   selector: 'app-transfer-list',
@@ -73,11 +73,15 @@ export class TransferListComponent implements OnInit {
       : this.transfers;
   }
 
-  openForm(): void {
-    const ref = this.dialog.open(TransferFormComponent, {
-      width: '520px',
+  openForm(file?: File): void {
+    const ref = this.dialog.open<TransferFormComponent, TransferFormData, boolean>(TransferFormComponent, {
+      data: { file },
+      width: '560px',
       maxWidth: '95vw',
+      panelClass: 'transfer-dialog',
       autoFocus: false,
+      // Un toque fuera no debe descartar el comprobante ni lo ya escrito
+      disableClose: true,
     });
 
     ref.afterClosed().subscribe((changed) => {

@@ -574,3 +574,18 @@ h6 {
   }
 }
 
+
+// ---- Registro de transferencia: pantalla completa en móviles ----
+@media (max-width: 768px) {
+  .cdk-overlay-pane.transfer-dialog {
+    width: 100vw !important;
+    max-width: 100vw !important;
+    height: 100vh;
+    height: 100dvh;
+
+    .mdc-dialog__surface {
+      max-height: 100%;
+      border-radius: 0 !important;
+    }
+  }
+}
