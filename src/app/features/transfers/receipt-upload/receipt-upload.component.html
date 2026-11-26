@@ -1,0 +1,43 @@
+<div class="receipt">
+  <input #fileInput type="file" hidden [accept]="acceptedTypes" (change)="onFileSelected($event)" />
+
+  <div class="receipt__header">
+    <button mat-stroked-button type="button" [disabled]="busy" (click)="fileInput.click()">
+      <mat-icon>upload_file</mat-icon>
+      {{ fileName ? 'Cambiar comprobante' : 'Subir comprobante' }}
+    </button>
+    <button *ngIf="fileName" mat-button type="button" color="warn" (click)="remove()">
+      <mat-icon>close</mat-icon>
+      Quitar
+    </button>
+  </div>
+
+  <span class="receipt__hint">{{ fileName || 'Opcional. JPG, PNG, WEBP o PDF. Máx. 8 MB.' }}</span>
+
+  <div *ngIf="busy" role="status">
+    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+    <span class="receipt__hint">
+      {{ step === 'uploading' ? 'Subiendo…' : 'Leyendo con IA…' }}
+    </span>
+  </div>
+
+  <div *ngIf="draft" role="status" class="receipt__notice" [class.receipt__notice--warn]="draft.requiresReview">
+    <mat-icon>{{ draft.requiresReview ? 'warning' : 'check_circle' }}</mat-icon>
+    <div>
+      <strong>{{ draft.requiresReview ? 'Revisa los datos con cuidado' : 'Datos leídos: verifícalos' }}</strong>
+      <span *ngIf="confidencePercent !== null"> · Confianza {{ confidencePercent }}%</span>
+      <ul *ngIf="draft.warnings?.length">
+        <li *ngFor="let warning of draft.warnings">{{ warning }}</li>
+      </ul>
+    </div>
+  </div>
+
+  <div *ngIf="error" role="alert" class="receipt__notice receipt__notice--error">
+    <mat-icon>error</mat-icon>
+    <div>
+      <span>{{ error }}</span>
+      <span *ngIf="receiptId"> Puedes completar los datos a mano.</span>
+      <button *ngIf="step === 'failed' && canRetry" mat-button type="button" (click)="retry()">Reintentar</button>
+    </div>
+  </div>
+</div>

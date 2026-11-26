@@ -1,0 +1,53 @@
+.receipt {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1.25rem;
+
+  &__header {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  &__hint {
+    font-size: 0.75rem;
+    color: var(--vria-text-secondary);
+    overflow-wrap: anywhere;
+  }
+
+  &__notice {
+    display: flex;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    border-radius: var(--vria-radius-sm);
+    border: 1px solid var(--vria-success);
+    font-size: 0.875rem;
+
+    > mat-icon {
+      flex-shrink: 0;
+      color: var(--vria-success);
+    }
+
+    ul {
+      margin: 0.25rem 0 0;
+      padding-left: 1.25rem;
+    }
+
+    &--warn {
+      border-color: var(--vria-warning);
+
+      > mat-icon {
+        color: var(--vria-warning);
+      }
+    }
+
+    &--error {
+      border-color: var(--vria-danger);
+
+      > mat-icon {
+        color: var(--vria-danger);
+      }
+    }
+  }
+}
